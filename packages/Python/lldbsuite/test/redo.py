@@ -93,7 +93,7 @@ def redo(suffix, dir, names):
             #print("Find a log file:", name)
             if name.startswith("Error") or name.startswith("Failure"):
                 if filename_components:
-                    if not all([comp in name for comp in filename_components]):
+                    if not all( comp in name for comp in filename_components):
                         continue
                 with open(os.path.join(dir, name), 'r') as log:
                     content = log.read()
