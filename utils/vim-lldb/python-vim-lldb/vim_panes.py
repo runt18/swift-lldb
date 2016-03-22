@@ -139,8 +139,10 @@ class PaneLayout(object):
     """ Returns true if name is a registered pane, False otherwise """
     return name in self.panes
 
-  def prepare(self, panes = []):
+  def prepare(self, panes = None):
     """ Draw panes on screen. If empty list is provided, show all. """
+    if panes is None:
+      panes = []
 
     # If we can't select a window contained in the layout, we are doing a first draw
     first_draw = not self.selectWindow(True)
@@ -192,8 +194,10 @@ class PaneLayout(object):
 
     return self.contains(curname) == select_contained
 
-  def hide(self, panes = []):
+  def hide(self, panes = None):
     """ Hide panes specified. If empty list provided, hide all. """
+    if panes is None:
+      panes = []
     for name in self.panes:
       if name in panes or len(panes) == 0:
         self.panes[name].destroy()

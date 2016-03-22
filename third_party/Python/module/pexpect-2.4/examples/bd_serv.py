@@ -26,10 +26,14 @@ class roller (threading.Thread):
 
     """This runs a function in a loop in a thread."""
 
-    def __init__(self, interval, function, args=[], kwargs={}):
+    def __init__(self, interval, function, args=None, kwargs=None):
 
         """The interval parameter defines time between each call to the function.
         """
+        if args is None:
+            args = []
+        if kwargs is None:
+            kwargs = {}
 
         threading.Thread.__init__(self)
         self.interval = interval
