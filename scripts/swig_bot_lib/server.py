@@ -53,7 +53,7 @@ def initialize_listening_socket(options):
     logging.debug("Creating socket...")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    logging.info("Binding to ip address '', port {}".format(options.port))
+    logging.info("Binding to ip address '', port {0}".format(options.port))
     s.bind(('', options.port))
 
     logging.debug("Putting socket in listen mode...")
@@ -68,12 +68,12 @@ def accept_once(sock, options):
             continue
 
         client, addr = sock.accept()
-        logging.info("Received connection from {}".format(addr))
+        logging.info("Received connection from {0}".format(addr))
         data_size = struct.unpack("!I", sockutil.recvall(client, 4))[0]
-        logging.debug("Expecting {} bytes of data from client"
+        logging.debug("Expecting {0} bytes of data from client"
                       .format(data_size))
         data = sockutil.recvall(client, data_size)
-        logging.info("Received {} bytes of data from client"
+        logging.info("Received {0} bytes of data from client"
                      .format(len(data)))
 
         pack_location = None
@@ -82,7 +82,7 @@ def accept_once(sock, options):
             os.makedirs(tempfolder, exist_ok=True)
 
             pack_location = tempfile.mkdtemp(dir=tempfolder)
-            logging.debug("Extracting archive to {}".format(pack_location))
+            logging.debug("Extracting archive to {0}".format(pack_location))
 
             local.unpack_archive(pack_location, data)
             logging.debug("Successfully unpacked archive...")
@@ -97,28 +97,28 @@ def accept_once(sock, options):
             config.target_dir = os.path.normpath(
                 os.path.join(config.src_root, "output"))
             logging.info(
-                "Running swig.  languages={}, swig={}, src_root={}, target={}"
+                "Running swig.  languages={0}, swig={1}, src_root={2}, target={3}"
                 .format(config.languages, config.swig_executable,
                         config.src_root, config.target_dir))
 
             status = local.generate(config)
-            logging.debug("Finished running swig.  Packaging up files {}"
+            logging.debug("Finished running swig.  Packaging up files {0}"
                           .format(os.listdir(config.target_dir)))
             zip_data = io.BytesIO()
             zip_file = local.pack_archive(zip_data, config.target_dir, None)
             response_status = remote.serialize_response_status(status)
-            logging.debug("Sending response status {}".format(response_status))
+            logging.debug("Sending response status {0}".format(response_status))
             logging.info("(swig output) -> swig_output.json")
             zip_file.writestr("swig_output.json", response_status)
 
             zip_file.close()
             response_data = zip_data.getvalue()
-            logging.info("Sending {} byte response".format(len(response_data)))
+            logging.info("Sending {0} byte response".format(len(response_data)))
             client.sendall(struct.pack("!I", len(response_data)))
             client.sendall(response_data)
         finally:
             if pack_location is not None:
-                logging.debug("Removing temporary folder {}"
+                logging.debug("Removing temporary folder {0}"
                               .format(pack_location))
                 shutil.rmtree(pack_location)
 

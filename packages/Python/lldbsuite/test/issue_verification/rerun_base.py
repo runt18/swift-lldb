@@ -16,7 +16,7 @@ class RerunBaseTestCase(lldbtest.TestBase):
         @returns True on the first and every other call via a given
         test method.
         """
-        should_pass_filename = "{}.{}.succeed-marker".format(
+        should_pass_filename = "{0}.{1}.succeed-marker".format(
             __file__, self.id())
         fail = not os.path.exists(should_pass_filename)
         if fail:

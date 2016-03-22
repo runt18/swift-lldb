@@ -16,7 +16,7 @@ class TestGdbRemoteExpeditedRegisters(gdbremote_testcase.GdbRemoteTestCaseBase):
             # Start up the inferior.
             "read packet: $c#63",
             # Immediately tell it to stop.  We want to see what it reports.
-            "read packet: {}".format(chr(3)),
+            "read packet: {0}".format(chr(3)),
             {"direction":"send", "regex":r"^\$T([0-9a-fA-F]+)([^#]+)#[0-9a-fA-F]{2}$", "capture":{1:"stop_result", 2:"key_vals_text"} },
             ], True)
 
@@ -76,7 +76,7 @@ class TestGdbRemoteExpeditedRegisters(gdbremote_testcase.GdbRemoteTestCaseBase):
         # Verify no expedited register was specified multiple times.
         for (reg_num, value) in list(expedited_registers.items()):
             if (type(value) == list) and (len(value) > 0):
-                self.fail("expedited register number {} specified more than once ({} times)".format(reg_num, len(value)))
+                self.fail("expedited register number {0} specified more than once ({1} times)".format(reg_num, len(value)))
 
     @debugserver_test
     def test_stop_notification_contains_no_duplicate_registers_debugserver(self):

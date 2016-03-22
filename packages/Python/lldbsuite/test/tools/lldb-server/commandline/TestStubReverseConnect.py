@@ -65,7 +65,7 @@ class TestStubReverseConnect(gdbremote_testcase.GdbRemoteTestCaseBase):
         (stub_socket, address) = self.listener_socket.accept()
         self.assertIsNotNone(stub_socket)
         self.assertIsNotNone(address)
-        print("connected to stub {} on {}".format(address, stub_socket.getsockname()))
+        print("connected to stub {0} on {1}".format(address, stub_socket.getsockname()))
 
         # Verify we can do the handshake.  If that works, we'll call it good.
         self.do_handshake(stub_socket, timeout_seconds=self._DEFAULT_TIMEOUT)

@@ -1317,7 +1317,7 @@ class Base(unittest2.TestCase):
                 cls.dir_lock.acquire()
                 # read the previous owner from the lock file
                 lock_id = cls.dir_lock.handle.read()
-                print("LOCK ERROR: {} wants to lock '{}' but it is already locked by '{}'".format(cls.__name__, full_dir, lock_id), file=sys.stderr)
+                print("LOCK ERROR: {0} wants to lock '{1}' but it is already locked by '{2}'".format(cls.__name__, full_dir, lock_id), file=sys.stderr)
                 raise ioerror
 
         # Set platform context.
@@ -1379,10 +1379,10 @@ class Base(unittest2.TestCase):
         log_basename = self.getLogBasenameForCurrentTest()
 
         # confirm that the file is writeable
-        host_log_path = "{}-host.log".format(log_basename)
+        host_log_path = "{0}-host.log".format(log_basename)
         open(host_log_path, 'w').close()
 
-        log_enable = "log enable -Tpn -f {} ".format(host_log_path)
+        log_enable = "log enable -Tpn -f {0} ".format(host_log_path)
         for channel_with_categories in lldbtest_config.channels:
             channel_then_categories = channel_with_categories.split(' ', 1)
             channel = channel_then_categories[0]
@@ -1400,7 +1400,7 @@ class Base(unittest2.TestCase):
                 raise Exception('log enable failed (check LLDB_LOG_OPTION env variable)')
 
         # Communicate log path name to debugserver & lldb-server
-        server_log_path = "{}-server.log".format(log_basename)
+        server_log_path = "{0}-server.log".format(log_basename)
         open(server_log_path, 'w').close()
         os.environ["LLDB_DEBUGSERVER_LOG_FILE"] = server_log_path
 
@@ -1479,7 +1479,7 @@ class Base(unittest2.TestCase):
         # test case specific file if test failure is encountered.
         self.log_basename = self.getLogBasenameForCurrentTest()
 
-        session_file = "{}.log".format(self.log_basename)
+        session_file = "{0}.log".format(self.log_basename)
         # Python 3 doesn't support unbuffered I/O in text mode.  Open buffered.
         self.session = open(session_file, "w")
 
@@ -1781,12 +1781,12 @@ class Base(unittest2.TestCase):
         if os.path.altsep is not None:
             compiler = compiler.replace(os.path.altsep, os.path.sep)
 
-        fname = "{}-{}-{}".format(self.id(), self.getArchitecture(), "_".join(compiler.split(os.path.sep)))
+        fname = "{0}-{1}-{2}".format(self.id(), self.getArchitecture(), "_".join(compiler.split(os.path.sep)))
         if len(fname) > 200:
-            fname = "{}-{}-{}".format(self.id(), self.getArchitecture(), compiler.split(os.path.sep)[-1])
+            fname = "{0}-{1}-{2}".format(self.id(), self.getArchitecture(), compiler.split(os.path.sep)[-1])
 
         if prefix is not None:
-            fname = "{}-{}".format(prefix, fname)
+            fname = "{0}-{1}".format(prefix, fname)
 
         return os.path.join(dname, fname)
 

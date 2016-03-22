@@ -43,7 +43,7 @@ def setupCrashInfoHook():
                 # we need to compile
                 cmd = "SDKROOT= xcrun clang %s -o %s -framework Python -Xlinker -dylib -iframework /System/Library/Frameworks/ -Xlinker -F /System/Library/Frameworks/" % (dylib_src,dylib_dst)
                 if subprocess.call(cmd,shell=True) != 0 or not os.path.isfile(dylib_dst):
-                    raise Exception('command failed: "{}"'.format(cmd))
+                    raise Exception('command failed: "{0}"'.format(cmd))
         finally:
             compile_lock.release()
             del compile_lock

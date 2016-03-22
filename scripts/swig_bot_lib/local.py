@@ -59,7 +59,7 @@ def pack_archive(bytes_io, src_root, filters):
         archive_entries = map(filter_func, filters)
     else:
         for (root, dirs, files) in os.walk(src_root):
-            logging.debug("Adding files {} from directory {} to output package"
+            logging.debug("Adding files {0} from directory {1} to output package"
                           .format(files, root))
             if len(files) > 0:
                 rel_root = os.path.relpath(root, src_root)
@@ -72,7 +72,7 @@ def pack_archive(bytes_io, src_root, filters):
         for file in files:
             rel_path = os.path.normpath(os.path.join(subfolder, file))
             full_path = os.path.join(src_root, rel_path)
-            logging.info("{} -> {}".format(full_path, rel_path))
+            logging.info("{0} -> {1}".format(full_path, rel_path))
             zip_file.write(full_path, rel_path)
 
     return zip_file
@@ -94,7 +94,7 @@ def generate(options):
         out_dir = os.path.join(options.target_dir, lang.title())
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
-        out_file = os.path.join(out_dir, "LLDBWrap{}.cpp".format(lang.title()))
+        out_file = os.path.join(out_dir, "LLDBWrap{0}.cpp".format(lang.title()))
         swig_command = [
             options.swig_executable,
             "-c++",
@@ -112,9 +112,9 @@ def generate(options):
             in_file
         ])
 
-        logging.info("generating swig {} bindings into {}"
+        logging.info("generating swig {0} bindings into {1}"
                      .format(lang, out_dir))
-        logging.debug("swig command line: {}".format(swig_command))
+        logging.debug("swig command line: {0}".format(swig_command))
         try:
             # Execute swig
             swig_output = subprocess.check_output(
@@ -125,7 +125,7 @@ def generate(options):
                 logging.info("swig output: %s", swig_output)
             return (0, swig_output)
         except subprocess.CalledProcessError as e:
-            logging.error("An error occurred executing swig.  returncode={}"
+            logging.error("An error occurred executing swig.  returncode={0}"
                           .format(e.returncode))
             logging.error(e.output)
             return (e.returncode, e.output)

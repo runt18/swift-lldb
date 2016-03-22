@@ -35,7 +35,7 @@ class TestImageListMultiArchitecture(TestBase):
             file_name = os.path.abspath(os.path.join(os.path.dirname(__file__), "bin", image_name))
             expected_triple_and_arch_regex = images[image_name]
 
-            self.runCmd("file {}".format(file_name))
+            self.runCmd("file {0}".format(file_name))
             self.match("image list -t -A", [expected_triple_and_arch_regex])
         # Revert to the host platform after all of this is done
         self.runCmd("platform select host")

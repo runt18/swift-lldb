@@ -112,14 +112,14 @@ class GdbRemoteTestCaseBase(TestBase):
             try:
                 os.remove(named_pipe_path)
             except:
-                print("failed to delete named pipe: {}".format(named_pipe_path))
+                print("failed to delete named pipe: {0}".format(named_pipe_path))
                 None
 
             # Delete the temp directory.
             try:
                 os.rmdir(temp_dir)
             except:
-                print("failed to delete temp dir: {}, directory contents: '{}'".format(temp_dir, os.listdir(temp_dir)))
+                print("failed to delete temp dir: {0}, directory contents: '{1}'".format(temp_dir, os.listdir(temp_dir)))
                 None
 
         # Add the shutdown hook to clean up the named pipe.
@@ -185,8 +185,8 @@ class GdbRemoteTestCaseBase(TestBase):
         self.debug_monitor_extra_args = ["gdbserver"]
 
         if len(lldbtest_config.channels) > 0:
-            self.debug_monitor_extra_args.append("--log-file={}-server.log".format(self.log_basename))
-            self.debug_monitor_extra_args.append("--log-channels={}".format(":".join(lldbtest_config.channels)))
+            self.debug_monitor_extra_args.append("--log-file={0}-server.log".format(self.log_basename))
+            self.debug_monitor_extra_args.append("--log-channels={0}".format(":".join(lldbtest_config.channels)))
 
         if use_named_pipe:
             (self.named_pipe_path, self.named_pipe, self.named_pipe_fd) = self.create_named_pipe()
@@ -195,7 +195,7 @@ class GdbRemoteTestCaseBase(TestBase):
         self.debug_monitor_exe = get_debugserver_exe()
         if not self.debug_monitor_exe:
             self.skipTest("debugserver exe not found")
-        self.debug_monitor_extra_args = ["--log-file={}-server.log".format(self.log_basename), "--log-flags=0x800000"]
+        self.debug_monitor_extra_args = ["--log-file={0}-server.log".format(self.log_basename), "--log-flags=0x800000"]
         if use_named_pipe:
             (self.named_pipe_path, self.named_pipe, self.named_pipe_fd) = self.create_named_pipe()
         # The debugserver stub has a race on handling the 'k' command, so it sends an X09 right away, then sends the real X notification
@@ -227,12 +227,12 @@ class GdbRemoteTestCaseBase(TestBase):
                     # send the kill packet so lldb-server shuts down gracefully
                     sock.sendall(GdbRemoteTestCaseBase._GDBREMOTE_KILL_PACKET)
                 except:
-                    logger.warning("failed to send kill packet to debug monitor: {}; ignoring".format(sys.exc_info()[0]))
+                    logger.warning("failed to send kill packet to debug monitor: {0}; ignoring".format(sys.exc_info()[0]))
 
                 try:
                     sock.close()
                 except:
-                    logger.warning("failed to close socket to debug monitor: {}; ignoring".format(sys.exc_info()[0]))
+                    logger.warning("failed to close socket to debug monitor: {0}; ignoring".format(sys.exc_info()[0]))
 
         self.addTearDownHook(shutdown_socket)
 
@@ -249,9 +249,9 @@ class GdbRemoteTestCaseBase(TestBase):
 
     def get_debug_monitor_command_line_args(self, attach_pid=None):
         if lldb.remote_platform:
-            commandline_args = self.debug_monitor_extra_args + ["*:{}".format(self.port)]
+            commandline_args = self.debug_monitor_extra_args + ["*:{0}".format(self.port)]
         else:
-            commandline_args = self.debug_monitor_extra_args + ["localhost:{}".format(self.port)]
+            commandline_args = self.debug_monitor_extra_args + ["localhost:{0}".format(self.port)]
 
         if attach_pid:
             commandline_args += ["--attach=%d" % attach_pid]
@@ -290,7 +290,7 @@ class GdbRemoteTestCaseBase(TestBase):
                 try:
                     server.terminate()
                 except:
-                    logger.warning("failed to terminate server for debug monitor: {}; ignoring".format(sys.exc_info()[0]))
+                    logger.warning("failed to terminate server for debug monitor: {0}; ignoring".format(sys.exc_info()[0]))
             self.addTearDownHook(shutdown_debug_monitor)
 
             # Schedule debug monitor to be shut down during teardown.
@@ -314,7 +314,7 @@ class GdbRemoteTestCaseBase(TestBase):
                 try:
                     server.terminate()
                 except:
-                    logger.warning("failed to terminate server for debug monitor: {}; ignoring".format(sys.exc_info()[0]))
+                    logger.warning("failed to terminate server for debug monitor: {0}; ignoring".format(sys.exc_info()[0]))
             self.addTearDownHook(shutdown_debug_monitor)
 
             connect_attemps = 0
@@ -365,7 +365,7 @@ class GdbRemoteTestCaseBase(TestBase):
             try:
                 inferior.terminate()
             except:
-                logger.warning("failed to terminate inferior process for attach: {}; ignoring".format(sys.exc_info()[0]))
+                logger.warning("failed to terminate inferior process for attach: {0}; ignoring".format(sys.exc_info()[0]))
         self.addTearDownHook(shutdown_process_for_attach)
         return inferior
 
@@ -618,7 +618,7 @@ class GdbRemoteTestCaseBase(TestBase):
                         # Promote to list
                         kv_dict[key] = [kv_dict[key], val]
                 else:
-                    self.fail("key '{}' already present when attempting to add value '{}' (text='{}', dict={})".format(key, val, key_val_text, kv_dict))
+                    self.fail("key '{0}' already present when attempting to add value '{1}' (text='{2}', dict={3})".format(key, val, key_val_text, kv_dict))
             else:
                 kv_dict[key] = val
         return kv_dict
@@ -689,7 +689,7 @@ class GdbRemoteTestCaseBase(TestBase):
 
             if time.time() > timeout_time:
                 raise Exception(
-                    'timed out after {} seconds while waiting for theads: waiting for at least {} threads, found {}'.format(
+                    'timed out after {0} seconds while waiting for theads: waiting for at least {1} threads, found {2}'.format(
                         timeout_seconds, thread_count, actual_thread_count))
 
         return threads
@@ -759,7 +759,7 @@ class GdbRemoteTestCaseBase(TestBase):
                 supported_type = key[-1]
                 key = key[:-1]
                 if not supported_type in ["+", "-", "?"]:
-                    raise Exception("malformed stub feature: final character {} not in expected set (+,-,?)".format(supported_type))
+                    raise Exception("malformed stub feature: final character {0} not in expected set (+,-,?)".format(supported_type))
                 supported_dict[key] = supported_type 
             # Ensure we know the supported element
             if not key in self._KNOWN_QSUPPORTED_STUB_FEATURES:
@@ -780,7 +780,7 @@ class GdbRemoteTestCaseBase(TestBase):
         # Send an interrupt, capture a T response.
         self.reset_test_sequence()
         self.test_sequence.add_log_lines(
-            ["read packet: {}".format(chr(3)),
+            ["read packet: {0}".format(chr(3)),
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]+)([^#]+)#[0-9a-fA-F]{2}$", "capture":{1:"stop_result"} }],
             True)
         context = self.expect_gdbremote_sequence()
@@ -902,7 +902,7 @@ class GdbRemoteTestCaseBase(TestBase):
             # Grab the next iteration of data.
             self.reset_test_sequence()
             self.test_sequence.add_log_lines([
-                "read packet: ${}{:x},{:x}:#00".format(command_prefix, offset, chunk_length),
+                "read packet: ${0}{1:x},{2:x}:#00".format(command_prefix, offset, chunk_length),
                 {"direction":"send", "regex":re.compile(r"^\$([^E])(.*)#[0-9a-fA-F]{2}$", re.MULTILINE|re.DOTALL), "capture":{1:"response_type", 2:"content_raw"} }
                 ], True)
 
@@ -929,7 +929,7 @@ class GdbRemoteTestCaseBase(TestBase):
     def add_interrupt_packets(self):
         self.test_sequence.add_log_lines([
             # Send the intterupt.
-            "read packet: {}".format(chr(3)),
+            "read packet: {0}".format(chr(3)),
             # And wait for the stop notification.
             {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})(.*)#[0-9a-fA-F]{2}$", "capture":{1:"stop_signo", 2:"stop_key_val_text" } },
             ], True)
@@ -942,7 +942,7 @@ class GdbRemoteTestCaseBase(TestBase):
     def add_QSaveRegisterState_packets(self, thread_id):
         if thread_id:
             # Use the thread suffix form.
-            request = "read packet: $QSaveRegisterState;thread:{:x}#00".format(thread_id)
+            request = "read packet: $QSaveRegisterState;thread:{0:x}#00".format(thread_id)
         else:
             request = "read packet: $QSaveRegisterState#00"
             
@@ -966,9 +966,9 @@ class GdbRemoteTestCaseBase(TestBase):
     def add_QRestoreRegisterState_packets(self, save_id, thread_id=None):
         if thread_id:
             # Use the thread suffix form.
-            request = "read packet: $QRestoreRegisterState:{};thread:{:x}#00".format(save_id, thread_id)
+            request = "read packet: $QRestoreRegisterState:{0};thread:{1:x}#00".format(save_id, thread_id)
         else:
-            request = "read packet: $QRestoreRegisterState:{}#00".format(save_id)
+            request = "read packet: $QRestoreRegisterState:{0}#00".format(save_id)
 
         self.test_sequence.add_log_lines([
             request,
@@ -992,9 +992,9 @@ class GdbRemoteTestCaseBase(TestBase):
 
             # Handle thread suffix.
             if thread_id:
-                p_request = "read packet: $p{:x};thread:{:x}#00".format(reg_index, thread_id)
+                p_request = "read packet: $p{0:x};thread:{1:x}#00".format(reg_index, thread_id)
             else:
-                p_request = "read packet: $p{:x}#00".format(reg_index)
+                p_request = "read packet: $p{0:x}#00".format(reg_index)
 
             # Read the existing value.
             self.reset_test_sequence()
@@ -1017,9 +1017,9 @@ class GdbRemoteTestCaseBase(TestBase):
 
             # Handle thread suffix for P.
             if thread_id:
-                P_request = "read packet: $P{:x}={};thread:{:x}#00".format(reg_index, pack_register_hex(endian, flipped_bits_int, byte_size=reg_byte_size), thread_id)
+                P_request = "read packet: $P{0:x}={1};thread:{2:x}#00".format(reg_index, pack_register_hex(endian, flipped_bits_int, byte_size=reg_byte_size), thread_id)
             else:
-                P_request = "read packet: $P{:x}={}#00".format(reg_index, pack_register_hex(endian, flipped_bits_int, byte_size=reg_byte_size))
+                P_request = "read packet: $P{0:x}={1}#00".format(reg_index, pack_register_hex(endian, flipped_bits_int, byte_size=reg_byte_size))
 
             # Write the flipped value to the register.
             self.reset_test_sequence()
@@ -1094,9 +1094,9 @@ class GdbRemoteTestCaseBase(TestBase):
 
             # Handle thread suffix.
             if thread_id:
-                p_request = "read packet: $p{:x};thread:{:x}#00".format(reg_index, thread_id)
+                p_request = "read packet: $p{0:x};thread:{1:x}#00".format(reg_index, thread_id)
             else:
-                p_request = "read packet: $p{:x}#00".format(reg_index)
+                p_request = "read packet: $p{0:x}#00".format(reg_index)
 
             # Read it with p.
             self.reset_test_sequence()
@@ -1141,7 +1141,7 @@ class GdbRemoteTestCaseBase(TestBase):
             self.assertIsNotNone(thread_id)
 
             # Build the packet for the single step instruction.  We replace {thread}, if present, with the thread_id.
-            step_packet = "read packet: ${}#00".format(re.sub(r"{thread}", "{:x}".format(thread_id), step_instruction))
+            step_packet = "read packet: ${0}#00".format(re.sub(r"{thread}", "{0:x}".format(thread_id), step_instruction))
             # print("\nstep_packet created: {}\n".format(step_packet))
 
             # Single step.
@@ -1215,7 +1215,7 @@ class GdbRemoteTestCaseBase(TestBase):
              { "type":"output_match", "regex":r"^code address: 0x([0-9a-fA-F]+)\r\ndata address: 0x([0-9a-fA-F]+)\r\ndata address: 0x([0-9a-fA-F]+)\r\n$", 
                "capture":{ 1:"function_address", 2:"g_c1_address", 3:"g_c2_address"} },
              # Now stop the inferior.
-             "read packet: {}".format(chr(3)),
+             "read packet: {0}".format(chr(3)),
              # And wait for the stop notification.
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})thread:([0-9a-fA-F]+);", "capture":{1:"stop_signo", 2:"stop_thread_id"} }],
             True)

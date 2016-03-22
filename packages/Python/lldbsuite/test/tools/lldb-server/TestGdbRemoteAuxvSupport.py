@@ -59,7 +59,7 @@ class TestGdbRemoteAuxvSupport(gdbremote_testcase.GdbRemoteTestCaseBase):
         # Grab the auxv data.
         self.reset_test_sequence()
         self.test_sequence.add_log_lines([
-            "read packet: $qXfer:auxv:read::{:x},{:x}:#00".format(OFFSET, LENGTH),
+            "read packet: $qXfer:auxv:read::{0:x},{1:x}:#00".format(OFFSET, LENGTH),
             {"direction":"send", "regex":re.compile(r"^\$([^E])(.*)#[0-9a-fA-F]{2}$", re.MULTILINE|re.DOTALL), "capture":{1:"response_type", 2:"content_raw"} }
             ], True)
 

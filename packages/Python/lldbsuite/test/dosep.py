@@ -294,7 +294,7 @@ def send_events_to_collector(events, command):
 
     if arg_index >= len(command):
         raise Exception(
-            "expected collector port at index {} in {}".format(
+            "expected collector port at index {0} in {1}".format(
                 arg_index, command))
     event_port = int(command[arg_index])
 
@@ -378,7 +378,7 @@ def call_with_timeout(
             worker_index = GET_WORKER_INDEX()
             command.extend([
                 "--event-add-entries",
-                "worker_index={}:int".format(worker_index)])
+                "worker_index={0}:int".format(worker_index)])
         except:  # pylint: disable=bare-except
             # Ctrl-C does bad things to multiprocessing.Manager.dict()
             # lookup.  Just swallow it.
@@ -558,7 +558,7 @@ def kill_all_worker_processes(workers, inferior_pid_events):
     active_pid_set = collect_active_pids_from_pid_events(
         inferior_pid_events)
     for inferior_pid in active_pid_set:
-        print("killing inferior pid {}".format(inferior_pid))
+        print("killing inferior pid {0}".format(inferior_pid))
         os.kill(inferior_pid, signal.SIGKILL)
 
 
@@ -576,7 +576,7 @@ def kill_all_worker_threads(workers, inferior_pid_events):
     active_pid_set = collect_active_pids_from_pid_events(
         inferior_pid_events)
     for inferior_pid in active_pid_set:
-        print("killing inferior pid {}".format(inferior_pid))
+        print("killing inferior pid {0}".format(inferior_pid))
         os.kill(inferior_pid, signal.SIGKILL)
 
     # We don't have a way to nuke the threads.  However, since we killed
@@ -774,7 +774,7 @@ def handle_ctrl_c(ctrl_c_count, job_queue, workers, inferior_pid_events,
         name_index = ctrl_c_count - 1
     else:
         name_index = len(key_name) - 1
-    message = "\nHandling {} KeyboardInterrupt".format(key_name[name_index])
+    message = "\nHandling {0} KeyboardInterrupt".format(key_name[name_index])
     with output_lock:
         print(message)
 
@@ -1319,7 +1319,7 @@ def _remove_option(
         removal_count += 1
     if removal_count == 0:
         raise Exception(
-            "failed to find at least one of '{}', '{}' in options".format(
+            "failed to find at least one of '{0}', '{1}' in options".format(
                 long_option_name, short_option_name))
 
 
@@ -1428,7 +1428,7 @@ def rerun_tests(test_subdir, tests_for_rerun, dotest_argv):
         # Print the file we'll be rerunning
         test_relative_path = os.path.relpath(
             test_filename, lldbsuite.lldb_test_root)
-        print("  {}".format(test_relative_path))
+        print("  {0}".format(test_relative_path))
 
         # Store test filenames by subdir.
         test_dir = os.path.dirname(test_filename)
@@ -1453,7 +1453,7 @@ def rerun_tests(test_subdir, tests_for_rerun, dotest_argv):
     rerun_thread_count = 1
     # Force the parallel test runner to choose a multi-worker strategy.
     rerun_runner_name = default_test_runner_name(rerun_thread_count + 1)
-    print("rerun will use the '{}' test runner strategy".format(
+    print("rerun will use the '{0}' test runner strategy".format(
         rerun_runner_name))
 
     runner_strategies_by_name = get_test_runner_strategies(rerun_thread_count)
@@ -1544,7 +1544,7 @@ def main(num_threads, test_subdir, test_runner_name, results_formatter):
 
     if test_runner_name not in runner_strategies_by_name:
         raise Exception(
-            "specified testrunner name '{}' unknown. Valid choices: {}".format(
+            "specified testrunner name '{0}' unknown. Valid choices: {1}".format(
                 test_runner_name,
                 list(runner_strategies_by_name.keys())))
     test_runner_func = runner_strategies_by_name[test_runner_name]
@@ -1572,7 +1572,7 @@ def main(num_threads, test_subdir, test_runner_name, results_formatter):
 
         if tests_for_rerun is not None and len(tests_for_rerun) > 0:
             rerun_file_count = len(tests_for_rerun)
-            print("\n{} test files marked for rerun\n".format(
+            print("\n{0} test files marked for rerun\n".format(
                 rerun_file_count))
 
             # Check if the number of files exceeds the max cutoff.  If so,
@@ -1613,7 +1613,7 @@ def main(num_threads, test_subdir, test_runner_name, results_formatter):
 
         if result:
             test_name = os.path.splitext(xtime)[0]
-            touch(os.path.join(session_dir, "{}-{}".format(result, test_name)))
+            touch(os.path.join(session_dir, "{0}-{1}".format(result, test_name)))
 
     # Only run the old summary logic if we don't have a results formatter
     # that already prints the summary.

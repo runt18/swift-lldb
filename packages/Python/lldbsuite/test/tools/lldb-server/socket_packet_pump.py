@@ -119,7 +119,7 @@ class SocketPacketPump(object):
                 if self._logger:
                     self._logger.debug(
                         "parsed packet from stub: +\n" +
-                        "new receive_buffer: {}".format(
+                        "new receive_buffer: {0}".format(
                             self._receive_buffer))
             else:
                 packet_match = self._GDB_REMOTE_PACKET_REGEX.match(
@@ -168,7 +168,7 @@ class SocketPacketPump(object):
                     new_bytes = self._socket.recv(4096)
                     if self._logger and new_bytes and len(new_bytes) > 0:
                         self._logger.debug(
-                            "pump received bytes: {}".format(new_bytes))
+                            "pump received bytes: {0}".format(new_bytes))
                 except:
                     # Likely a closed socket.  Done with the pump thread.
                     if self._logger:

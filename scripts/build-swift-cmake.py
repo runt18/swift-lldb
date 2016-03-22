@@ -92,7 +92,7 @@ build_script_impl_arguments = []
 
 if args.lldb_extra_xcodebuild_args:
     build_script_impl_arguments.append(
-        "--lldb-extra-xcodebuild-args={}".format(
+        "--lldb-extra-xcodebuild-args={0}".format(
             args.lldb_extra_xcodebuild_args))
 
 if package_darwin:
@@ -116,7 +116,7 @@ else:
     if args.lldb_extra_cmake_args and len(args.lldb_extra_cmake_args) > 0:
         # Add the quoted version of the command line arg.
         build_script_impl_arguments.append(
-            "--lldb-extra-cmake-args={}".format(args.lldb_extra_cmake_args))
+            "--lldb-extra-cmake-args={0}".format(args.lldb_extra_cmake_args))
 
     if uname != "Darwin":
         # we don't build with Xcode, so we can actually install

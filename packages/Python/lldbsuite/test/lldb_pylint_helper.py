@@ -134,7 +134,7 @@ def add_lldb_module_directory():
             sys.path.insert(0, lldb_module_path)
     # pylint: disable=broad-except
     except Exception as exception:
-        print("failed to find python path: {}".format(exception))
+        print("failed to find python path: {0}".format(exception))
 
 
 def add_lldb_test_package_paths(check_dir):

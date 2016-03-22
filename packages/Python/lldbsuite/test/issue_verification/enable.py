@@ -12,7 +12,7 @@ def main():
         if basename.startswith("Test") and extension == '.park':
             source_path = os.path.join(script_dir, filename)
             dest_path = os.path.join(script_dir, basename)
-            sys.stdout.write("renaming {} to {}\n".format(
+            sys.stdout.write("renaming {0} to {1}\n".format(
                 source_path, dest_path))
             os.rename(source_path, dest_path)
 

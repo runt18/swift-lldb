@@ -78,7 +78,7 @@ def maybe_create_remote_root_dir(args):
         "mkdir",
         "-p",
         args.remote_dir]
-    print("create remote root dir command:\n{}".format(commandline))
+    print("create remote root dir command:\n{0}".format(commandline))
     return subprocess.call(commandline)
 
 
@@ -99,7 +99,7 @@ def init_with_args(args):
     # is is called lldb.
     if os.path.basename(args.local_lldb_dir) != 'lldb':
         raise Exception(
-            "local lldb root needs to be called 'lldb' but was {} instead"
+            "local lldb root needs to be called 'lldb' but was {0} instead"
             .format(os.path.basename(args.local_lldb_dir)))
 
     args.lldb_dir_relative_regex = re.compile("%s/llvm/tools/lldb/" % args.remote_dir)
@@ -123,12 +123,12 @@ def sync_llvm(args):
     commandline.extend(_COMMON_SYNC_OPTS.split())
     commandline.extend(_COMMON_EXCLUDE_OPTS.split())
     commandline.append("--exclude=/llvm/tools/lldb")
-    commandline.extend(["-e", "ssh -p {}".format(args.port)])
+    commandline.extend(["-e", "ssh -p {0}".format(args.port)])
     commandline.extend([
         "%s/llvm" % args.local_lldb_dir,
         "%s@%s:%s" % (args.user, args.remote_address, args.remote_dir)])
     if args.debug:
-        print("going to execute llvm sync: {}".format(commandline))
+        print("going to execute llvm sync: {0}".format(commandline))
     return subprocess.call(commandline)
 
 
@@ -137,12 +137,12 @@ def sync_lldb(args):
     commandline.extend(_COMMON_SYNC_OPTS.split())
     commandline.extend(_COMMON_EXCLUDE_OPTS.split())
     commandline.append("--exclude=/lldb/llvm")
-    commandline.extend(["-e", "ssh -p {}".format(args.port)])
+    commandline.extend(["-e", "ssh -p {0}".format(args.port)])
     commandline.extend([
         args.local_lldb_dir,
         "%s@%s:%s/llvm/tools" % (args.user, args.remote_address, args.remote_dir)])
     if args.debug:
-        print("going to execute lldb sync: {}".format(commandline))
+        print("going to execute lldb sync: {0}".format(commandline))
     return subprocess.call(commandline)
 
 
@@ -160,7 +160,7 @@ def build_cmake_command(args):
     ld_flags = "\"-lstdc++ -lm\""
 
     install_dir = os.path.join(
-        args.remote_build_dir, "..", "install-{}".format(args.configuration))
+        args.remote_build_dir, "..", "install-{0}".format(args.configuration))
 
     command_line = [
         "cmake",
@@ -191,7 +191,7 @@ def maybe_configure(args):
     commandline.extend(build_cmake_command(args))
 
     if args.debug:
-        print("configure command: {}".format(commandline))
+        print("configure command: {0}".format(commandline))
 
     return subprocess.call(commandline)
 
@@ -216,7 +216,7 @@ def run_remote_build_command(args, build_command_list):
     commandline.extend(build_command_list)
 
     if args.debug:
-        print("running remote build command: {}".format(commandline))
+        print("running remote build command: {0}".format(commandline))
 
     proc = subprocess.Popen(
         commandline,

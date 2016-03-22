@@ -41,7 +41,7 @@ class CommunicatorThread(threading.Thread):
         except Exception as exception:  # pylint: disable=broad-except
             if self.output_file:
                 self.output_file.write(
-                    "exception while using communicate() for pid: {}\n".format(
+                    "exception while using communicate() for pid: {0}\n".format(
                         exception))
         finally:
             # Signal that the thread's run is complete.
@@ -83,9 +83,9 @@ def timeout_to_seconds(timeout):
                 # Value is in days.
                 return 24 * (60.0 * 60.0) * value
             else:
-                raise Exception("unexpected units value '{}'".format(units))
+                raise Exception("unexpected units value '{0}'".format(units))
         else:
-            raise Exception("could not parse TIMEOUT spec '{}'".format(
+            raise Exception("could not parse TIMEOUT spec '{0}'".format(
                 timeout))
 
 
