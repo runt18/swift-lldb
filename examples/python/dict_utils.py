@@ -3,8 +3,10 @@ class LookupDictionary(dict):
     """
     a dictionary which can lookup value by key, or keys by value
     """
-    def __init__(self, items=[]):
+    def __init__(self, items=None):
         """items can be a list of pair_lists or a dictionary"""
+        if items is None:
+            items = []
         dict.__init__(self, items)
  
     def get_keys_for_value(self, value, fail_value = None):
@@ -30,8 +32,10 @@ class LookupDictionary(dict):
 
 class Enum(LookupDictionary):
     
-    def __init__(self, initial_value=0, items=[]):
+    def __init__(self, initial_value=0, items=None):
         """items can be a list of pair_lists or a dictionary"""
+        if items is None:
+            items = []
         LookupDictionary.__init__(self, items)
         self.value = initial_value
     

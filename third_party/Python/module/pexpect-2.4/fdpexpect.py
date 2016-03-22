@@ -15,11 +15,13 @@ class fdspawn (spawn):
     descriptor. For example, you could use it to read through a file looking
     for patterns, or to control a modem or serial device. """
 
-    def __init__ (self, fd, args=[], timeout=30, maxread=2000, searchwindowsize=None, logfile=None):
+    def __init__ (self, fd, args=None, timeout=30, maxread=2000, searchwindowsize=None, logfile=None):
 
         """This takes a file descriptor (an int) or an object that support the
         fileno() method (returning an int). All Python file-like objects
         support fileno(). """
+        if args is None:
+            args = []
 
         ### TODO: Add better handling of trying to use fdspawn in place of spawn
         ### TODO: (overload to allow fdspawn to also handle commands as spawn does.

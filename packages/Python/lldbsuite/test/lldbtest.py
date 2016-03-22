@@ -1546,7 +1546,7 @@ class Base(unittest2.TestCase):
             if os.path.exists("/proc/" + str(pid)):
                 os.kill(pid, signal.SIGTERM)
 
-    def spawnSubprocess(self, executable, args=[], install_remote=True):
+    def spawnSubprocess(self, executable, args=None, install_remote=True):
         """ Creates a subprocess.Popen object with the specified executable and arguments,
             saves it in self.subprocesses, and returns the object.
             NOTE: if using this function, ensure you also call:
@@ -1555,12 +1555,14 @@ class Base(unittest2.TestCase):
 
             otherwise the test suite will leak processes.
         """
+        if args is None:
+            args = []
         proc = _RemoteProcess(install_remote) if lldb.remote_platform else _LocalProcess(self.TraceOn())
         proc.launch(executable, args)
         self.subprocesses.append(proc)
         return proc
 
-    def forkSubprocess(self, executable, args=[]):
+    def forkSubprocess(self, executable, args=None):
         """ Fork a subprocess with its own group ID.
             NOTE: if using this function, ensure you also call:
 
@@ -1568,6 +1570,8 @@ class Base(unittest2.TestCase):
 
             otherwise the test suite will leak processes.
         """
+        if args is None:
+            args = []
         child_pid = os.fork()
         if child_pid == 0:
             # If more I/O support is required, this can be beefed up.

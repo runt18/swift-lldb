@@ -265,7 +265,7 @@ class spawn (object):
     """This is the main class interface for Pexpect. Use this class to start
     and control child applications. """
 
-    def __init__(self, command, args=[], timeout=30, maxread=2000, searchwindowsize=None, logfile=None, cwd=None, env=None):
+    def __init__(self, command, args=None, timeout=30, maxread=2000, searchwindowsize=None, logfile=None, cwd=None, env=None):
 
         """This is the constructor. The command parameter may be a string that
         includes a command and any arguments to the command. For example::
@@ -374,6 +374,8 @@ class spawn (object):
         If you need more detail you can also read the self.status member which
         stores the status returned by os.waitpid. You can interpret this using
         os.WIFEXITED/os.WEXITSTATUS or os.WIFSIGNALED/os.TERMSIG. """
+        if args is None:
+            args = []
 
         self.STDIN_FILENO = pty.STDIN_FILENO
         self.STDOUT_FILENO = pty.STDOUT_FILENO
@@ -481,12 +483,14 @@ class spawn (object):
         s.append('delayafterterminate: ' + str(self.delayafterterminate))
         return '\n'.join(s)
 
-    def _spawn(self,command,args=[]):
+    def _spawn(self,command,args=None):
 
         """This starts the given command in a child process. This does all the
         fork/exec type of stuff for a pty. This is called by __init__. If args
         is empty then command will be parsed (split on spaces) and args will be
         set to parsed arguments. """
+        if args is None:
+            args = []
 
         # The pid and child_fd of this object get set by this method.
         # Note that it is difficult for this method to fail.
