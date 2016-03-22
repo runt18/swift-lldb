@@ -101,7 +101,7 @@ class DriverBatchModeTest (TestBase):
         self.assertTrue(index == 0, "lldb didn't close on successful batch completion.")
 
     def closeVictim(self):
-        if self.victim != None:
+        if self.victim is not None:
             self.victim.close()
             self.victim = None
 
@@ -125,7 +125,7 @@ class DriverBatchModeTest (TestBase):
         # Start up the process by hand and wait for it to get to the wait loop.
 
         self.victim = pexpect.spawn('%s WAIT' %(exe))
-        if self.victim == None:
+        if self.victim is None:
             self.fail("Could not spawn ", exe, ".")
 
         self.addTearDownHook (self.closeVictim)
@@ -134,7 +134,7 @@ class DriverBatchModeTest (TestBase):
             self.victim.logfile_read = sys.stdout
 
         self.victim.expect("PID: ([0-9]+) END")
-        if self.victim.match == None:
+        if self.victim.match is None:
             self.fail("Couldn't get the target PID.")
 
         victim_pid = int(self.victim.match.group(1))

@@ -39,7 +39,7 @@ def prettyTime(t):
 class ExecutionTimes:
   @classmethod
   def executionTimes(cls):
-    if cls.m_executionTimes == None:
+    if cls.m_executionTimes is None:
       cls.m_executionTimes = ExecutionTimes()
       for i in range(100):
         cls.m_executionTimes.start()

@@ -103,7 +103,7 @@ class LLDBTestResult(unittest2.TextTestResult):
         """
         test_categories = []
         test_method = getattr(test, test._testMethodName)
-        if test_method != None and hasattr(test_method, "categories"):
+        if test_method is not None and hasattr(test_method, "categories"):
             test_categories.extend(test_method.categories)
 
         test_categories.extend(test.getCategories())

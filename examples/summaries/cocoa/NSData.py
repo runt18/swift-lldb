@@ -115,13 +115,13 @@ def NSData_SummaryProvider (valobj,dict):
 	logger >> "NSData_SummaryProvider"
 	provider = GetSummary_Impl(valobj);
 	logger >> "found a summary provider, it is: " + str(provider)
-	if provider != None:
+	if provider is not None:
 		try:
 			summary = provider.length();
 		except:
 			summary = None
 		logger >> "got a summary: it is " + str(summary)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not NSData>'
 		elif isinstance(summary,basestring):
 			pass
@@ -138,7 +138,7 @@ def NSData_SummaryProvider2 (valobj,dict):
 	logger >> "NSData_SummaryProvider2"
 	provider = GetSummary_Impl(valobj);
 	logger >> "found a summary provider, it is: " + str(provider)
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -146,7 +146,7 @@ def NSData_SummaryProvider2 (valobj,dict):
 		except:
 			summary = None
 		logger >> "got a summary: it is " + str(summary)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not CFData>'
 		elif isinstance(summary,basestring):
 			pass

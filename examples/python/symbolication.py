@@ -58,7 +58,7 @@ class Address:
         return s
 
     def resolve_addr(self):
-        if self.so_addr == None:
+        if self.so_addr is None:
             self.so_addr = self.target.ResolveLoadAddress (self.load_addr)
         return self.so_addr
 
@@ -66,7 +66,7 @@ class Address:
         return self.inlined
     
     def get_symbol_context(self):
-        if self.sym_ctx == None:
+        if self.sym_ctx is None:
             sb_addr = self.resolve_addr()
             if sb_addr:
                 self.sym_ctx = self.target.ResolveSymbolContextForAddress (sb_addr, lldb.eSymbolContextEverything)
@@ -84,7 +84,7 @@ class Address:
         return None
     
     def symbolicate(self, verbose = False):
-        if self.symbolication == None:
+        if self.symbolication is None:
             self.symbolication = ''
             self.inlined = False
             sym_ctx = self.get_symbol_context()
@@ -195,11 +195,11 @@ class Section:
         
     def __str__(self):
         if self.name:
-            if self.end_addr != None:
-                if self.start_addr != None:
+            if self.end_addr is not None:
+                if self.start_addr is not None:
                     return "%s=[0x%16.16x - 0x%16.16x)" % (self.name, self.start_addr, self.end_addr)
             else:
-                if self.start_addr != None:
+                if self.start_addr is not None:
                     return "%s=0x%16.16x" % (self.name, self.start_addr)
             return self.name
         return "<invalid>"
@@ -268,7 +268,7 @@ class Image:
             s += "%s " % (resolved_path)
         for section_info in self.section_infos:
             s += ", %s" % (section_info)
-        if self.slide != None:
+        if self.slide is not None:
             s += ', slide = 0x%16.16x' % self.slide
         return s        
     
@@ -301,7 +301,7 @@ class Image:
         return None
     
     def has_section_load_info(self):
-        return self.section_infos or self.slide != None
+        return self.section_infos or self.slide is not None
     
     def load_module(self, target):
         if self.unavailable:
@@ -617,7 +617,7 @@ def Symbolicate(command_args):
                     image.add_section (section)
                 else:
                     sys.exit(1)
-        if options.slide != None:
+        if options.slide is not None:
             image.slide = options.slide
         symbolicator.images.append(image)
     

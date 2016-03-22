@@ -120,7 +120,7 @@ def GetSummary_Impl(valobj):
 def NSURL_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -128,7 +128,7 @@ def NSURL_SummaryProvider (valobj,dict):
 		except:
 			summary = None
 		logger >> "got summary " + str(summary)
-		if summary == None or summary == '':
+		if summary is None or summary == '':
 			summary = '<variable is not NSURL>'
 		return summary
 	return 'Summary Unavailable'

@@ -113,7 +113,7 @@ class NSSetI_SummaryProvider:
 							self.offset(),
 							self.sys_params.types_cache.NSUInteger)
 		value = num_children_vo.GetValueAsUnsigned(0)
-		if value != None:
+		if value is not None:
 			# the MSB on immutable sets seems to be taken by some other data
 			# not sure if it is a bug or some weird sort of feature, but masking it out
 			# gets the count right (unless, of course, someone's dictionaries grow
@@ -216,12 +216,12 @@ def GetSummary_Impl(valobj):
 def NSSet_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		try:
 			summary = provider.count();
 		except:
 			summary = None
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not NSSet>'
 		if isinstance(summary, basestring):
 			return summary
@@ -233,7 +233,7 @@ def NSSet_SummaryProvider (valobj,dict):
 def NSSet_SummaryProvider2 (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -246,7 +246,7 @@ def NSSet_SummaryProvider2 (valobj,dict):
 		# this only happens on 64bit, and the bit mask was derived through
 		# experimentation (if counts start looking weird, then most probably
 		#                  the mask needs to be changed)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not CFSet>'
 		if isinstance(summary, basestring):
 			return summary

@@ -298,20 +298,20 @@ class _LocalProcess(_BaseProcess):
                            stdin = PIPE)
 
     def terminate(self):
-        if self._proc.poll() == None:
+        if self._proc.poll() is None:
             # Terminate _proc like it does the pexpect
             signals_to_try = [sig for sig in ['SIGHUP', 'SIGCONT', 'SIGINT'] if sig in dir(signal)]
             for sig in signals_to_try:
                 try:
                     self._proc.send_signal(getattr(signal, sig))
                     time.sleep(self._delayafterterminate)
-                    if self._proc.poll() != None:
+                    if self._proc.poll() is not None:
                         return
                 except ValueError:
                     pass  # Windows says SIGINT is not a valid signal to send
             self._proc.terminate()
             time.sleep(self._delayafterterminate)
-            if self._proc.poll() != None:
+            if self._proc.poll() is not None:
                 return
             self._proc.kill()
             time.sleep(self._delayafterterminate)
@@ -1733,7 +1733,7 @@ class Base(unittest2.TestCase):
             # False because there's no need to write "expected failure" to the
             # stderr twice.
             # Once by the Python unittest framework, and a second time by us.
-            if bugnumber == None:
+            if bugnumber is None:
                 print("expected failure", file=sbuf)
             else:
                 print("expected failure (problem id:" + str(bugnumber) + ")", file=sbuf)
@@ -1754,7 +1754,7 @@ class Base(unittest2.TestCase):
             # False because there's no need to write "unexpected success" to the
             # stderr twice.
             # Once by the Python unittest framework, and a second time by us.
-            if bugnumber == None:
+            if bugnumber is None:
                 print("unexpected success", file=sbuf)
             else:
                 print("unexpected success (problem id:" + str(bugnumber) + ")", file=sbuf)
@@ -1976,12 +1976,12 @@ class Base(unittest2.TestCase):
            Any operator other than the following defaults to an equality test:
              '>', '>=', "=>", '<', '<=', '=<', '!=', "!" or 'not'
         """
-        if (compiler_version == None):
+        if (compiler_version is None):
             return True
         operator = str(compiler_version[0])
         version = compiler_version[1]
 
-        if (version == None):
+        if (version is None):
             return True
         if (operator == '>'):
             return self.getCompilerVersion() > version
@@ -1997,7 +1997,7 @@ class Base(unittest2.TestCase):
 
     def expectedCompiler(self, compilers):
         """Returns True iff any element of compilers is a sub-string of the current compiler."""
-        if (compilers == None):
+        if (compilers is None):
             return True
 
         for compiler in compilers:
@@ -2008,7 +2008,7 @@ class Base(unittest2.TestCase):
 
     def expectedArch(self, archs):
         """Returns True iff any element of archs is a sub-string of the current architecture."""
-        if (archs == None):
+        if (archs is None):
             return True
 
         for arch in archs:

@@ -43,17 +43,17 @@ class FileLogger:
 				pass
 
 	def write(self,data):
-		if self.file != None:
+		if self.file is not None:
 			print(data,file=self.file)
 		else:
 			print(data)
 
 	def flush(self):
-		if self.file != None:
+		if self.file is not None:
 			self.file.flush()
 
 	def close(self):
-		if self.file != None:
+		if self.file is not None:
 			self.file.close()
 			self.file = None
 
@@ -77,7 +77,7 @@ class Logger:
 			return
 		want_file = False
 		try:
-			want_file = (_lldb_formatters_debug_filename != None and _lldb_formatters_debug_filename != '' and _lldb_formatters_debug_filename != 0)
+			want_file = (_lldb_formatters_debug_filename is not None and _lldb_formatters_debug_filename != '' and _lldb_formatters_debug_filename != 0)
 		except:
 			pass
 		if want_file:
@@ -99,7 +99,7 @@ class Logger:
 	def _log_caller(self):
 		caller = inspect.stack()[2]
 		try:
-			if caller != None and len(caller) > 3:
+			if caller is not None and len(caller) > 3:
 				self.write('Logging from function ' + str(caller))
 			else:
 				self.write('Caller info not available - Required caller logging not possible')

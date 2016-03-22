@@ -56,8 +56,8 @@ class CommandParser:
                 if new_breakpoint:
                     current_breakpoint = None
 
-                if command != None:
-                    if current_breakpoint == None:
+                if command is not None:
+                    if current_breakpoint is None:
                         current_breakpoint = {}
                         current_breakpoint['file_name'] = source_file
                         current_breakpoint['line_number'] = line_number

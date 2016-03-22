@@ -74,7 +74,7 @@ def main():
 
     for host in sys.argv[1:]:
         child = login(host, user, password)
-        if child == None:
+        if child is None:
             print 'Could not login to host:', host
             continue
         print 'Changing password on host:', host

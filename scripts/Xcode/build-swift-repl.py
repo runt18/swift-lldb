@@ -49,14 +49,14 @@ def swiftc_path():
 
 def swift_target():
     deployment_target = macosx_deployment_target()
-    if deployment_target != None:
+    if deployment_target is not None:
         return arch()+"-apple-macosx"+deployment_target
     else:
         return None
 
 def target_arg_for_repl():
     target = swift_target()
-    if target != None:
+    if target is not None:
         return ["-target", target]
     else:
         return []

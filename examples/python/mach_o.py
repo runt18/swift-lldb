@@ -566,11 +566,11 @@ class Mach:
         else:
             self.content = None
 
-        if self.content != None:
+        if self.content is not None:
             self.content.unpack(data, self.magic)
 
     def is_valid(self):
-        return self.content != None
+        return self.content is not None
 
     class Universal:
         
@@ -1168,7 +1168,7 @@ class Mach:
 
             
         def __init__(self, c=None, l=0,o=0):   
-            if c != None:
+            if c is not None:
                 self.command = c
             else:
                 self.command = Mach.LoadCommand.Command(0)

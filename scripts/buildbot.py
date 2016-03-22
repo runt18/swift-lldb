@@ -51,7 +51,7 @@ class LLDBBuildBot:
         
         cmdline_prefix = []
         
-        if self.m_revision != None:
+        if self.m_revision is not None:
             cmdline_prefix = ["svn", "-r %s" % (self.m_revision), "co"]
         else:
             cmdline_prefix = ["svn", "co"]

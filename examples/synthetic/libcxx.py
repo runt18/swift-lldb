@@ -47,7 +47,7 @@ def stdstring_SummaryProvider(valobj,dict):
 		data_ptr = l.GetChildAtIndex(2)
 		size_vo = l.GetChildAtIndex(1)
 		size = size_vo.GetValueAsUnsigned(0)+1 # the NULL terminator must be accounted for
-		if size <= 1 or size == None: # should never be the case
+		if size <= 1 or size is None: # should never be the case
 			return '""'
 		try:
 			data = data_ptr.GetPointeeData(0,size)
@@ -185,7 +185,7 @@ class stdlist_iterator:
 	def next(self):
 		logger = lldb.formatters.Logger.Logger()
 		node = self.increment_node(self.node)
-		if node != None and node.sbvalue.IsValid() and not(node.is_null):
+		if node is not None and node.sbvalue.IsValid() and not(node.is_null):
 			self.node = node
 			return self.value()
 		else:
@@ -242,7 +242,7 @@ class stdlist_SynthProvider:
 	def num_children(self):
 		global _list_capping_size
 		logger = lldb.formatters.Logger.Logger()
-		if self.count == None:
+		if self.count is None:
 			self.count = self.num_children_impl()
 			if self.count > _list_capping_size:
 				self.count = _list_capping_size
@@ -426,7 +426,7 @@ class stdmap_iterator:
 	def next(self):
 		logger = lldb.formatters.Logger.Logger()
 		node = self.increment_node(self.node)
-		if node != None and node.sbvalue.IsValid() and not(node.is_null):
+		if node is not None and node.sbvalue.IsValid() and not(node.is_null):
 			self.node = node
 			return self.value()
 		else:
@@ -441,7 +441,7 @@ class stdmap_iterator:
 		if N == 1:
 			return self.next()
 		while N > 0:
-			if self.next() == None:
+			if self.next() is None:
 				return None
 			N = N - 1
 		return self.value()
@@ -474,7 +474,7 @@ class stdmap_SynthProvider:
 	def num_children(self):
 		global _map_capping_size
 		logger = lldb.formatters.Logger.Logger()
-		if self.count == None:
+		if self.count is None:
 			self.count = self.num_children_impl()
 			if self.count > _map_capping_size:
 				self.count = _map_capping_size
@@ -492,7 +492,7 @@ class stdmap_SynthProvider:
 
 	def get_data_type(self):
 		logger = lldb.formatters.Logger.Logger()
-		if self.data_type == None or self.data_size == None:
+		if self.data_type is None or self.data_size is None:
 			if self.num_children() == 0:
 				return False
 			deref = self.root_node.Dereference()
@@ -510,7 +510,7 @@ class stdmap_SynthProvider:
 
 	def get_value_offset(self,node):
 		logger = lldb.formatters.Logger.Logger()
-		if self.skip_size == None:
+		if self.skip_size is None:
 			node_type = node.GetType()
 			fields_count = node_type.GetNumberOfFields()
 			for i in range(fields_count):
@@ -518,7 +518,7 @@ class stdmap_SynthProvider:
 				if field.GetName() == '__value_':
 					self.skip_size = field.GetOffsetInBytes()
 					break
-		return (self.skip_size != None)
+		return (self.skip_size is not None)
 
 	def get_child_index(self,name):
 		logger = lldb.formatters.Logger.Logger()
@@ -545,7 +545,7 @@ class stdmap_SynthProvider:
 			# hence, we need to know if we are at a node != 0, so that we can still get at the data
 			need_to_skip = (index > 0)
 			current = iterator.advance(index)
-			if current == None:
+			if current is None:
 				logger >> "Tree is garbage - returning None"
 				self.garbage = True
 				return None
@@ -560,7 +560,7 @@ class stdmap_SynthProvider:
 					return self.valobj.CreateValueFromData('[' + str(index) + ']',obj_data,self.data_type)
 				else:
 					# FIXME we need to have accessed item 0 before accessing any other item!
-					if self.skip_size == None:
+					if self.skip_size is None:
 						logger >> "You asked for item > 0 before asking for item == 0, I will fetch 0 now then retry"
 						if self.get_child_at_index(0):
 							return self.get_child_at_index(index)
@@ -738,7 +738,7 @@ class stdsharedptr_SynthProvider:
         if index == 0:
             return self.ptr
         if index == 1:
-            if self.cntrl == None:
+            if self.cntrl is None:
                 count = 0
             else:
                 count = 1 + self.cntrl.GetChildMemberWithName('__shared_owners_').GetValueAsSigned()
@@ -746,7 +746,7 @@ class stdsharedptr_SynthProvider:
                                                    lldb.SBData.CreateDataFromUInt64Array(self.endianness, self.pointer_size, [count]),
                                                    self.count_type)
         if index == 2:
-            if self.cntrl == None:
+            if self.cntrl is None:
                 count = 0
             else:
                 count = 1 + self.cntrl.GetChildMemberWithName('__shared_weak_owners_').GetValueAsSigned()

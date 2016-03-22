@@ -53,7 +53,7 @@ class NSBundleKnown_SummaryProvider:
 							self.offset(),
 							self.sys_params.types_cache.NSString)
 		my_string = text.GetSummary()
-		if (my_string == None) or (my_string == ''):
+		if (my_string is None) or (my_string == ''):
 			statistics.metric_hit('unknown_class',str(self.valobj.GetName()) + " triggered unknown pointer location")
 			return NSBundleUnknown_SummaryProvider(self.valobj, self.sys_params).url_text()
 		else:
@@ -110,7 +110,7 @@ def GetSummary_Impl(valobj):
 def NSBundle_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -118,7 +118,7 @@ def NSBundle_SummaryProvider (valobj,dict):
 		except:
 			summary = None
 		logger >> "got summary " + str(summary)
-		if summary == None or summary == '':
+		if summary is None or summary == '':
 			summary = '<variable is not NSBundle>'
 		return summary
 	return 'Summary Unavailable'

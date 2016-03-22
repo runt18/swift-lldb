@@ -87,7 +87,7 @@ class TestSwiftGlobals(TestBase):
         self.assertTrue(my_large_dude.IsValid(), "my_large_dude returned a valid value object.")
         value = my_large_dude.GetValue()
         self.assertTrue(error.Success(), "Got a value for my_large_dude")
-        self.assertTrue(value == None, "my_large_dude value is the uninitialized one.")
+        self.assertTrue(value is None, "my_large_dude value is the uninitialized one.")
 
         # Now proceed to the breakpoint in our main function, make sure we can
         # still read these variables and they now have the right values.

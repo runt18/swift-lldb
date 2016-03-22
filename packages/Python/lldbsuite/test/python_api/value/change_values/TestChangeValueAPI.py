@@ -144,6 +144,6 @@ class ChangeValueAPITestCase(TestBase):
 
         self.assertTrue(process.GetState() == lldb.eStateStopped)
         thread = lldbutil.get_stopped_thread(process, lldb.eStopReasonBreakpoint)
-        self.assertTrue(thread == None, "We should not have managed to hit our second breakpoint with sp == 1")
+        self.assertTrue(thread is None, "We should not have managed to hit our second breakpoint with sp == 1")
         
         process.Kill()

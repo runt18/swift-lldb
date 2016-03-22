@@ -59,7 +59,7 @@ def DFS (root, word, cur_path):
 
         # Check to see if left child is NULL
 
-        if left_child_ptr.GetValue() == None:
+        if left_child_ptr.GetValue() is None:
             return ""
         else:
             cur_path = cur_path + "L"
@@ -68,7 +68,7 @@ def DFS (root, word, cur_path):
 
         # Check to see if right child is NULL
 
-        if right_child_ptr.GetValue() == None:
+        if right_child_ptr.GetValue() is None:
             return ""
         else:
             cur_path = cur_path + "R"
@@ -84,7 +84,7 @@ def tree_size (root):
     the one defined in dictionary.c  It uses LLDB API
     functions to examine and traverse the tree nodes.
     """
-    if (root.GetValue == None):
+    if (root.GetValue is None):
         return 0
 
     if (int (root.GetValue(), 16) == 0):
@@ -107,12 +107,12 @@ def print_tree (root):
     the one defined in dictionary.c  It uses LLDB API
     functions to examine and traverse the tree nodes.
     """
-    if (root.GetChildAtIndex(1).GetValue() != None) and (int (root.GetChildAtIndex(1).GetValue(), 16) != 0):
+    if (root.GetChildAtIndex(1).GetValue() is not None) and (int (root.GetChildAtIndex(1).GetValue(), 16) != 0):
         print_tree (root.GetChildAtIndex(1))
 
     print root.GetChildAtIndex(0).GetSummary()
 
-    if (root.GetChildAtIndex(2).GetValue() != None) and (int (root.GetChildAtIndex(2).GetValue(), 16) != 0):
+    if (root.GetChildAtIndex(2).GetValue() is not None) and (int (root.GetChildAtIndex(2).GetValue(), 16) != 0):
         print_tree (root.GetChildAtIndex(2))
 
 

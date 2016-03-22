@@ -23,7 +23,7 @@ def CFString_SummaryProvider (valobj,dict):
 				summary = '"' + summary + '"'
 		except:
 			summary = None
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not NSString>'
 		return '@'+summary
 	return ''
@@ -33,7 +33,7 @@ def CFAttributedString_SummaryProvider (valobj,dict):
 	offset = valobj.GetTarget().GetProcess().GetAddressByteSize()
 	pointee = valobj.GetValueAsUnsigned(0)
 	summary = '<variable is not NSAttributedString>'
-	if pointee != None and pointee != 0:
+	if pointee is not None and pointee != 0:
 		pointee = pointee + offset
 		child_ptr = valobj.CreateValueFromAddress("string_ptr",pointee,valobj.GetType())
 		child = child_ptr.CreateValueFromAddress("string_data",child_ptr.GetValueAsUnsigned(),valobj.GetType()).AddressOf()
@@ -43,7 +43,7 @@ def CFAttributedString_SummaryProvider (valobj,dict):
 				summary = provider.get_child_at_index(provider.get_child_index("content")).GetSummary();
 			except:
 				summary = '<variable is not NSAttributedString>'
-	if summary == None:
+	if summary is None:
 		summary = '<variable is not NSAttributedString>'
 	return '@'+summary
 
@@ -262,7 +262,7 @@ class CFStringSynthProvider:
 					self.valobj.GetType().GetBasicType(lldb.eBasicTypeChar));
 		cfinfo.SetFormat(11)
 		info = cfinfo.GetValue();
-		if info != None:
+		if info is not None:
 			self.invalid = False;
 			return int(info,0);
 		else:
@@ -311,7 +311,7 @@ class CFStringSynthProvider:
 	def compute_flags(self):
 		logger = lldb.formatters.Logger.Logger()
 		self.info_bits = self.read_info_bits();
-		if self.info_bits == None:
+		if self.info_bits is None:
 			return;
 		self.mutable = self.is_mutable();
 		self.inline = self.is_inline();

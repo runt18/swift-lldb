@@ -204,7 +204,7 @@ class RwT_Data:
 class Class_Data_V2:
 	def __init__(self,isa_pointer,params):
 		logger = lldb.formatters.Logger.Logger()
-		if (isa_pointer != None) and (Utilities.is_valid_pointer(isa_pointer.GetValueAsUnsigned(),params.pointer_size, allow_tagged=0)):
+		if (isa_pointer is not None) and (Utilities.is_valid_pointer(isa_pointer.GetValueAsUnsigned(),params.pointer_size, allow_tagged=0)):
 			self.sys_params = params
 			self.valobj = isa_pointer
 			self.check_valid()
@@ -325,7 +325,7 @@ class Class_Data_V2:
 class Class_Data_V1:
 	def __init__(self,isa_pointer,params):
 		logger = lldb.formatters.Logger.Logger()
-		if (isa_pointer != None) and (Utilities.is_valid_pointer(isa_pointer.GetValueAsUnsigned(),params.pointer_size, allow_tagged=0)):
+		if (isa_pointer is not None) and (Utilities.is_valid_pointer(isa_pointer.GetValueAsUnsigned(),params.pointer_size, allow_tagged=0)):
 			self.valid = 1
 			self.sys_params = params
 			self.valobj = isa_pointer
@@ -657,7 +657,7 @@ class ObjCRuntime:
 			if section.GetName() == '__OBJC':
 				section_objc = section
 				break
-		if section_objc != None and section_objc.IsValid():
+		if section_objc is not None and section_objc.IsValid():
 			logger >> "found __OBJC: v1"
 			return 1
 		logger >> "no __OBJC: v2"
@@ -702,7 +702,7 @@ class ObjCRuntime:
 
 	def read_isa(self):
 		logger = lldb.formatters.Logger.Logger()
-		if self.isa_value != None:
+		if self.isa_value is not None:
 			logger >> "using cached isa"
 			return self.isa_value
 		self.isa_pointer = self.valobj.CreateChildAtOffset("cfisa",
@@ -740,7 +740,7 @@ class ObjCRuntime:
 		if self.is_valid() == 0 or self.read_isa() is None:
 			return InvalidClass_Data()
 		data = self.sys_params.isa_cache.get_value(self.isa_value,default=None)
-		if data != None:
+		if data is not None:
 			return data
 		if self.sys_params.runtime_version == 2:
 			data = Class_Data_V2(self.isa_pointer,self.sys_params)

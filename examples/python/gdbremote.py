@@ -312,7 +312,7 @@ class RegisterInfo:
                 return '0x%16.16x' % (uval)
         bytes = list();
         uval = packet.get_hex_uint8()
-        while uval != None:
+        while uval is not None:
             bytes.append(uval)
             uval = packet.get_hex_uint8()
         value_str = '0x'
@@ -461,16 +461,16 @@ class Packet:
     def get_hex_uint(self, byte_order, n = 0):
         if byte_order == 'big':
             hex_str = self.get_hex_chars(n)
-            if hex_str == None:
+            if hex_str is None:
                 return None
             return int(hex_str, 16)
         else:
             uval = self.get_hex_uint8()
-            if uval == None:
+            if uval is None:
                 return None
             uval_result = 0
             shift = 0
-            while uval != None:
+            while uval is not None:
                 uval_result |= (uval << shift)
                 shift += 8
                 uval = self.get_hex_uint8()
@@ -853,7 +853,7 @@ def dump_hex_memory_buffer(addr, hex_byte_str):
     idx = 0
     ascii = ''
     uval = packet.get_hex_uint8()
-    while uval != None:
+    while uval is not None:
         if ((idx % 16) == 0):
             if ascii:
                 print '  ', ascii
@@ -942,7 +942,7 @@ def cmd_read_one_reg(options, cmd, args):
     s = 'read_register (reg_num=%u' % reg_num
     if name:
         s += ' (%s)' % (name)
-    if tid != None:
+    if tid is not None:
         s += ', tid = 0x%4.4x' % (tid)
     s += ')'
     print s
@@ -967,7 +967,7 @@ def cmd_write_one_reg(options, cmd, args):
             s += ' (%s)' % (name)
         s += ', value = '
         s += get_register_name_equal_value(options, reg_num, hex_value_str)
-        if tid != None:
+        if tid is not None:
             s += ', tid = 0x%4.4x' % (tid)
         s += ')'
         print s
@@ -977,7 +977,7 @@ def dump_all_regs(packet):
     for reg_info in g_register_infos:
         nibble_size = reg_info.bit_size() / 4
         hex_value_str = packet.get_hex_chars(nibble_size)
-        if hex_value_str != None:
+        if hex_value_str is not None:
             value = reg_info.get_value_from_hex_string (hex_value_str)
             print '%*s = %s' % (g_max_register_info_name_len, reg_info.name(), value)
         else:
@@ -987,7 +987,7 @@ def cmd_read_all_regs(cmd, cmd_args):
     packet = Packet(cmd_args)
     packet.get_char() # toss the 'g' command character
     tid = get_thread_from_thread_suffix (packet.str)
-    if tid != None:
+    if tid is not None:
         print 'read_all_register(thread = 0x%4.4x)' % tid
     else:
         print 'read_all_register()'

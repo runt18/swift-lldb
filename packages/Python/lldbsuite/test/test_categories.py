@@ -61,7 +61,7 @@ def validate(categories, exact_match):
         origCategory = category
         if category not in all_categories and not exact_match:
             category = unique_string_match(category, all_categories)
-        if (category not in all_categories) or category == None:
+        if (category not in all_categories) or category is None:
             print("fatal error: category '" + origCategory + "' is not a valid category")
             print("if you have added a new category, please edit test_categories.py, adding your new category to all_categories")
             print("else, please specify one or more of the following: " + str(list(all_categories.keys())))

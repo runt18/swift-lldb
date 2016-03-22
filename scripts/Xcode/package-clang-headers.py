@@ -59,7 +59,7 @@ for subdir in os.listdir(clang_dir):
         version_dir = os.path.join(clang_dir, subdir)
         break
 
-if version_dir == None:
+if version_dir is None:
     print "Couldn't find a subdirectory of the form #(.#)... in " + clang_dir
     sys.exit(1)
 

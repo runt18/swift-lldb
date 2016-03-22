@@ -27,11 +27,11 @@ def backtrace_print_frame (target, frame_num, addr, fp):
     if sbaddr.GetModule():
       module_filename = ""
       module_uuid_str = sbaddr.GetModule().GetUUIDString()
-      if module_uuid_str == None:
+      if module_uuid_str is None:
         module_uuid_str = ""
       if sbaddr.GetModule().GetFileSpec():
         module_filename = sbaddr.GetModule().GetFileSpec().GetFilename()
-        if module_filename == None:
+        if module_filename is None:
           module_filename = ""
       if module_uuid_str != "" or module_filename != "":
         module_description = '%s %s' % (module_filename, module_uuid_str)
@@ -71,7 +71,7 @@ def simple_backtrace(debugger):
   this_module = backtrace_print_frame (target, 0, cur_thread.GetFrameAtIndex(0).GetPC(), initial_fp)
   print_stack_frame (process, initial_fp)
   print ""
-  if this_module != None:
+  if this_module is not None:
     module_list.append (this_module)
   if cur_thread.GetNumFrames() < 2:
     return [module_list, address_list]
@@ -86,7 +86,7 @@ def simple_backtrace(debugger):
     this_module = backtrace_print_frame (target, frame_num, cur_pc, cur_fp)
     print_stack_frame (process, cur_fp)
     print ""
-    if this_module != None:
+    if this_module is not None:
       module_list.append (this_module)
     frame_num = frame_num + 1
     next_pc = 0
@@ -107,7 +107,7 @@ def simple_backtrace(debugger):
   this_module = backtrace_print_frame (target, frame_num, cur_pc, cur_fp)
   print_stack_frame (process, cur_fp)
   print ""
-  if this_module != None:
+  if this_module is not None:
     module_list.append (this_module)
   return [module_list, address_list]
 
@@ -182,7 +182,7 @@ to be helpful when reporting the problem.
             this_module = backtrace_print_frame (target, frame_num, frame.GetPC(), frame.GetFP())
             print_stack_frame (process, frame.GetFP())
             print ""
-            if this_module != None:
+            if this_module is not None:
               modules_seen.append (this_module)
             addresses_seen.append (frame.GetPC())
             frame_num = frame_num + 1
@@ -192,9 +192,9 @@ to be helpful when reporting the problem.
         print "Simple stack walk algorithm:"
         print ""
         (module_list, address_list) = simple_backtrace(debugger)
-        if module_list and module_list != None:
+        if module_list and module_list is not None:
           modules_seen += module_list
-        if address_list and address_list != None:
+        if address_list and address_list is not None:
           addresses_seen = set(addresses_seen)
           addresses_seen.update(set(address_list))
 
@@ -205,7 +205,7 @@ to be helpful when reporting the problem.
         print ""
         modules_already_seen = set()
         for module in modules_seen:
-          if module != None and module.GetFileSpec().GetFilename() != None:
+          if module is not None and module.GetFileSpec().GetFilename() is not None:
             if not module.GetFileSpec().GetFilename() in modules_already_seen:
               debugger.HandleCommand('image list %s' % module.GetFileSpec().GetFilename())
               modules_already_seen.add(module.GetFileSpec().GetFilename())

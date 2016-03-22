@@ -248,11 +248,11 @@ class EventAPITestCase(TestBase):
                         if match.group(1) == 'connected':
                             # When debugging remote targets with lldb-server, we
                             # first get the 'connected' event.
-                            self.context.assertTrue(self.context.state == None)
+                            self.context.assertTrue(self.context.state is None)
                             self.context.state = 'connected'
                             continue
                         elif match.group(1) == 'running':
-                            self.context.assertTrue(self.context.state == None or self.context.state == 'connected')
+                            self.context.assertTrue(self.context.state is None or self.context.state == 'connected')
                             self.context.state = 'running'
                             continue
                         elif match.group(1) == 'stopped':

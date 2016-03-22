@@ -235,7 +235,7 @@ class VimPane(object):
 
   def isPrepared(self):
     """ check window is OK """
-    if self.buffer == None or len(dir(self.buffer)) == 0 or bufwinnr(self.name) == -1:
+    if self.buffer is None or len(dir(self.buffer)) == 0 or bufwinnr(self.name) == -1:
       return False
     return True
 
@@ -249,7 +249,7 @@ class VimPane(object):
 
   def destroy(self):
     """ destroy window """
-    if self.buffer == None or len(dir(self.buffer)) == 0:
+    if self.buffer is None or len(dir(self.buffer)) == 0:
       return
     vim.command('bdelete ' + self.name)
 

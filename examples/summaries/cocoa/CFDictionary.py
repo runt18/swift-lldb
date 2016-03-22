@@ -90,7 +90,7 @@ class NSDictionaryI_SummaryProvider:
 							self.offset(),
 							self.sys_params.types_cache.NSUInteger)
 		value = num_children_vo.GetValueAsUnsigned(0)
-		if value != None:
+		if value is not None:
 			# the MS6bits on immutable dictionaries seem to be taken by the LSB of capacity
 			# not sure if it is a bug or some weird sort of feature, but masking that out
 			# gets the count right
@@ -129,7 +129,7 @@ class NSDictionaryM_SummaryProvider:
 							self.offset(),
 							self.sys_params.types_cache.NSUInteger)
 		value = num_children_vo.GetValueAsUnsigned(0)
-		if value != None:
+		if value is not None:
 			# the MS6bits on immutable dictionaries seem to be taken by the LSB of capacity
 			# not sure if it is a bug or some weird sort of feature, but masking that out
 			# gets the count right
@@ -191,7 +191,7 @@ def GetSummary_Impl(valobj):
 def CFDictionary_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -199,7 +199,7 @@ def CFDictionary_SummaryProvider (valobj,dict):
 		except:
 			summary = None
 		logger >> "got summary " + str(summary)
-		if summary == None:
+		if summary is None:
 			return '<variable is not NSDictionary>'
 		if isinstance(summary,basestring):
 			return summary
@@ -209,7 +209,7 @@ def CFDictionary_SummaryProvider (valobj,dict):
 def CFDictionary_SummaryProvider2 (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -217,7 +217,7 @@ def CFDictionary_SummaryProvider2 (valobj,dict):
 		except:
 			summary = None
 		logger >> "got summary " + str(summary)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not CFDictionary>'
 		if isinstance(summary,basestring):
 			return summary
