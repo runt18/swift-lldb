@@ -34,7 +34,7 @@ class LogTestCase(TestBase):
         self.expect("file " + exe,
                     patterns = [ "Current executable set to .*a.out" ])
 
-        log_file = os.path.join (os.getcwd(), "lldb-commands-log-%s-%s-%s.txt" % (type,
+        log_file = os.path.join (os.getcwd(), "lldb-commands-log-{0!s}-{1!s}-{2!s}.txt".format(type,
                                                                                   os.path.basename(self.getCompiler()),
                                                                                   self.getArchitecture()))
 
@@ -44,7 +44,7 @@ class LogTestCase(TestBase):
         # By default, Debugger::EnableLog() will set log options to
         # PREPEND_THREAD_NAME + OPTION_THREADSAFE. We don't want the
         # threadnames here, so we enable just threadsafe (-t).
-        self.runCmd ("log enable -t -f '%s' lldb commands" % (log_file))
+        self.runCmd ("log enable -t -f '{0!s}' lldb commands".format((log_file)))
         
         self.runCmd ("command alias bp breakpoint")
                      
@@ -74,7 +74,7 @@ class LogTestCase(TestBase):
             for i in range(1, 1000):
                 f.write("bacon\n")
 
-        self.runCmd ("log enable -t -f '%s' lldb commands" % (self.truncate_log_file))
+        self.runCmd ("log enable -t -f '{0!s}' lldb commands".format((self.truncate_log_file)))
         self.runCmd ("help log")
         self.runCmd ("log disable lldb")
 
@@ -95,7 +95,7 @@ class LogTestCase(TestBase):
         with open(self.append_log_file, "w") as f:
             f.write("bacon\n")
 
-        self.runCmd ("log enable -t -a -f '%s' lldb commands" % (self.append_log_file))
+        self.runCmd ("log enable -t -a -f '{0!s}' lldb commands".format((self.append_log_file)))
         self.runCmd ("help log")
         self.runCmd ("log disable lldb")
 

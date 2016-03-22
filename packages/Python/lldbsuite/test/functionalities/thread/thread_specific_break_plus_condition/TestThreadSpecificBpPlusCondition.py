@@ -53,7 +53,7 @@ class ThreadSpecificBreakPlusConditionTestCase(TestBase):
         value = frame.FindVariable("my_value").GetValueAsSigned(0)
         self.assertTrue (value > 0 and value < 11, "Got a reasonable value for my_value.")
 
-        cond_string = "my_value != %d"%(value)
+        cond_string = "my_value != {0:d}".format((value))
 
         break_thread_body.SetThreadID(victim_thread.GetThreadID())
         break_thread_body.SetCondition (cond_string)

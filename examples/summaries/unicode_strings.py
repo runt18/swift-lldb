@@ -20,7 +20,7 @@ def utf8_summary(value,unused):
 		return '""'
 	error = lldb.SBError()
 	string_data = value.process.ReadMemory(pointer, length, error)
-	return '"%s"' % (string_data) # utf8 is safe to emit as-is on OSX
+	return '"{0!s}"'.format((string_data)) # utf8 is safe to emit as-is on OSX
 
 def utf16_summary(value,unused):
 	pointer = value.GetChildMemberWithName("first").GetValueAsUnsigned(0)
@@ -32,7 +32,7 @@ def utf16_summary(value,unused):
 		return '""'
 	error = lldb.SBError()
 	string_data = value.process.ReadMemory(pointer, length, error)
-	return '"%s"' % (string_data.decode('utf-16').encode('utf-8')) # utf8 is safe to emit as-is on OSX
+	return '"{0!s}"'.format((string_data.decode('utf-16').encode('utf-8'))) # utf8 is safe to emit as-is on OSX
 
 def utf32_summary(value,unused):
 	pointer = value.GetChildMemberWithName("first").GetValueAsUnsigned(0)
@@ -44,5 +44,5 @@ def utf32_summary(value,unused):
 		return '""'
 	error = lldb.SBError()
 	string_data = value.process.ReadMemory(pointer, length, error)
-	return '"%s"' % (string_data.decode('utf-32').encode('utf-8')) # utf8 is safe to emit as-is on OSX
+	return '"{0!s}"'.format((string_data.decode('utf-32').encode('utf-8'))) # utf8 is safe to emit as-is on OSX
 

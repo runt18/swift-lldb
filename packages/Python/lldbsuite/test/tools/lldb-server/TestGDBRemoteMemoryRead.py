@@ -34,8 +34,8 @@ class MemoryReadTestCase(TestBase):
             error = lldb.SBError()
             memory = process.ReadMemory(pc, size, error)
             self.assertTrue(error.Success())
-            self.match("process plugin packet send x%x,%x" % (pc, size), ["response:", memory])
-            self.match("process plugin packet send m%x,%x" % (pc, size), ["response:", binascii.hexlify(memory)])
+            self.match("process plugin packet send x{0:x},{1:x}".format(pc, size), ["response:", memory])
+            self.match("process plugin packet send m{0:x},{1:x}".format(pc, size), ["response:", binascii.hexlify(memory)])
 
         process.Continue()
         self.assertEqual(process.GetState(), lldb.eStateExited, "Process exited")

@@ -35,7 +35,7 @@ class XCode41Vs42GDBDisassembly(BenchBase):
         self.run_gdb_disassembly(self.gdb_42_exe, self.exe, self.function, self.count)
         print("4.2 gdb benchmark:", self.stopwatch)
         self.gdb_42_avg = self.stopwatch.avg()
-        print("gdb_42_avg/gdb_41_avg: %f" % (self.gdb_42_avg/self.gdb_41_avg))
+        print("gdb_42_avg/gdb_41_avg: {0:f}".format((self.gdb_42_avg/self.gdb_41_avg)))
 
     @benchmarks_test
     @no_debug_info_test
@@ -49,7 +49,7 @@ class XCode41Vs42GDBDisassembly(BenchBase):
         self.run_gdb_disassembly(self.gdb_41_exe, self.exe, self.function, self.count)
         print("4.1 gdb benchmark:", self.stopwatch)
         self.gdb_41_avg = self.stopwatch.avg()
-        print("gdb_42_avg/gdb_41_avg: %f" % (self.gdb_42_avg/self.gdb_41_avg))
+        print("gdb_42_avg/gdb_41_avg: {0:f}".format((self.gdb_42_avg/self.gdb_41_avg)))
 
     def run_gdb_disassembly(self, gdb_exe_path, exe, function, count):
         import pexpect
@@ -58,7 +58,7 @@ class XCode41Vs42GDBDisassembly(BenchBase):
         prompt = self.child_prompt
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s --nx %s' % (gdb_exe_path, exe))
+        self.child = pexpect.spawn('{0!s} --nx {1!s}'.format(gdb_exe_path, exe))
         child = self.child
 
         # Turn on logging for what the child sends back.
@@ -66,7 +66,7 @@ class XCode41Vs42GDBDisassembly(BenchBase):
             child.logfile_read = sys.stdout
 
         child.expect_exact(prompt)
-        child.sendline('break %s' % function)
+        child.sendline('break {0!s}'.format(function))
         child.expect_exact(prompt)
         child.sendline('run')
         child.expect_exact(prompt)

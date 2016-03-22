@@ -36,7 +36,7 @@ class Disassemble_VST1_64(TestBase):
         if self.TraceOn():
             print()
             for i in insts:
-                print("Disassembled%s" % str(i))
+                print("Disassembled{0!s}".format(str(i)))
 
         # Remove the following return statement when the radar is fixed.
         return
@@ -53,6 +53,6 @@ class Disassemble_VST1_64(TestBase):
         if self.TraceOn():
             print()
             print("Raw bytes:    ", [hex(x) for x in raw_bytes])
-            print("Disassembled%s" % str(inst))
+            print("Disassembled{0!s}".format(str(inst)))
  
         self.assertTrue (inst.GetMnemonic(target) == "vst1.64")

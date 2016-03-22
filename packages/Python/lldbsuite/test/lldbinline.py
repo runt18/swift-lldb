@@ -86,9 +86,9 @@ class InlineTest(TestBase):
             # The test was skipped altogether.
             return ""
         elif self.using_dsym:
-            return "-N dwarf %s" % (self.mydir)
+            return "-N dwarf {0!s}".format((self.mydir))
         else:
-            return "-N dsym %s" % (self.mydir)
+            return "-N dsym {0!s}".format((self.mydir))
 
     def BuildMakefile(self):
         if os.path.exists("Makefile"):
@@ -178,7 +178,7 @@ class InlineTest(TestBase):
             answer = value.GetSummary()
         else:
             answer = value.GetValue()
-        report_str = "%s expected: %s got: %s"%(expression, expected_result, answer)
+        report_str = "{0!s} expected: {1!s} got: {2!s}".format(expression, expected_result, answer)
         self.assertTrue(answer == expected_result, report_str)
 
 def ApplyDecoratorsToFunction(func, decorators):

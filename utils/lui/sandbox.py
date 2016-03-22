@@ -34,7 +34,7 @@ class SandboxUI(cui.CursesUI):
     #self.wins.append(cui.TitledWin(w2, h2, w2, h2, "Test Window 4"))
     list_win = cui.ListWin(w2, h2, w2, h2)
     for i in range(0, 40):
-      list_win.addItem('Item %s' % i)
+      list_win.addItem('Item {0!s}'.format(i))
     self.wins.append(list_win)
     self.wins.append(cui.TitledWin( 0,  0, w2, h2, "Test Window 1"))
     self.wins.append(cui.TitledWin(w2,  0, w2, h2, "Test Window 2"))

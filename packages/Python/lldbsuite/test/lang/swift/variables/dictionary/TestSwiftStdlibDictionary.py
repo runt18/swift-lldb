@@ -77,9 +77,9 @@ class TestSwiftStdlibDictionary(TestBase):
             value_str = str(value_summary)
 
         if fail_on_missing:
-            self.assertTrue(found, ("could not find an expected child for '%s':'%s'" % (key_str,value_str)))
+            self.assertTrue(found, ("could not find an expected child for '{0!s}':'{1!s}'".format(key_str, value_str)))
         else:
-            self.assertFalse(found, ("found a not expected child for '%s':'%s'" % (key_str,value_str)))
+            self.assertFalse(found, ("found a not expected child for '{0!s}':'{1!s}'".format(key_str, value_str)))
 
     def do_test(self):
         """Tests that we properly vend synthetic children for Swift.Dictionary"""
@@ -118,7 +118,7 @@ class TestSwiftStdlibDictionary(TestBase):
         self.runCmd('type summary add a.Wrapper -s ${var.value%S}')
 
         for i in range(0,100):
-            self.find_dictionary_entry(self.get_variable("d"), key_value = str(i), value_summary = '"%s"' % (i * 2 + 1))
+            self.find_dictionary_entry(self.get_variable("d"), key_value = str(i), value_summary = '"{0!s}"'.format((i * 2 + 1)))
         
         self.runCmd('expression d.removeValueForKey(34)')
         self.find_dictionary_entry(self.get_variable("d"), key_value = 34, value_summary = '"43"', fail_on_missing=False)

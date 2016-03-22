@@ -86,7 +86,7 @@ class StandardUnwindTest(TestBase):
             thread = process.GetThreadAtIndex(0)
 
             if self.TraceOn():
-                print("INDEX: %u" % index)
+                print("INDEX: {0:d}".format(index))
                 for f in thread.frames:
                     print(f)
 

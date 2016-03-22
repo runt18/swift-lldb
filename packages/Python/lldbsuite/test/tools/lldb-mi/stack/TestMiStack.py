@@ -21,7 +21,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -82,7 +82,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -95,7 +95,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test int local variables:
         # Run to BP_local_int_test
         line = line_number('main.cpp', '// BP_local_int_test')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"2\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -122,7 +122,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test struct local variable:
         # Run to BP_local_struct_test
         line = line_number('main.cpp', '// BP_local_struct_test')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"3\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -149,7 +149,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test array local variable:
         # Run to BP_local_array_test
         line = line_number('main.cpp', '// BP_local_array_test')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"4\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -176,7 +176,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test pointers as local variable:
         # Run to BP_local_pointer_test
         line = line_number('main.cpp', '// BP_local_pointer_test')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"5\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -208,7 +208,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -221,7 +221,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test int local variables:
         # Run to BP_local_int_test
         line = line_number('main.cpp', '// BP_local_int_test_with_args')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"2\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -248,7 +248,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test struct local variable:
         # Run to BP_local_struct_test
         line = line_number('main.cpp', '// BP_local_struct_test_with_args')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"3\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -275,7 +275,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test array local variable:
         # Run to BP_local_array_test
         line = line_number('main.cpp', '// BP_local_array_test_with_args')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"4\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -302,7 +302,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test pointers as local variable:
         # Run to BP_local_pointer_test
         line = line_number('main.cpp', '// BP_local_pointer_test_with_args')
-        self.runCmd("-break-insert --file main.cpp:%d" % line)
+        self.runCmd("-break-insert --file main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"5\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -334,7 +334,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -372,7 +372,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         self.expect("\^error,msg=\"Command 'stack-info-frame'\. Invalid process during debug session\"")
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -407,7 +407,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -429,7 +429,7 @@ class MiStackTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main

@@ -78,7 +78,7 @@ def getCCSpec(compiler):
             return (" CC=" + cc + " SWIFTCC=" + swiftcc + " SWIFTLIBS=\"" + swift.getSwiftLibraryPath() +
                 "\" SWIFTSDKROOT=\"" + swift.getSwiftSDKRoot() + "\"")
         else:
-            return "CC=\"%s\"" % cc
+            return "CC=\"{0!s}\"".format(cc)
     return ""
 
 def getCmdLine(d):

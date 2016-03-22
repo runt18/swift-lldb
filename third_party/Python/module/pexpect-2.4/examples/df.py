@@ -24,7 +24,7 @@ for dummy in range (0, 1000):
 # Print report
 print
 for m in filesystem_list:
-    s = "Filesystem %s is at %s%%" % (m[0], m[1])
+    s = "Filesystem {0!s} is at {1!s}%".format(m[0], m[1])
     # highlight filesystems over 95% capacity
     if int(m[1]) > 95:
         s = '! ' + s

@@ -405,7 +405,7 @@ class TestOutputBuffering(unittest2.TestCase):
                 Stderr:
                 bar
             """)
-            expectedFullMessage = 'None\n%s%s' % (expectedOutMessage, expectedErrMessage)
+            expectedFullMessage = 'None\n{0!s}{1!s}'.format(expectedOutMessage, expectedErrMessage)
 
             self.assertIs(test, self)
             self.assertEqual(result._original_stdout.getvalue(), expectedOutMessage)

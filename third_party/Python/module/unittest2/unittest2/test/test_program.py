@@ -151,8 +151,8 @@ class TestCommandLineArgs(unittest2.TestCase):
             if attr == 'catch' and not hasInstallHandler:
                 continue
             
-            short_opt = '-%s' % arg[0]
-            long_opt = '--%s' % arg
+            short_opt = '-{0!s}'.format(arg[0])
+            long_opt = '--{0!s}'.format(arg)
             for opt in short_opt, long_opt:
                 setattr(program, attr, None)
                 

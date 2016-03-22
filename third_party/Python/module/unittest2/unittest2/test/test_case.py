@@ -642,16 +642,15 @@ class Test_TestCase(unittest2.TestCase, EqualityMixin, HashingMixin):
             try:
                 self.assertEqual(a, b)
             except self.failureException:
-                self.fail('assertEqual(%r, %r) failed' % (a, b))
+                self.fail('assertEqual({0!r}, {1!r}) failed'.format(a, b))
             try:
                 self.assertEqual(a, b, msg='foo')
             except self.failureException:
-                self.fail('assertEqual(%r, %r) with msg= failed' % (a, b))
+                self.fail('assertEqual({0!r}, {1!r}) with msg= failed'.format(a, b))
             try:
                 self.assertEqual(a, b, 'foo')
             except self.failureException:
-                self.fail('assertEqual(%r, %r) with third parameter failed' %
-                          (a, b))
+                self.fail('assertEqual({0!r}, {1!r}) with third parameter failed'.format(a, b))
 
         unequal_pairs = [
                ((), []),

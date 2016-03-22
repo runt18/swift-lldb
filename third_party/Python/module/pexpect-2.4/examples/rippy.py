@@ -76,7 +76,7 @@ __version__ = '1.2'
 __revision__ = '$Revision: 11 $'
 __all__ = ['main', __version__, __revision__]
 
-GLOBAL_LOGFILE_NAME = "rippy_%d.log" % os.getpid()
+GLOBAL_LOGFILE_NAME = "rippy_{0:d}.log".format(os.getpid())
 GLOBAL_LOGFILE = open (GLOBAL_LOGFILE_NAME, "wb")
 
 ###############################################################################
@@ -208,7 +208,7 @@ Values of 6 to 10 usually adjust quiet DVDs to a comfortable level.""",1),
 #Normally this should be half of the audio sample rate.
 #This improves audio compression and quality.
 #Normally you don't need to change this.""",1),
-'delete_tmp_files_flag':("N","delete temporary files when finished?","""If Y then %s, audio_raw_filename, and 'divx2pass.log' will be deleted at the end."""%GLOBAL_LOGFILE_NAME,1)
+'delete_tmp_files_flag':("N","delete temporary files when finished?","""If Y then {0!s}, audio_raw_filename, and 'divx2pass.log' will be deleted at the end.""".format(GLOBAL_LOGFILE_NAME),1)
 }
 
 ##############################################################################
@@ -239,10 +239,10 @@ def convert (options):
         # and then calculate the length of that. This is because MP4 video is VBR, so
         # you cannot get exact time based on compressed size.
         if options['video_length']=='calc':
-            print "# extract PCM raw audio to %s" % (options['audio_raw_filename'])
+            print "# extract PCM raw audio to {0!s}".format((options['audio_raw_filename']))
             apply_smart (extract_audio, options)
             options['video_length'] = apply_smart (get_length, options)
-            print "# Length of raw audio file : %d seconds (%0.2f minutes)" % (options['video_length'], float(options['video_length'])/60.0)
+            print "# Length of raw audio file : {0:d} seconds ({1:0.2f} minutes)".format(options['video_length'], float(options['video_length'])/60.0)
         if options['video_bitrate']=='calc':
             options['video_bitrate'] = options['video_bitrate_overhead'] * apply_smart (calc_video_bitrate, options) 
         print "# video bitrate : " + str(options['video_bitrate'])
@@ -269,21 +269,21 @@ def convert (options):
     video_actual_size = get_filesize (options['video_final_filename'])
     if options['video_target_size'] != 'none':
         revised_bitrate = calculate_revised_bitrate (options['video_bitrate'], options['video_target_size'], video_actual_size)
-        o.append("# revised video_bitrate : %d\n" % revised_bitrate)
+        o.append("# revised video_bitrate : {0:d}\n".format(revised_bitrate))
     for k,v in options.iteritems():
-        o.append (" %30s : %s\n" % (k, v))
+        o.append (" {0:30!s} : {1!s}\n".format(k, v))
     print '# '.join(o)
     fout = open("rippy.conf","wb").write(''.join(o))
-    print "# final actual video size = %d" % video_actual_size
+    print "# final actual video size = {0:d}".format(video_actual_size)
     if options['video_target_size'] != 'none':
         if video_actual_size > options['video_target_size']:
             print "# FINAL VIDEO SIZE IS GREATER THAN DESIRED TARGET"
-            print "# final video size is %d bytes over target size" % (video_actual_size - options['video_target_size'])
+            print "# final video size is {0:d} bytes over target size".format((video_actual_size - options['video_target_size']))
         else:
-            print "# final video size is %d bytes under target size" % (options['video_target_size'] - video_actual_size)
+            print "# final video size is {0:d} bytes under target size".format((options['video_target_size'] - video_actual_size))
         print "# If you want to run the entire compression process all over again"
         print "# to get closer to the target video size then trying using a revised"
-        print "# video_bitrate of %d" % revised_bitrate
+        print "# video_bitrate of {0:d}".format(revised_bitrate)
 
     return options
 
@@ -330,7 +330,7 @@ def input_option (message, default_value="", help=None, level=0, max_level=0):
     default value is returned automatically without user input.
     """
     if default_value != '':
-        message = "%s [%s] " % (message, default_value)
+        message = "{0!s} [{1!s}] ".format(message, default_value)
     if level > max_level:
         return default_value
     while 1:
@@ -372,7 +372,7 @@ def apply_smart (func, args):
         if func in globals():
             func = globals()[func]
         else:
-            raise NameError("name '%s' is not defined" % func)
+            raise NameError("name '{0!s}' is not defined".format(func))
     if hasattr(func,'im_func'): # Handle case when func is a class method.
         func = func.im_func
     argcount = func.func_code.co_argcount
@@ -415,7 +415,7 @@ def get_aspect_ratio (video_source_filename):
     This function is very lenient. It basically guesses 16/9 whenever
     it cannot figure out the aspect ratio.
     """
-    cmd = "mplayer '%s' -vo png -ao null -frames 1" % video_source_filename
+    cmd = "mplayer '{0!s}' -vo png -ao null -frames 1".format(video_source_filename)
     (command_output, exitstatus) = run(cmd)
     ar = re.findall("Movie-Aspect is ([0-9]+\.?[0-9]*:[0-9]+\.?[0-9]*)", command_output)
     if len(ar)==0:
@@ -440,7 +440,7 @@ def get_aid_list (video_source_filename):
     """This returns a list of audio ids in the source video file.
     TODO: Also extract ID_AID_nnn_LANG to associate language. Not all DVDs include this.
     """
-    cmd = "mplayer '%s' -vo null -ao null -frames 0 -identify" % video_source_filename
+    cmd = "mplayer '{0!s}' -vo null -ao null -frames 0 -identify".format(video_source_filename)
     (command_output, exitstatus) = run(cmd)
     idl = re.findall("ID_AUDIO_ID=([0-9]+)", command_output)
     idl.sort()
@@ -450,7 +450,7 @@ def get_sid_list (video_source_filename):
     """This returns a list of subtitle ids in the source video file.
     TODO: Also extract ID_SID_nnn_LANG to associate language. Not all DVDs include this.
     """
-    cmd = "mplayer '%s' -vo null -ao null -frames 0 -identify" % video_source_filename
+    cmd = "mplayer '{0!s}' -vo null -ao null -frames 0 -identify".format(video_source_filename)
     (command_output, exitstatus) = run(cmd)
     idl = re.findall("ID_SUBTITLE_ID=([0-9]+)", command_output)
     idl.sort()
@@ -462,7 +462,7 @@ def extract_audio (video_source_filename, audio_id=128, verbose_flag=0, dry_run_
         At this time there is no way to set the output audio name.
     """
     #cmd = "mplayer %(video_source_filename)s -vc null -vo null -aid %(audio_id)s -ao pcm:fast -noframedrop" % locals()
-    cmd = "mplayer -quiet '%(video_source_filename)s' -vc dummy -vo null -aid %(audio_id)s -ao pcm:fast -noframedrop" % locals()
+    cmd = "mplayer -quiet '{video_source_filename!s}' -vc dummy -vo null -aid {audio_id!s} -ao pcm:fast -noframedrop".format(**locals())
     if verbose_flag: print cmd
     if not dry_run_flag:
         run(cmd)
@@ -471,7 +471,7 @@ def extract_audio (video_source_filename, audio_id=128, verbose_flag=0, dry_run_
 def extract_subtitles (video_source_filename, subtitle_id=0, verbose_flag=0, dry_run_flag=0):
     """This extracts the given subtitle_id track as VOBSUB format from the given source video.
     """
-    cmd = "mencoder -quiet '%(video_source_filename)s' -o /dev/null -nosound -ovc copy -vobsubout subtitles -vobsuboutindex 0 -sid %(subtitle_id)s" % locals()
+    cmd = "mencoder -quiet '{video_source_filename!s}' -o /dev/null -nosound -ovc copy -vobsubout subtitles -vobsuboutindex 0 -sid {subtitle_id!s}".format(**locals())
     if verbose_flag: print cmd
     if not dry_run_flag:
         run(cmd)
@@ -485,7 +485,7 @@ def get_length (audio_raw_filename):
     Weird...
     This returns -1 if it cannot get the length of the given file.
     """
-    cmd = "mplayer %s -vo null -ao null -frames 0 -identify" % audio_raw_filename
+    cmd = "mplayer {0!s} -vo null -ao null -frames 0 -identify".format(audio_raw_filename)
     (command_output, exitstatus) = run(cmd)
     idl = re.findall("ID_LENGTH=([0-9.]*)", command_output)
     idl.sort()
@@ -539,11 +539,11 @@ def crop_detect (video_source_filename, video_length, dry_run_flag=0):
     """
     skip = int(video_length/9) # offset to skip (-ss option in mencoder)
     sample_length = 10
-    cmd1 = "mencoder '%s' -quiet -ss %d -endpos %d -o /dev/null -nosound -ovc lavc -vf cropdetect" % (video_source_filename,   skip, sample_length)
-    cmd2 = "mencoder '%s' -quiet -ss %d -endpos %d -o /dev/null -nosound -ovc lavc -vf cropdetect" % (video_source_filename, 2*skip, sample_length)
-    cmd3 = "mencoder '%s' -quiet -ss %d -endpos %d -o /dev/null -nosound -ovc lavc -vf cropdetect" % (video_source_filename, 4*skip, sample_length)
-    cmd4 = "mencoder '%s' -quiet -ss %d -endpos %d -o /dev/null -nosound -ovc lavc -vf cropdetect" % (video_source_filename, 6*skip, sample_length)
-    cmd5 = "mencoder '%s' -quiet -ss %d -endpos %d -o /dev/null -nosound -ovc lavc -vf cropdetect" % (video_source_filename, 8*skip, sample_length)
+    cmd1 = "mencoder '{0!s}' -quiet -ss {1:d} -endpos {2:d} -o /dev/null -nosound -ovc lavc -vf cropdetect".format(video_source_filename, skip, sample_length)
+    cmd2 = "mencoder '{0!s}' -quiet -ss {1:d} -endpos {2:d} -o /dev/null -nosound -ovc lavc -vf cropdetect".format(video_source_filename, 2*skip, sample_length)
+    cmd3 = "mencoder '{0!s}' -quiet -ss {1:d} -endpos {2:d} -o /dev/null -nosound -ovc lavc -vf cropdetect".format(video_source_filename, 4*skip, sample_length)
+    cmd4 = "mencoder '{0!s}' -quiet -ss {1:d} -endpos {2:d} -o /dev/null -nosound -ovc lavc -vf cropdetect".format(video_source_filename, 6*skip, sample_length)
+    cmd5 = "mencoder '{0!s}' -quiet -ss {1:d} -endpos {2:d} -o /dev/null -nosound -ovc lavc -vf cropdetect".format(video_source_filename, 8*skip, sample_length)
     if dry_run_flag:
         return "0:0:0:0"
     (command_output1, exitstatus1) = run(cmd1)
@@ -569,7 +569,7 @@ def build_compression_command (video_source_filename, video_final_filename, vide
     #
     video_filter = ''
     if video_crop_area and video_crop_area.lower()!='none':
-        video_filter = video_filter + 'crop=%s' % video_crop_area
+        video_filter = video_filter + 'crop={0!s}'.format(video_crop_area)
     if video_deinterlace_flag:
         if video_filter != '':
             video_filter = video_filter + ','
@@ -577,7 +577,7 @@ def build_compression_command (video_source_filename, video_final_filename, vide
     if video_scale and video_scale.lower()!='none':
         if video_filter != '':
             video_filter = video_filter + ','
-        video_filter = video_filter + 'scale=%s' % video_scale
+        video_filter = video_filter + 'scale={0!s}'.format(video_scale)
     # optional video rotation -- were you holding your camera sideways?
     #if video_filter != '':
     #    video_filter = video_filter + ','
@@ -589,7 +589,7 @@ def build_compression_command (video_source_filename, video_final_filename, vide
     # build chapter argument
     #
     if video_chapter is not None:
-        chapter = '-chapter %d-%d' %(video_chapter,video_chapter)
+        chapter = '-chapter {0:d}-{1:d}'.format(video_chapter, video_chapter)
     else:
         chapter = ''
 #    chapter = '-chapter 2-2'
@@ -601,11 +601,11 @@ def build_compression_command (video_source_filename, video_final_filename, vide
     if audio_sample_rate:
         if audio_filter != '':
             audio_filter = audio_filter + ','
-        audio_filter = audio_filter + 'lavcresample=%s' % audio_sample_rate 
+        audio_filter = audio_filter + 'lavcresample={0!s}'.format(audio_sample_rate) 
     if audio_volume_boost is not None:
         if audio_filter != '':
             audio_filter = audio_filter + ','
-        audio_filter = audio_filter + 'volume=%0.1f:1'%audio_volume_boost
+        audio_filter = audio_filter + 'volume={0:0.1f}:1'.format(audio_volume_boost)
     if audio_filter != '':
         audio_filter = '-af ' + audio_filter
     #
@@ -616,18 +616,18 @@ def build_compression_command (video_source_filename, video_final_filename, vide
     # build lavcopts argument
     #
     #lavcopts = '-lavcopts vcodec=%s:vbitrate=%d:mbd=2:aspect=%s:acodec=%s:abitrate=%d:vpass=1' % (video_codec,video_bitrate,audio_codec,audio_bitrate)
-    lavcopts = '-lavcopts vcodec=%(video_codec)s:vbitrate=%(video_bitrate)d:mbd=2:aspect=%(video_aspect_ratio)s:acodec=%(audio_codec)s:abitrate=%(audio_bitrate)d:vpass=1' % (locals())
+    lavcopts = '-lavcopts vcodec={video_codec!s}:vbitrate={video_bitrate:d}:mbd=2:aspect={video_aspect_ratio!s}:acodec={audio_codec!s}:abitrate={audio_bitrate:d}:vpass=1'.format(**(locals()))
     if video_gray_flag:
         lavcopts = lavcopts + ':gray'
 
     seek_filter = ''
     if seek_skip is not None:
-        seek_filter = '-ss %s' % (str(seek_skip))
+        seek_filter = '-ss {0!s}'.format((str(seek_skip)))
     if seek_length is not None:
-        seek_filter = seek_filter + ' -endpos %s' % (str(seek_length))
+        seek_filter = seek_filter + ' -endpos {0!s}'.format((str(seek_length)))
 
 #    cmd = "mencoder -quiet -info comment='Arkivist' '%(video_source_filename)s' %(seek_filter)s %(chapter)s -aid %(audio_id)s -o '%(video_final_filename)s' -ffourcc %(video_fourcc_override)s -ovc lavc -oac lavc %(lavcopts)s %(video_filter)s %(audio_filter)s" % locals()
-    cmd = "mencoder -quiet -info comment='Arkivist' '%(video_source_filename)s' %(seek_filter)s %(chapter)s -aid %(audio_id)s -o '%(video_final_filename)s' -ffourcc %(video_fourcc_override)s -ovc lavc -oac mp3lame %(lavcopts)s %(video_filter)s %(audio_filter)s" % locals()
+    cmd = "mencoder -quiet -info comment='Arkivist' '{video_source_filename!s}' {seek_filter!s} {chapter!s} -aid {audio_id!s} -o '{video_final_filename!s}' -ffourcc {video_fourcc_override!s} -ovc lavc -oac mp3lame {lavcopts!s} {video_filter!s} {audio_filter!s}".format(**locals())
     return cmd
 
 def compression_estimate (video_length, video_source_filename, video_final_filename, video_target_size, audio_id=128, video_bitrate=1000, video_codec='mpeg4', audio_codec='mp3', video_fourcc_override='FMP4', video_gray_flag=0, video_crop_area=None, video_aspect_ratio='16/9', video_scale=None, video_encode_passes=2, video_deinterlace_flag=0, audio_volume_boost=None, audio_sample_rate=None, audio_bitrate=None):
@@ -718,7 +718,7 @@ def mux (video_final_filename, video_transcoded_filename, audio_compressed_filen
 
 def mux_mkv (video_final_filename, video_transcoded_filename, audio_compressed_filename, verbose_flag=0, dry_run_flag=0):
     """This is depricated."""
-    cmd = 'mkvmerge -o %s --noaudio %s %s' % (video_final_filename, video_transcoded_filename, audio_compressed_filename)
+    cmd = 'mkvmerge -o {0!s} --noaudio {1!s} {2!s}'.format(video_final_filename, video_transcoded_filename, audio_compressed_filename)
     if verbose_flag: print cmd
     if not dry_run_flag:
         run(cmd)
@@ -809,7 +809,7 @@ def interactive_convert ():
                     default_id = 'None'
             options[k] = input_option (prompts[k][1], default_id, prompts[k][2], prompts[k][3], max_prompt_level)
         elif k == 'audio_lowpass_filter':
-            lowpass_default =  "%.1f" % (math.floor(float(options['audio_sample_rate']) / 2.0))
+            lowpass_default =  "{0:.1f}".format((math.floor(float(options['audio_sample_rate']) / 2.0)))
             options[k] = input_option (prompts[k][1], lowpass_default, prompts[k][2], prompts[k][3], max_prompt_level)
         elif k == 'video_bitrate':
             if options['video_length'].lower() == 'none':
@@ -833,7 +833,7 @@ def interactive_convert ():
     print
     print "The following options will be used:"
     for k,v in options.iteritems():
-        print "%27s : %s" % (k, v)
+        print "{0:27!s} : {1!s}".format(k, v)
 
     print
     c = input_option("Continue?", "Y")

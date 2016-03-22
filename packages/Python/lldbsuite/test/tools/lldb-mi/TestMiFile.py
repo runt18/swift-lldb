@@ -21,7 +21,7 @@ class MiFileTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Test that -file-exec-and-symbols works for filename
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run
@@ -39,7 +39,7 @@ class MiFileTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test that -file-exec-and-symbols works for absolute path
         import os
         path = os.path.join(os.getcwd(), self.myexe)
-        self.runCmd("-file-exec-and-symbols \"%s\"" % path)
+        self.runCmd("-file-exec-and-symbols \"{0!s}\"".format(path))
         self.expect("\^done")
 
         # Run
@@ -55,8 +55,8 @@ class MiFileTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Test that -file-exec-and-symbols works for relative path
-        path = "./%s" % self.myexe
-        self.runCmd("-file-exec-and-symbols %s" % path)
+        path = "./{0!s}".format(self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(path))
         self.expect("\^done")
 
         # Run
@@ -72,6 +72,6 @@ class MiFileTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Test that -file-exec-and-symbols fails on unknown path
-        path = "unknown_dir/%s" % self.myexe
-        self.runCmd("-file-exec-and-symbols %s" % path)
+        path = "unknown_dir/{0!s}".format(self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(path))
         self.expect("\^error")

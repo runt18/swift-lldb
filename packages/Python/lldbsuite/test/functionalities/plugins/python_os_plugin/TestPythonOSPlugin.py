@@ -69,7 +69,7 @@ class PluginPythonOSPlugin(TestBase):
 
         # Now load the python OS plug-in which should update the thread list and we should have
         # OS plug-in created threads with the IDs: 0x111111111, 0x222222222, 0x333333333
-        command = "settings set target.process.python-os-plugin-path '%s'" % python_os_plugin_path
+        command = "settings set target.process.python-os-plugin-path '{0!s}'".format(python_os_plugin_path)
         self.dbg.HandleCommand(command)
 
         # Verify our OS plug-in threads showed up
@@ -125,7 +125,7 @@ class PluginPythonOSPlugin(TestBase):
 
         # Now load the python OS plug-in which should update the thread list and we should have
         # OS plug-in created threads with the IDs: 0x111111111, 0x222222222, 0x333333333
-        command = "settings set target.process.python-os-plugin-path '%s'" % python_os_plugin_path
+        command = "settings set target.process.python-os-plugin-path '{0!s}'".format(python_os_plugin_path)
         self.dbg.HandleCommand(command)
 
         # Verify our OS plug-in threads showed up

@@ -66,7 +66,7 @@ except ImportError:
                 except ImportError:
                     pass
                 else:
-                    print 'imported lldb from: "%s"' % (lldb_python_dir)
+                    print 'imported lldb from: "{0!s}"'.format((lldb_python_dir))
                     success = True
                     break
     if not success:
@@ -107,15 +107,15 @@ class CrashLog(symbolication.Symbolicator):
             if self.app_specific_backtrace:
                 print "%Application Specific Backtrace[%u] %s" % (prefix, self.index, self.reason)
             else:
-                print "%sThread[%u] %s" % (prefix, self.index, self.reason)
+                print "{0!s}Thread[{1:d}] {2!s}".format(prefix, self.index, self.reason)
             if self.frames:
-                print "%s  Frames:" % (prefix)
+                print "{0!s}  Frames:".format((prefix))
                 for frame in self.frames:
                     frame.dump(prefix + '    ')
             if self.registers:
-                print "%s  Registers:" % (prefix)
+                print "{0!s}  Registers:".format((prefix))
                 for reg in self.registers.keys():
-                    print "%s    %-5s = %#16.16x" % (prefix, reg, self.registers[reg])
+                    print "{0!s}    {1:<5!s} = {2:#16.16x}".format(prefix, reg, self.registers[reg])
         
         def dump_symbolicated (self, crash_log, options):
             this_thread_crashed = self.app_specific_backtrace
@@ -124,7 +124,7 @@ class CrashLog(symbolication.Symbolicator):
                 if options.crashed_only and this_thread_crashed == False:
                     return
 
-            print "%s" % self
+            print "{0!s}".format(self)
             #prev_frame_index = -1
             display_frame_idx = -1
             for frame_idx, frame in enumerate(self.frames):
@@ -139,7 +139,7 @@ class CrashLog(symbolication.Symbolicator):
                     symbolicated_frame_address_idx = 0
                     for symbolicated_frame_address in symbolicated_frame_addresses:
                         display_frame_idx += 1
-                        print '[%3u] %s' % (frame_idx, symbolicated_frame_address)
+                        print '[{0:3d}] {1!s}'.format(frame_idx, symbolicated_frame_address)
                         if (options.source_all or self.did_crash()) and display_frame_idx < options.source_frames and options.source_context:
                             source_context = options.source_context
                             line_entry = symbolicated_frame_address.get_symbol_context().line_entry
@@ -152,7 +152,7 @@ class CrashLog(symbolication.Symbolicator):
                                     # Indent the source a bit
                                     indent_str = '    '
                                     join_str = '\n' + indent_str
-                                    print '%s%s' % (indent_str, join_str.join(source_text.split('\n')))
+                                    print '{0!s}{1!s}'.format(indent_str, join_str.join(source_text.split('\n')))
                         if symbolicated_frame_address_idx == 0:
                             if disassemble:
                                 instructions = symbolicated_frame_address.get_instructions()
@@ -177,11 +177,11 @@ class CrashLog(symbolication.Symbolicator):
         
         def __str__(self):
             if self.app_specific_backtrace:
-                s = "Application Specific Backtrace[%u]" % self.index
+                s = "Application Specific Backtrace[{0:d}]".format(self.index)
             else:
-                s = "Thread[%u]" % self.index
+                s = "Thread[{0:d}]".format(self.index)
             if self.reason:
-                s += ' %s' % self.reason
+                s += ' {0!s}'.format(self.reason)
             return s
         
     
@@ -194,12 +194,12 @@ class CrashLog(symbolication.Symbolicator):
         
         def __str__(self):
             if self.description:
-                return "[%3u] 0x%16.16x %s" % (self.index, self.pc, self.description)
+                return "[{0:3d}] 0x{1:16.16x} {2!s}".format(self.index, self.pc, self.description)
             else:
-                return "[%3u] 0x%16.16x" % (self.index, self.pc)
+                return "[{0:3d}] 0x{1:16.16x}".format(self.index, self.pc)
 
         def dump(self, prefix):
-            print "%s%s" % (prefix, str(self))
+            print "{0!s}{1!s}".format(prefix, str(self))
     
     class DarwinImage(symbolication.Image):
         """Class that represents a binary images in a darwin crash log"""
@@ -222,9 +222,9 @@ class CrashLog(symbolication.Symbolicator):
             # Mark this as resolved so we don't keep trying
             self.resolved = True
             uuid_str = self.get_normalized_uuid_string()
-            print 'Getting symbols for %s %s...' % (uuid_str, self.path),
+            print 'Getting symbols for {0!s} {1!s}...'.format(uuid_str, self.path),
             if os.path.exists(self.dsymForUUIDBinary):
-                dsym_for_uuid_command = '%s %s' % (self.dsymForUUIDBinary, uuid_str)
+                dsym_for_uuid_command = '{0!s} {1!s}'.format(self.dsymForUUIDBinary, uuid_str)
                 s = commands.getoutput(dsym_for_uuid_command)
                 if s:
                     plist_root = plistlib.readPlistFromString (s)
@@ -239,7 +239,7 @@ class CrashLog(symbolication.Symbolicator):
                                 self.path = os.path.expanduser (plist['DBGSymbolRichExecutable'])
                                 self.resolved_path = self.path
             if not self.resolved_path and os.path.exists(self.path):
-                dwarfdump_cmd_output = commands.getoutput('dwarfdump --uuid "%s"' % self.path)
+                dwarfdump_cmd_output = commands.getoutput('dwarfdump --uuid "{0!s}"'.format(self.path))
                 self_uuid = self.get_uuid()
                 for line in dwarfdump_cmd_output.splitlines():
                     match = self.dwarfdump_uuid_regex.search (line)
@@ -252,7 +252,7 @@ class CrashLog(symbolication.Symbolicator):
                             break;
                 if not self.resolved_path:
                     self.unavailable = True
-                    print "error\n    error: unable to locate '%s' with UUID %s" % (self.path, uuid_str)
+                    print "error\n    error: unable to locate '{0!s}' with UUID {1!s}".format(self.path, uuid_str)
                     return False
             if (self.resolved_path and os.path.exists(self.resolved_path)) or (self.path and os.path.exists(self.path)):
                 print 'ok'
@@ -284,7 +284,7 @@ class CrashLog(symbolication.Symbolicator):
         try:
             f = open(self.path)
         except IOError:
-            self.error = 'error: cannot open "%s"' % self.path
+            self.error = 'error: cannot open "{0!s}"'.format(self.path)
             return
 
         self.file_lines = f.read().splitlines()
@@ -302,7 +302,7 @@ class CrashLog(symbolication.Symbolicator):
                             if self.thread_exception:
                                 thread.reason += self.thread_exception
                             if self.thread_exception_data:
-                                thread.reason += " (%s)" % self.thread_exception_data
+                                thread.reason += " ({0!s})".format(self.thread_exception_data)
                         if app_specific_backtrace:
                             self.backtraces.append(thread)
                         else:
@@ -397,7 +397,7 @@ class CrashLog(symbolication.Symbolicator):
                         self.idents.append(ident)
                     thread.frames.append (CrashLog.Frame(int(frame_match.group(1)), int(frame_match.group(3), 0), frame_match.group(4)))
                 else:
-                    print 'error: frame regex failed for line: "%s"' % line
+                    print 'error: frame regex failed for line: "{0!s}"'.format(line)
             elif parse_mode == PARSE_MODE_IMAGES:
                 image_match = self.image_regex_uuid.search (line)
                 if image_match:
@@ -419,7 +419,7 @@ class CrashLog(symbolication.Symbolicator):
                                                       image_match.group(5))
                         self.images.append (image)
                     else:
-                        print "error: image regex failed for: %s" % line
+                        print "error: image regex failed for: {0!s}".format(line)
 
             elif parse_mode == PARSE_MODE_THREGS:
                 stripped_line = line.strip()
@@ -436,7 +436,7 @@ class CrashLog(symbolication.Symbolicator):
         f.close()
     
     def dump(self):
-        print "Crash Log File: %s" % (self.path)
+        print "Crash Log File: {0!s}".format((self.path))
         if self.backtraces:
             print "\nApplication Specific Backtraces:"
             for thread in self.backtraces:
@@ -452,7 +452,7 @@ class CrashLog(symbolication.Symbolicator):
         for image in self.images:
             if image.identifier == identifier:
                 return image            
-        regex_text = '^.*\.%s$' % (identifier)
+        regex_text = '^.*\.{0!s}$'.format((identifier))
         regex = re.compile(regex_text)
         for image in self.images:
             if regex.match(image.identifier):
@@ -503,7 +503,7 @@ class Interactive(cmd.Cmd):
 
     def default(self, line):
         '''Catch all for unknown command, which will exit the interpreter.'''
-        print "uknown command: %s" % line
+        print "uknown command: {0!s}".format(line)
         return True
 
     def do_q(self, line):
@@ -532,7 +532,7 @@ class Interactive(cmd.Cmd):
                 if idx < len(self.crash_logs):
                     SymbolicateCrashLog (self.crash_logs[idx], options)
                 else:
-                    print 'error: crash log index %u is out of range' % (idx)
+                    print 'error: crash log index {0:d} is out of range'.format((idx))
         else:
             # No arguments, symbolicate all crash logs using the options provided
             for idx in range(len(self.crash_logs)):
@@ -542,9 +542,9 @@ class Interactive(cmd.Cmd):
         '''Dump a list of all crash logs that are currently loaded.
         
         USAGE: list'''
-        print '%u crash logs are loaded:' % len(self.crash_logs)
+        print '{0:d} crash logs are loaded:'.format(len(self.crash_logs))
         for (crash_log_idx, crash_log) in enumerate(self.crash_logs):
-            print '[%u] = %s' % (crash_log_idx, crash_log.path)
+            print '[{0:d}] = {1!s}'.format(crash_log_idx, crash_log.path)
 
     def do_image(self, line):
         '''Dump information about one or more binary images in the crash log given an image basename, or all images if no arguments are provided.'''
@@ -568,21 +568,21 @@ class Interactive(cmd.Cmd):
                         if fullpath_search:
                             if image.get_resolved_path() == image_path:
                                 matches_found += 1
-                                print '[%u] ' % (crash_log_idx), image
+                                print '[{0:d}] '.format((crash_log_idx)), image
                         else:
                             image_basename = image.get_resolved_path_basename()
                             if image_basename == image_path:
                                 matches_found += 1
-                                print '[%u] ' % (crash_log_idx), image
+                                print '[{0:d}] '.format((crash_log_idx)), image
                     if matches_found == 0:
                         for (image_idx, image) in enumerate(crash_log.images):
                             resolved_image_path = image.get_resolved_path()
                             if resolved_image_path and string.find(image.get_resolved_path(), image_path) >= 0:
-                                print '[%u] ' % (crash_log_idx), image
+                                print '[{0:d}] '.format((crash_log_idx)), image
         else:
             for crash_log in self.crash_logs:
                 for (image_idx, image) in enumerate(crash_log.images):
-                    print '[%u] %s' % (image_idx, image)            
+                    print '[{0:d}] {1!s}'.format(image_idx, image)            
         return False
 
 
@@ -602,7 +602,7 @@ def interactive_crashlogs(options, args):
         if options.debug:
             crash_log.dump()
         if not crash_log.images:
-            print 'error: no images in crash log "%s"' % (crash_log)
+            print 'error: no images in crash log "{0!s}"'.format((crash_log))
             continue
         else:
             crash_logs.append(crash_log)
@@ -636,15 +636,15 @@ def save_crashlog(debugger, command, result, dict):
         if lldb.process:
             pid = lldb.process.id
             if pid != lldb.LLDB_INVALID_PROCESS_ID:
-                out_file.write('Process:         %s [%u]\n' % (identifier, pid))
-        out_file.write('Path:            %s\n' % (target.executable.fullpath))
-        out_file.write('Identifier:      %s\n' % (identifier))
-        out_file.write('\nDate/Time:       %s\n' % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-        out_file.write('OS Version:      Mac OS X %s (%s)\n' % (platform.mac_ver()[0], commands.getoutput('sysctl -n kern.osversion')));
+                out_file.write('Process:         {0!s} [{1:d}]\n'.format(identifier, pid))
+        out_file.write('Path:            {0!s}\n'.format((target.executable.fullpath)))
+        out_file.write('Identifier:      {0!s}\n'.format((identifier)))
+        out_file.write('\nDate/Time:       {0!s}\n'.format((datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))))
+        out_file.write('OS Version:      Mac OS X {0!s} ({1!s})\n'.format(platform.mac_ver()[0], commands.getoutput('sysctl -n kern.osversion')));
         out_file.write('Report Version:  9\n')
         for thread_idx in range(lldb.process.num_threads):
             thread = lldb.process.thread[thread_idx]
-            out_file.write('\nThread %u:\n' % (thread_idx))
+            out_file.write('\nThread {0:d}:\n'.format((thread_idx)))
             for (frame_idx, frame) in enumerate(thread.frames):
                 frame_pc = frame.pc
                 frame_offset = 0
@@ -658,19 +658,19 @@ def save_crashlog(debugger, command, result, dict):
                         frame_offset = frame_pc - frame.function.addr.load_addr
                 elif frame.symbol:
                     frame_offset = frame_pc - frame.symbol.addr.load_addr
-                out_file.write('%-3u %-32s 0x%16.16x %s' % (frame_idx, frame.module.file.basename, frame_pc, frame.name))
+                out_file.write('{0:<3d} {1:<32!s} 0x{2:16.16x} {3!s}'.format(frame_idx, frame.module.file.basename, frame_pc, frame.name))
                 if frame_offset > 0: 
-                    out_file.write(' + %u' % (frame_offset))
+                    out_file.write(' + {0:d}'.format((frame_offset)))
                 line_entry = frame.line_entry
                 if line_entry:
                     if options.verbose:
                         # This will output the fullpath + line + column
-                        out_file.write(' %s' % (line_entry))
+                        out_file.write(' {0!s}'.format((line_entry)))
                     else:
-                        out_file.write(' %s:%u' % (line_entry.file.basename, line_entry.line))
+                        out_file.write(' {0!s}:{1:d}'.format(line_entry.file.basename, line_entry.line))
                         column = line_entry.column
                         if column: 
-                            out_file.write(':%u' % (column))
+                            out_file.write(':{0:d}'.format((column)))
                 out_file.write('\n')
                 
         out_file.write('\nBinary Images:\n')
@@ -685,7 +685,7 @@ def save_crashlog(debugger, command, result, dict):
                     module_version_array = module.GetVersion()
                     if module_version_array:
                         module_version = '.'.join(map(str,module_version_array))
-                    out_file.write ('    0x%16.16x - 0x%16.16x  %s (%s - ???) <%s> %s\n' % (text_segment_load_addr, text_segment_end_load_addr, identifier, module_version, module.GetUUIDString(), module.file.fullpath))
+                    out_file.write ('    0x{0:16.16x} - 0x{1:16.16x}  {2!s} ({3!s} - ???) <{4!s}> {5!s}\n'.format(text_segment_load_addr, text_segment_end_load_addr, identifier, module_version, module.GetUUIDString(), module.file.fullpath))
         out_file.close()
     else:
         result.PutCString ("error: invalid target");
@@ -695,7 +695,7 @@ def Symbolicate(debugger, command, result, dict):
     try:
         SymbolicateCrashLogs (shlex.split(command))
     except:
-        result.PutCString ("error: python exception %s" % sys.exc_info()[0])
+        result.PutCString ("error: python exception {0!s}".format(sys.exc_info()[0]))
 
 def SymbolicateCrashLog(crash_log, options):
     if crash_log.error:
@@ -736,7 +736,7 @@ def SymbolicateCrashLog(crash_log, options):
                             for image in images:
                                 images_to_load.append(image)
                         else:
-                            print 'error: can\'t find image for identifier "%s"' % ident
+                            print 'error: can\'t find image for identifier "{0!s}"'.format(ident)
         else:
             for ident in crash_log.idents:
                 images = crash_log.find_images_with_identifier (ident)
@@ -744,7 +744,7 @@ def SymbolicateCrashLog(crash_log, options):
                     for image in images:
                         images_to_load.append(image)
                 else:
-                    print 'error: can\'t find image for identifier "%s"' % ident
+                    print 'error: can\'t find image for identifier "{0!s}"'.format(ident)
 
     for image in images_to_load:
         if not image in loaded_images:
@@ -801,12 +801,12 @@ be disassembled and lookups can be performed using the addresses found in the cr
         return
         
     if options.debug:
-        print 'command_args = %s' % command_args
+        print 'command_args = {0!s}'.format(command_args)
         print 'options', options
         print 'args', args
         
     if options.debug_delay > 0:
-        print "Waiting %u seconds for debugger to attach..." % options.debug_delay
+        print "Waiting {0:d} seconds for debugger to attach...".format(options.debug_delay)
         time.sleep(options.debug_delay)
     error = lldb.SBError()
         

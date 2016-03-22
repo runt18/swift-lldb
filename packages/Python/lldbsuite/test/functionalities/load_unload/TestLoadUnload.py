@@ -53,8 +53,7 @@ class LoadUnloadTestCase(TestBase):
                     lldb.SBFileSpec(os.path.join(wd, f)))
                 if err.Fail():
                     raise RuntimeError(
-                        "Unable copy '%s' to '%s'.\n>>> %s" %
-                        (f, wd, err.GetCString()))
+                        "Unable copy '{0!s}' to '{1!s}'.\n>>> {2!s}".format(f, wd, err.GetCString()))
             if hidden_dir:
                 shlib = 'libloadunload_d.so'
                 hidden_dir = os.path.join(wd, 'hidden')
@@ -62,14 +61,13 @@ class LoadUnloadTestCase(TestBase):
                 err = lldb.remote_platform.MakeDirectory(hidden_dir)
                 if err.Fail():
                     raise RuntimeError(
-                        "Unable to create a directory '%s'." % hidden_dir)
+                        "Unable to create a directory '{0!s}'.".format(hidden_dir))
                 err = lldb.remote_platform.Put(
                     lldb.SBFileSpec(os.path.join(cwd, 'hidden', shlib)),
                     lldb.SBFileSpec(hidden_file))
                 if err.Fail():
                     raise RuntimeError(
-                        "Unable copy 'libloadunload_d.so' to '%s'.\n>>> %s" %
-                        (wd, err.GetCString()))
+                        "Unable copy 'libloadunload_d.so' to '{0!s}'.\n>>> {1!s}".format(wd, err.GetCString()))
 
     @skipIfFreeBSD # llvm.org/pr14424 - missing FreeBSD Makefiles/testcase support
     @not_remote_testsuite_ready
@@ -99,12 +97,12 @@ class LoadUnloadTestCase(TestBase):
         #self.expect("target modules list -t 3",
         #    patterns = ["%s-[^-]*-[^-]*" % self.getArchitecture()])
         # Add an image search path substitution pair.
-        self.runCmd("target modules search-paths add %s %s" % (os.getcwd(), new_dir))
+        self.runCmd("target modules search-paths add {0!s} {1!s}".format(os.getcwd(), new_dir))
 
         self.expect("target modules search-paths list",
             substrs = [os.getcwd(), new_dir])
 
-        self.expect("target modules search-paths query %s" % os.getcwd(), "Image search path successfully transformed",
+        self.expect("target modules search-paths query {0!s}".format(os.getcwd()), "Image search path successfully transformed",
             substrs = [new_dir])
 
         # Obliterate traces of libd from the old location.
@@ -171,8 +169,7 @@ class LoadUnloadTestCase(TestBase):
         self.runCmd("continue")
 
         # Add the hidden directory first in the search path.
-        env_cmd_string = ("settings set target.env-vars %s=%s" %
-                          (self.dylibPath, new_dir))
+        env_cmd_string = ("settings set target.env-vars {0!s}={1!s}".format(self.dylibPath, new_dir))
         if not self.platformIsDarwin():
             env_cmd_string += ":" + wd
         self.runCmd(env_cmd_string)
@@ -216,8 +213,8 @@ class LoadUnloadTestCase(TestBase):
                     error=True, matching=False, patterns = ["1 match found"])
 
         # Use lldb 'process load' to load the dylib.
-        self.expect("process load %s --install" % dylibName, "%s loaded correctly" % dylibName,
-            patterns = ['Loading "%s".*ok' % dylibName,
+        self.expect("process load {0!s} --install".format(dylibName), "{0!s} loaded correctly".format(dylibName),
+            patterns = ['Loading "{0!s}".*ok'.format(dylibName),
                         'Image [0-9]+ loaded'])
 
         # Search for and match the "Image ([0-9]+) loaded" pattern.
@@ -232,11 +229,11 @@ class LoadUnloadTestCase(TestBase):
 
         # Now we should have an entry for a_function.
         self.expect("image lookup -n a_function", "a_function should now exist",
-            patterns = ["1 match found .*%s" % dylibName])
+            patterns = ["1 match found .*{0!s}".format(dylibName)])
 
         # Use lldb 'process unload' to unload the dylib.
-        self.expect("process unload %s" % index, "%s unloaded correctly" % dylibName,
-            patterns = ["Unloading .* with index %s.*ok" % index])
+        self.expect("process unload {0!s}".format(index), "{0!s} unloaded correctly".format(dylibName),
+            patterns = ["Unloading .* with index {0!s}.*ok".format(index)])
 
         self.runCmd("process continue")
 
@@ -334,13 +331,13 @@ class LoadUnloadTestCase(TestBase):
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
             substrs = ['stopped',
                        'd_init',
-                       'stop reason = breakpoint %d' % d_init_bp_num])
+                       'stop reason = breakpoint {0:d}'.format(d_init_bp_num)])
 
         self.runCmd("continue")
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
             substrs = ['stopped',
                        'a_init',
-                       'stop reason = breakpoint %d' % a_init_bp_num])
+                       'stop reason = breakpoint {0:d}'.format(a_init_bp_num)])
         self.expect("thread backtrace",
             substrs = ['a_init',
                        'dlopen',
@@ -350,7 +347,7 @@ class LoadUnloadTestCase(TestBase):
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
             substrs = ['stopped',
                        'b_init',
-                       'stop reason = breakpoint %d' % b_init_bp_num])
+                       'stop reason = breakpoint {0:d}'.format(b_init_bp_num)])
         self.expect("thread backtrace",
             substrs = ['b_init',
                        'dlopen',

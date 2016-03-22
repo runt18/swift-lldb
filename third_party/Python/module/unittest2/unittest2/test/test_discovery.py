@@ -62,7 +62,7 @@ class TestDiscovery(unittest2.TestCase):
 
         expected = [name + ' module tests' for name in
                     ('test1', 'test2')]
-        expected.extend([('test_dir.%s' % name) + ' module tests' for name in
+        expected.extend([('test_dir.{0!s}'.format(name)) + ' module tests' for name in
                     ('test3', 'test4')])
         self.assertEqual(suite, expected)
 
@@ -344,7 +344,7 @@ class TestDiscovery(unittest2.TestCase):
         msg = re.escape(r"'foo' module incorrectly imported from %r. Expected %r. "
                 "Is this module globally installed?" % (mod_dir, expected_dir))
         self.assertRaisesRegexp(
-            ImportError, '^%s$' % msg, loader.discover,
+            ImportError, '^{0!s}$'.format(msg), loader.discover,
             start_dir='foo', pattern='foo.py'
         )
         self.assertEqual(sys.path[0], full_path)

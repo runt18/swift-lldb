@@ -26,13 +26,13 @@ def dump_module_line_tables(debugger, command, result, dict):
         target = debugger.GetSelectedTarget()
         lldb.target = target
         for module_name in command_args:
-            result.PutCString('Searching for module "%s"' % (module_name,))
+            result.PutCString('Searching for module "{0!s}"'.format(module_name))
             module_fspec = lldb.SBFileSpec (module_name, False)
             module = target.FindModule (module_fspec);
             if module:
                 for cu_idx in range (module.GetNumCompileUnits()):
                     cu = module.GetCompileUnitAtIndex(cu_idx)
-                    result.PutCString("\n%s:" % (cu.file))
+                    result.PutCString("\n{0!s}:".format((cu.file)))
                     for line_idx in range(cu.GetNumLineEntries()):
                         line_entry = cu.GetLineEntryAtIndex(line_idx)
                         start_file_addr = line_entry.addr.file_addr
@@ -40,20 +40,20 @@ def dump_module_line_tables(debugger, command, result, dict):
                         # If the two addresses are equal, this line table entry is a termination entry
                         if options.verbose:
                             if start_file_addr != end_file_addr:
-                                result.PutCString('[%#x - %#x): %s' % (start_file_addr, end_file_addr, line_entry))
+                                result.PutCString('[{0:#x} - {1:#x}): {2!s}'.format(start_file_addr, end_file_addr, line_entry))
                         else:
                             if start_file_addr == end_file_addr:
-                                result.PutCString('%#x: END' % (start_file_addr))
+                                result.PutCString('{0:#x}: END'.format((start_file_addr)))
                             else:
-                                result.PutCString('%#x: %s' % (start_file_addr, line_entry))
+                                result.PutCString('{0:#x}: {1!s}'.format(start_file_addr, line_entry))
                         if start_file_addr == end_file_addr:
                             result.Printf("\n")
             else:
-                result.PutCString ("no module for '%s'" % module)
+                result.PutCString ("no module for '{0!s}'".format(module))
     else:
         result.PutCString ("error: invalid target")
 
 parser = create_dump_module_line_tables_options ()
 dump_module_line_tables.__doc__ = parser.format_help()
-lldb.debugger.HandleCommand('command script add -f %s.dump_module_line_tables dump_module_line_tables' % __name__)
+lldb.debugger.HandleCommand('command script add -f {0!s}.dump_module_line_tables dump_module_line_tables'.format(__name__))
 print 'Installed "dump_module_line_tables" command'

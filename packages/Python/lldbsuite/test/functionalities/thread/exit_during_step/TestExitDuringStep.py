@@ -62,7 +62,7 @@ class ExitDuringStepTestCase(TestBase):
 
         # The breakpoint list should show 1 location.
         self.expect("breakpoint list -f", "Breakpoint location shown correctly",
-            substrs = ["1: file = 'main.cpp', line = %d, exact_match = 0, locations = 1" % self.breakpoint])
+            substrs = ["1: file = 'main.cpp', line = {0:d}, exact_match = 0, locations = 1".format(self.breakpoint)])
 
         # Run the program.
         self.runCmd("run", RUN_SUCCEEDED)
@@ -97,12 +97,12 @@ class ExitDuringStepTestCase(TestBase):
         # Find the thread that is stopped at the breakpoint
         stepping_thread = None
         for thread in process:
-            expected_bp_desc = "breakpoint %s." % self.bp_num
+            expected_bp_desc = "breakpoint {0!s}.".format(self.bp_num)
             stop_desc = thread.GetStopDescription(100)
             if stop_desc and (expected_bp_desc in stop_desc):
                 stepping_thread = thread
                 break
-        self.assertTrue(stepping_thread != None, "unable to find thread stopped at %s" % expected_bp_desc)
+        self.assertTrue(stepping_thread != None, "unable to find thread stopped at {0!s}".format(expected_bp_desc))
 
         current_line = self.breakpoint
         stepping_frame = stepping_thread.GetFrameAtIndex(0)

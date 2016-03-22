@@ -24,4 +24,4 @@ def check_first_register_readable(test_case):
         test_case.expect("register read zero", substrs = ['zero = 0x'])
     else:
         # TODO: Add check for other architectures
-        test_case.fail("Unsupported architecture for test case (arch: %s)" % test_case.getArchitecture())
+        test_case.fail("Unsupported architecture for test case (arch: {0!s})".format(test_case.getArchitecture()))

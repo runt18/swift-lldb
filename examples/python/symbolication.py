@@ -48,13 +48,13 @@ class Address:
         self.symbolication = None # The cached symbolicated string that describes this address
         self.inlined = False
     def __str__(self):
-        s = "%#16.16x" % (self.load_addr)
+        s = "{0:#16.16x}".format((self.load_addr))
         if self.symbolication:
-            s += " %s" % (self.symbolication)
+            s += " {0!s}".format((self.symbolication))
         elif self.description:
-            s += " %s" % (self.description)
+            s += " {0!s}".format((self.description))
         elif self.so_addr:
-            s += " %s" % (self.so_addr)
+            s += " {0!s}".format((self.so_addr))
         return s
 
     def resolve_addr(self):
@@ -124,21 +124,21 @@ class Address:
                     # Dump the offset from the current function or symbol if it is non zero
                     function_offset = self.load_addr - function_start_load_addr
                     if function_offset > 0:
-                        self.symbolication += " + %u" % (function_offset)
+                        self.symbolication += " + {0:d}".format((function_offset))
                     elif function_offset < 0:
-                        self.symbolication += " %i (invalid negative offset, file a bug) " % function_offset
+                        self.symbolication += " {0:d} (invalid negative offset, file a bug) ".format(function_offset)
 
                     # Print out any line information if any is available
                     if line_entry.GetFileSpec():
                         # Print full source file path in verbose mode
                         if verbose:
-                            self.symbolication += ' at %s' % line_entry.GetFileSpec()
+                            self.symbolication += ' at {0!s}'.format(line_entry.GetFileSpec())
                         else:
-                            self.symbolication += ' at %s' % line_entry.GetFileSpec().GetFilename()
-                        self.symbolication += ':%u' % line_entry.GetLine ()
+                            self.symbolication += ' at {0!s}'.format(line_entry.GetFileSpec().GetFilename())
+                        self.symbolication += ':{0:d}'.format(line_entry.GetLine ())
                         column = line_entry.GetColumn()
                         if column > 0:
-                            self.symbolication += ':%u' % column
+                            self.symbolication += ':{0:d}'.format(column)
                     return True
         return False
 
@@ -184,7 +184,7 @@ class Section:
                 if op == '+':
                     self.end_addr += self.start_addr
                 return True
-        print 'error: invalid section info string "%s"' % s
+        print 'error: invalid section info string "{0!s}"'.format(s)
         print 'Valid section info formats are:'
         print 'Format                Example                    Description'
         print '--------------------- -----------------------------------------------'
@@ -197,10 +197,10 @@ class Section:
         if self.name:
             if self.end_addr != None:
                 if self.start_addr != None:
-                    return "%s=[0x%16.16x - 0x%16.16x)" % (self.name, self.start_addr, self.end_addr)
+                    return "{0!s}=[0x{1:16.16x} - 0x{2:16.16x})".format(self.name, self.start_addr, self.end_addr)
             else:
                 if self.start_addr != None:
-                    return "%s=0x%16.16x" % (self.name, self.start_addr)
+                    return "{0!s}=0x{1:16.16x}".format(self.name, self.start_addr)
             return self.name
         return "<invalid>"
             
@@ -239,37 +239,37 @@ class Image:
         return obj
         
     def dump(self, prefix):
-        print "%s%s" % (prefix, self)
+        print "{0!s}{1!s}".format(prefix, self)
 
     def debug_dump(self):
-        print 'path = "%s"' % (self.path)
-        print 'resolved_path = "%s"' % (self.resolved_path)
-        print 'resolved = %i' % (self.resolved)
-        print 'unavailable = %i' % (self.unavailable)
-        print 'uuid = %s' % (self.uuid)
-        print 'section_infos = %s' % (self.section_infos)
-        print 'identifier = "%s"' % (self.identifier)
-        print 'version = %s' % (self.version)
-        print 'arch = %s' % (self.arch)
-        print 'module = %s' % (self.module)
-        print 'symfile = "%s"' % (self.symfile)
-        print 'slide = %i (0x%x)' % (self.slide, self.slide)
+        print 'path = "{0!s}"'.format((self.path))
+        print 'resolved_path = "{0!s}"'.format((self.resolved_path))
+        print 'resolved = {0:d}'.format((self.resolved))
+        print 'unavailable = {0:d}'.format((self.unavailable))
+        print 'uuid = {0!s}'.format((self.uuid))
+        print 'section_infos = {0!s}'.format((self.section_infos))
+        print 'identifier = "{0!s}"'.format((self.identifier))
+        print 'version = {0!s}'.format((self.version))
+        print 'arch = {0!s}'.format((self.arch))
+        print 'module = {0!s}'.format((self.module))
+        print 'symfile = "{0!s}"'.format((self.symfile))
+        print 'slide = {0:d} (0x{1:x})'.format(self.slide, self.slide)
         
     def __str__(self):
         s = ''
         if self.uuid:
-            s += "%s " % (self.get_uuid())
+            s += "{0!s} ".format((self.get_uuid()))
         if self.arch:
-            s += "%s " % (self.arch)
+            s += "{0!s} ".format((self.arch))
         if self.version:
-            s += "%s " % (self.version)
+            s += "{0!s} ".format((self.version))
         resolved_path = self.get_resolved_path()
         if resolved_path:
-            s += "%s " % (resolved_path)
+            s += "{0!s} ".format((resolved_path))
         for section_info in self.section_infos:
-            s += ", %s" % (section_info)
+            s += ", {0!s}".format((section_info))
         if self.slide != None:
-            s += ', slide = 0x%16.16x' % self.slide
+            s += ', slide = 0x{0:16.16x}'.format(self.slide)
         return s        
     
     def add_section(self, section):
@@ -321,11 +321,11 @@ class Image:
                                     if error.Success():
                                         num_sections_loaded += 1
                                     else:
-                                        return 'error: %s' % error.GetCString()
+                                        return 'error: {0!s}'.format(error.GetCString())
                                 else:
-                                    return 'error: unable to find the section named "%s"' % section_info.name
+                                    return 'error: unable to find the section named "{0!s}"'.format(section_info.name)
                             else:
-                                return 'error: unable to find "%s" section in "%s"' % (range.name, self.get_resolved_path())
+                                return 'error: unable to find "{0!s}" section in "{1!s}"'.format(range.name, self.get_resolved_path())
                         if num_sections_loaded == 0:
                             return 'error: no sections were successfully loaded'
                     else:
@@ -354,7 +354,7 @@ class Image:
                 resolved_path = self.get_resolved_path()
                 self.module = target.AddModule (resolved_path, self.arch, uuid_str, self.symfile)
             if not self.module:
-                return 'error: unable to get module for (%s) "%s"' % (self.arch, self.get_resolved_path())
+                return 'error: unable to get module for ({0!s}) "{1!s}"'.format(self.arch, self.get_resolved_path())
             if self.has_section_load_info():
                 return self.load_module(target)
             else:
@@ -401,9 +401,9 @@ class Image:
                         print 'ERROR: ', err
                 return target
             else:
-                print 'error: unable to create a valid target for (%s) "%s"' % (self.arch, self.path)
+                print 'error: unable to create a valid target for ({0!s}) "{1!s}"'.format(self.arch, self.path)
         else:
-            print 'error: unable to locate main executable (%s) "%s"' % (self.arch, self.path)
+            print 'error: unable to locate main executable ({0!s}) "{1!s}"'.format(self.arch, self.path)
         return None
     
 class Symbolicator:
@@ -433,13 +433,13 @@ class Symbolicator:
     def __str__(self):
         s = "Symbolicator:\n"
         if self.target:
-            s += "Target = '%s'\n" % (self.target)
+            s += "Target = '{0!s}'\n".format((self.target))
             s += "Target modules:\n"
             for m in self.target.modules:
                 s += str(m) + "\n"
         s += "Images:\n"
         for image in self.images:
-            s += '    %s\n' % (image)
+            s += '    {0!s}\n'.format((image))
         return s
     
     def find_images_with_identifier(self, identifier):
@@ -448,7 +448,7 @@ class Symbolicator:
             if image.identifier == identifier:
                 images.append(image)
         if len(images) == 0:
-            regex_text = '^.*\.%s$' % (identifier)
+            regex_text = '^.*\.{0!s}$'.format((identifier))
             regex = re.compile(regex_text)
             for image in self.images:
                 if regex.match(image.identifier):
@@ -537,12 +537,12 @@ def disassemble_instructions (target, instructions, pc, insts_before_pc, insts_a
         operands =  inst.GetOperands (target)
         comment =  inst.GetComment (target)
         #data = inst.GetData (target)
-        lines.append ("%#16.16x: %8s %s" % (inst_pc, mnemonic, operands))
+        lines.append ("{0:#16.16x}: {1:8!s} {2!s}".format(inst_pc, mnemonic, operands))
         if comment:
             line_len = len(lines[-1])
             if line_len < comment_column:
                 lines[-1] += ' ' * (comment_column - line_len)
-                lines[-1] += "; %s" % comment
+                lines[-1] += "; {0!s}".format(comment)
 
     if pc_index >= 0:
         # If we are disassembling the non-zeroeth frame, we need to backup the PC by 1
@@ -632,7 +632,7 @@ def Symbolicate(command_args):
                 print symbolicated_addr
             print
     else:
-        print 'error: no target for %s' % (symbolicator)
+        print 'error: no target for {0!s}'.format((symbolicator))
         
 if __name__ == '__main__':
     # Create a new debugger instance

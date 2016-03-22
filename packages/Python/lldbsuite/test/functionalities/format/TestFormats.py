@@ -20,7 +20,7 @@ class TestFormats(TestBase):
         self.build()
         import pexpect
         prompt = "(lldb) "
-        child = pexpect.spawn('%s %s -x -o "b main" -o r a.out' % (lldbtest_config.lldbExec, self.lldbOption))
+        child = pexpect.spawn('{0!s} {1!s} -x -o "b main" -o r a.out'.format(lldbtest_config.lldbExec, self.lldbOption))
         # Turn on logging for what the child sends back.
         if self.TraceOn():
             child.logfile_read = sys.stdout

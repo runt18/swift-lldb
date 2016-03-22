@@ -22,7 +22,7 @@ def stack_frames(debugger, command, result, dict):
     frame_info = {}
     for thread in process:
         last_frame = None
-        print "thread %u" % (thread.id)
+        print "thread {0:d}".format((thread.id))
         for frame in thread.frames:
             if last_frame:
                 frame_size = 0
@@ -34,7 +34,7 @@ def stack_frames(debugger, command, result, dict):
                     else:
                         # First frame that has a valid size
                         first_frame_size = last_frame.fp - last_frame.sp 
-                    print "<%#7x> %s" % (first_frame_size, last_frame)
+                    print "<{0:#7x}> {1!s}".format(first_frame_size, last_frame)
                     if first_frame_size:
                         name = last_frame.name
                         if name not in frame_info:
@@ -44,7 +44,7 @@ def stack_frames(debugger, command, result, dict):
                 else:
                     # Second or higher frame
                     frame_size = frame.fp - last_frame.fp 
-                print "<%#7x> %s" % (frame_size, frame)
+                print "<{0:#7x}> {1!s}".format(frame_size, frame)
                 if frame_size > 0:
                     name = frame.name
                     if name not in frame_info:

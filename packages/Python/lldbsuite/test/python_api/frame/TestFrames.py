@@ -70,10 +70,10 @@ class FrameAPITestCase(TestBase):
                 valList = frame.GetVariables(True, False, False, True)
                 argList = []
                 for val in valList:
-                    argList.append("(%s)%s=%s" % (val.GetTypeName(),
+                    argList.append("({0!s}){1!s}={2!s}".format(val.GetTypeName(),
                                                   val.GetName(),
                                                   val.GetValue()))
-                print("%s(%s)" % (name, ", ".join(argList)), file=session)
+                print("{0!s}({1!s})".format(name, ", ".join(argList)), file=session)
                 
                 # Also check the generic pc & stack pointer.  We can't test their absolute values,
                 # but they should be valid.  Uses get_GPRs() from the lldbutil module.

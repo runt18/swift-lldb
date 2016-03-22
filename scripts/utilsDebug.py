@@ -53,7 +53,7 @@ class CDebugFnVerbose(object):
     def dump_object(self, vstrText, vObject):
         if CDebugFnVerbose.bVerboseOn == False:
             return
-        sys.stdout.write("%d%s> Dp: %s" % (CDebugFnVerbose.__nLevel, self.__get_dots(),
+        sys.stdout.write("{0:d}{1!s}> Dp: {2!s}".format(CDebugFnVerbose.__nLevel, self.__get_dots(),
                                            vstrText))
         print(vObject)
 
@@ -67,7 +67,7 @@ class CDebugFnVerbose(object):
     def dump_text(self, vstrText):
         if CDebugFnVerbose.bVerboseOn == False:
             return
-        print(("%d%s> Dp: %s" % (CDebugFnVerbose.__nLevel, self.__get_dots(),
+        print(("{0:d}{1!s}> Dp: {2!s}".format(CDebugFnVerbose.__nLevel, self.__get_dots(),
                                  vstrText)))
 
     # Private methods:
@@ -94,7 +94,7 @@ class CDebugFnVerbose(object):
     #--
     def __indent_back(self):
         if CDebugFnVerbose.bVerboseOn:
-            print(("%d%s< fn: %s" % (CDebugFnVerbose.__nLevel, self.__get_dots(),
+            print(("{0:d}{1!s}< fn: {2!s}".format(CDebugFnVerbose.__nLevel, self.__get_dots(),
                                      self.__strFnName)))
         CDebugFnVerbose.__nLevel -= 1
 
@@ -110,7 +110,7 @@ class CDebugFnVerbose(object):
         CDebugFnVerbose.__nLevel += 1
         self.__strFnName = vstrFnName
         if CDebugFnVerbose.bVerboseOn:
-            print(("%d%s> fn: %s" % (CDebugFnVerbose.__nLevel, self.__get_dots(),
+            print(("{0:d}{1!s}> fn: {2!s}".format(CDebugFnVerbose.__nLevel, self.__get_dots(),
                                      self.__strFnName)))
 
     # Private statics attributes:

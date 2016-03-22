@@ -47,9 +47,9 @@ class BreakpointOptionsTestCase(TestBase):
 
         # Check the list of breakpoint.
         self.expect("breakpoint list -f", "Breakpoint locations shown correctly",
-            substrs = ["1: file = 'main.cpp', line = %d, exact_match = 0, locations = 1" % self.line,
-                       "2: file = 'main.cpp', line = %d, exact_match = 0, locations = 1" % self.line,
-                       "3: file = 'main.cpp', line = %d, exact_match = 1, locations = 0" % self.line])
+            substrs = ["1: file = 'main.cpp', line = {0:d}, exact_match = 0, locations = 1".format(self.line),
+                       "2: file = 'main.cpp', line = {0:d}, exact_match = 0, locations = 1".format(self.line),
+                       "3: file = 'main.cpp', line = {0:d}, exact_match = 1, locations = 0".format(self.line)])
 
         # Continue the program, there should be another stop.
         self.runCmd("process continue")

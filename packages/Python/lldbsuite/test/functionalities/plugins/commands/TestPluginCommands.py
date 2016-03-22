@@ -25,9 +25,9 @@ class PluginCommandTestCase(TestBase):
 
         plugin_name = "plugin"
         if sys.platform.startswith("darwin"):
-            plugin_lib_name = "lib%s.dylib" % plugin_name
+            plugin_lib_name = "lib{0!s}.dylib".format(plugin_name)
         else:
-            plugin_lib_name = "lib%s.so" % plugin_name
+            plugin_lib_name = "lib{0!s}.so".format(plugin_name)
 
         # Invoke the library build rule.
         self.buildLibrary("plugin.cpp", plugin_name)
@@ -36,7 +36,7 @@ class PluginCommandTestCase(TestBase):
 
         retobj = lldb.SBCommandReturnObject()
 
-        retval = debugger.GetCommandInterpreter().HandleCommand("plugin load %s" % plugin_lib_name, retobj)
+        retval = debugger.GetCommandInterpreter().HandleCommand("plugin load {0!s}".format(plugin_lib_name), retobj)
 
         retobj.Clear()
 

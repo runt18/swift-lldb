@@ -39,7 +39,7 @@ except ImportError:
                 except ImportError:
                     pass
                 else:
-                    print 'imported lldb from: "%s"' % (lldb_python_dir)
+                    print 'imported lldb from: "{0!s}"'.format((lldb_python_dir))
                     success = True
                     break
     if not success:
@@ -133,7 +133,7 @@ def memfind (target, options, args, result):
         start_addr = int(args[0], 0)
         end_addr = int(args[1], 0)
         if start_addr >= end_addr:
-            print_error ("error: inavlid memory range [%#x - %#x)" % (start_addr, end_addr), True, result)
+            print_error ("error: inavlid memory range [{0:#x} - {1:#x})".format(start_addr, end_addr), True, result)
             return
         options.size = end_addr - start_addr
     else:
@@ -156,21 +156,21 @@ def memfind (target, options, args, result):
     bytes = process.ReadMemory (start_addr, options.size, error)
     if error.Success():
         num_matches = 0
-        print >>result, "Searching memory range [%#x - %#x) for" % (start_addr, end_addr),
+        print >>result, "Searching memory range [{0:#x} - {1:#x}) for".format(start_addr, end_addr),
         for byte in options.data:
-            print >>result, '%2.2x' % ord(byte),
+            print >>result, '{0:2.2x}'.format(ord(byte)),
         print >>result
         
         match_index = string.find(bytes, options.data)
         while match_index != -1:
             num_matches = num_matches + 1
-            print >>result, '%#x: %#x + %u' % (start_addr + match_index, start_addr, match_index)
+            print >>result, '{0:#x}: {1:#x} + {2:d}'.format(start_addr + match_index, start_addr, match_index)
             match_index = string.find(bytes, options.data, match_index + 1)
             
         if num_matches == 0:
             print >>result, "error: no matches found"
     else:
-        print >>result, 'error: %s' % (error.GetCString())
+        print >>result, 'error: {0!s}'.format((error.GetCString()))
         
 
 if __name__ == '__main__':

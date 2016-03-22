@@ -19,13 +19,13 @@ class TestPlatformProcessConnect(gdbremote_testcase.GdbRemoteTestCaseBase):
         err = lldb.remote_platform.Put(lldb.SBFileSpec(os.path.join(os.getcwd(), "a.out")),
                                        lldb.SBFileSpec(os.path.join(working_dir, "a.out")))
         if err.Fail():
-            raise RuntimeError("Unable copy '%s' to '%s'.\n>>> %s" % (f, wd, err.GetCString()))
+            raise RuntimeError("Unable copy '{0!s}' to '{1!s}'.\n>>> {2!s}".format(f, wd, err.GetCString()))
 
-        port_file = "%s/port" % working_dir
-        commandline_args = ["platform", "--listen", "*:0", "--socket-file", port_file, "--", "%s/a.out" % working_dir, "foo"]
+        port_file = "{0!s}/port".format(working_dir)
+        commandline_args = ["platform", "--listen", "*:0", "--socket-file", port_file, "--", "{0!s}/a.out".format(working_dir), "foo"]
         self.spawnSubprocess(self.debug_monitor_exe, commandline_args, install_remote=False)
         self.addTearDownHook(self.cleanupSubprocesses)
-        new_port = self.run_shell_cmd("while [ ! -f %s ]; do sleep 0.25; done && cat %s" % (port_file, port_file))
+        new_port = self.run_shell_cmd("while [ ! -f {0!s} ]; do sleep 0.25; done && cat {1!s}".format(port_file, port_file))
 
         new_debugger = lldb.SBDebugger.Create()
         new_debugger.SetAsync(False)
@@ -38,10 +38,10 @@ class TestPlatformProcessConnect(gdbremote_testcase.GdbRemoteTestCaseBase):
         new_interpreter = new_debugger.GetCommandInterpreter()
 
         m = re.search("(.*):[0-9]+", configuration.lldb_platform_url)
-        command = "platform connect %s:%s" % (m.group(1), new_port)
+        command = "platform connect {0!s}:{1!s}".format(m.group(1), new_port)
         result = lldb.SBCommandReturnObject()
         new_interpreter.HandleCommand(command, result)
-        self.assertTrue(result.Succeeded(), "platform process connect failed: %s" % result.GetOutput())
+        self.assertTrue(result.Succeeded(), "platform process connect failed: {0!s}".format(result.GetOutput()))
 
         target = new_debugger.GetSelectedTarget()
         process = target.GetProcess()

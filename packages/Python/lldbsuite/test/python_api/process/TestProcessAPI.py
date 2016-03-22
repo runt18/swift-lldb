@@ -285,5 +285,5 @@ class ProcessAPITestCase(TestBase):
         error = lldb.SBError();
         num = process.GetNumSupportedHardwareWatchpoints(error)
         if self.TraceOn() and error.Success():
-            print("Number of supported hardware watchpoints: %d" % num)
+            print("Number of supported hardware watchpoints: {0:d}".format(num))
 

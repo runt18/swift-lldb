@@ -78,7 +78,7 @@ class ConditionalBreakTestCase(TestBase):
                     # In reality, similar logic can be used to find out the call
                     # site.
                     self.assertTrue(frame1.GetLineEntry().GetLine() == line,
-                                    "Immediate caller a() at main.c:%d" % line)
+                                    "Immediate caller a() at main.c:{0:d}".format(line))
 
                     # And the local variable 'val' should have a value of (int) 3.
                     val = frame1.FindVariable("val")

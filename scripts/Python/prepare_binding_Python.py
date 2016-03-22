@@ -200,17 +200,17 @@ def do_swig_rebuild(options, dependency_file, config_build_dir, settings):
         "-shadow",
         "-python",
         "-threads",
-        "-I\"%s\"" % os.path.normcase(
-            os.path.join(options.src_root, "include")),
-        "-I\"%s\"" % os.path.normcase("./."),
+        "-I\"{0!s}\"".format(os.path.normcase(
+            os.path.join(options.src_root, "include"))),
+        "-I\"{0!s}\"".format(os.path.normcase("./.")),
         "-D__STDC_LIMIT_MACROS",
         "-D__STDC_CONSTANT_MACROS"]
     if options.generate_dependency_file:
-        command.append("-MMD -MF \"%s\"" % temp_dep_file_path)
+        command.append("-MMD -MF \"{0!s}\"".format(temp_dep_file_path))
     command.extend([
-        "-outdir", "\"%s\"" % config_build_dir,
-        "-o", "\"%s\"" % settings.output_file,
-        "\"%s\"" % settings.input_file
+        "-outdir", "\"{0!s}\"".format(config_build_dir),
+        "-o", "\"{0!s}\"".format(settings.output_file),
+        "\"{0!s}\"".format(settings.input_file)
         ])
     logging.info("running swig with: %s", command)
 
@@ -344,7 +344,7 @@ def run_python_script(script_and_args):
     @param script_and_args the python script to execute, along with
     the command line arguments to pass to it.
     """
-    command_line = "%s %s" % (sys.executable, script_and_args)
+    command_line = "{0!s} {1!s}".format(sys.executable, script_and_args)
     process = subprocess.Popen(command_line, shell=True)
     script_stdout, script_stderr = process.communicate()
     return_code = process.returncode
@@ -374,7 +374,7 @@ def do_modify_python_lldb(options, config_build_dir):
         logging.error("failed to find python script: '%s'", script_path)
         sys.exit(-11)
 
-    script_invocation = "%s %s" % (script_path, config_build_dir)
+    script_invocation = "{0!s} {1!s}".format(script_path, config_build_dir)
     run_python_script(script_invocation)
 
 

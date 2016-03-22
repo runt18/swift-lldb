@@ -78,7 +78,7 @@ class TestSwiftSubmoduleImport(TestBase):
         # Now make sure we can explicitly do the import:
         value = self.frame.EvaluateExpression ('import Darwin.C\n b', options)
         self.assertTrue(value.IsValid(), "Got a valid value back from import Darwin.C")
-        self.assertTrue(value.GetError().Success(), "The import was not successful: %s"%(value.GetError().GetCString()))
+        self.assertTrue(value.GetError().Success(), "The import was not successful: {0!s}".format((value.GetError().GetCString())))
 
 if __name__ == '__main__':
     import atexit

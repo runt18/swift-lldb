@@ -95,7 +95,7 @@ class TextTestResult(result.TestResult):
 
     def addSkip(self, test, reason):
         super(TextTestResult, self).addSkip(test, reason)
-        self.newTestResult(test,"s","skipped %r" % (reason,))
+        self.newTestResult(test,"s","skipped {0!r}".format(reason))
 
     def addExpectedFailure(self, test, err, bugnumber):
         super(TextTestResult, self).addExpectedFailure(test, err, bugnumber)
@@ -117,9 +117,9 @@ class TextTestResult(result.TestResult):
     def printErrorList(self, flavour, errors):
         for test, err in errors:
             self.stream.writeln(self.separator1)
-            self.stream.writeln("%s: %s" % (flavour, self.getDescription(test)))
+            self.stream.writeln("{0!s}: {1!s}".format(flavour, self.getDescription(test)))
             self.stream.writeln(self.separator2)
-            self.stream.writeln("%s" % err)
+            self.stream.writeln("{0!s}".format(err))
 
     def stopTestRun(self):
         super(TextTestResult, self).stopTestRun()
@@ -171,8 +171,7 @@ class TextTestRunner(unittest.TextTestRunner):
         if hasattr(result, 'separator2'):
             self.stream.writeln(result.separator2)
         run = result.testsRun
-        self.stream.writeln("Ran %d test%s in %.3fs" %
-                            (run, run != 1 and "s" or "", timeTaken))
+        self.stream.writeln("Ran {0:d} test{1!s} in {2:.3f}s".format(run, run != 1 and "s" or "", timeTaken))
         self.stream.writeln()
         
         expectedFails = unexpectedSuccesses = skipped = passed = failed = errored = 0
@@ -187,17 +186,17 @@ class TextTestRunner(unittest.TextTestRunner):
         except AttributeError:
             pass
         infos = []
-        infos.append("%d passes" % passed)
-        infos.append("%d failures" % failed)
-        infos.append("%d errors" % errored)
-        infos.append("%d skipped" % skipped)
-        infos.append("%d expected failures" % expectedFails)
-        infos.append("%d unexpected successes" % unexpectedSuccesses)
+        infos.append("{0:d} passes".format(passed))
+        infos.append("{0:d} failures".format(failed))
+        infos.append("{0:d} errors".format(errored))
+        infos.append("{0:d} skipped".format(skipped))
+        infos.append("{0:d} expected failures".format(expectedFails))
+        infos.append("{0:d} unexpected successes".format(unexpectedSuccesses))
         self.stream.write("RESULT: ")
         if not result.wasSuccessful():
             self.stream.write("FAILED")
         else:
             self.stream.write("PASSED")
 
-        self.stream.writeln(" (%s)" % (", ".join(infos),))
+        self.stream.writeln(" ({0!s})".format(", ".join(infos)))
         return result

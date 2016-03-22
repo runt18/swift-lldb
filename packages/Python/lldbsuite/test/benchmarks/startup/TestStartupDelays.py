@@ -47,7 +47,7 @@ class StartupDelaysBench(BenchBase):
         self.stopwatch2.reset()
         for i in range(count):
             # So that the child gets torn down after the test.
-            self.child = pexpect.spawn('%s %s' % (lldbtest_config.lldbExec, self.lldbOption))
+            self.child = pexpect.spawn('{0!s} {1!s}'.format(lldbtest_config.lldbExec, self.lldbOption))
             child = self.child
 
             # Turn on logging for what the child sends back.
@@ -56,12 +56,12 @@ class StartupDelaysBench(BenchBase):
 
             with self.stopwatch:
                 # Create a fresh target.
-                child.sendline('file %s' % exe) # Aka 'target create'.
+                child.sendline('file {0!s}'.format(exe)) # Aka 'target create'.
                 child.expect_exact(prompt)
 
             with self.stopwatch2:
                 # Read debug info and set the first breakpoint.
-                child.sendline('breakpoint set %s' % break_spec)
+                child.sendline('breakpoint set {0!s}'.format(break_spec))
                 child.expect_exact(prompt)
 
             with self.stopwatch3:

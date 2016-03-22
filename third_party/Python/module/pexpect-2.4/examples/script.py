@@ -62,7 +62,7 @@ def main():
         command = "sh"
 
     # Begin log with date/time in the form CCCCyymm.hhmmss
-    fout.write ('# %4d%02d%02d.%02d%02d%02d \n' % time.localtime()[:-3])
+    fout.write ('# {0:4d}{1:02d}{2:02d}.{3:02d}{4:02d}{5:02d} \n'.format(*time.localtime()[:-3]))
     
     ######################################################################
     # Start the interactive session

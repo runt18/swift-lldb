@@ -37,13 +37,13 @@ class libcxx_hash_table_SynthProvider:
 			bl_ptr = table.GetChildMemberWithName('__bucket_list_').GetChildMemberWithName('__ptr_')
 			self.bucket_array_ptr = bl_ptr.GetChildMemberWithName('__first_').GetValueAsUnsigned(0)
 			self.bucket_count = bl_ptr.GetChildMemberWithName('__second_').GetChildMemberWithName('__data_').GetChildMemberWithName('__first_').GetValueAsUnsigned(0)
-			logger >> "Bucket count = %r" % self.bucket_count
+			logger >> "Bucket count = {0!r}".format(self.bucket_count)
 
 			self.begin_ptr = table.GetChildMemberWithName('__p1_').GetChildMemberWithName('__first_').GetChildMemberWithName('__next_')
 
 			self.num_elements    = table.GetChildMemberWithName('__p2_').GetChildMemberWithName('__first_').GetValueAsUnsigned(0)
 			self.max_load_factor = table.GetChildMemberWithName('__p3_').GetChildMemberWithName('__first_').GetValueAsUnsigned(0)
-			logger >> "Num elements = %r" % self.num_elements
+			logger >> "Num elements = {0!r}".format(self.num_elements)
 
 			# save the pointers as we get them
 			#   -- don't access this first element if num_element==0!
@@ -53,7 +53,7 @@ class libcxx_hash_table_SynthProvider:
 			else:
 				self.next_element = None
 		except Exception as e:
-			logger >> "Caught exception: %r" % e
+			logger >> "Caught exception: {0!r}".format(e)
 			pass
 
 	def num_children(self):
@@ -83,7 +83,7 @@ class libcxx_hash_table_SynthProvider:
 			return None
 
 		# extend
-		logger >> " : cache size starts with %d elements" % len(self.elements_cache)
+		logger >> " : cache size starts with {0:d} elements".format(len(self.elements_cache))
 		while index >= len(self.elements_cache):
 			# if we hit the end before we get the index, give up:
 			if not self.next_element:
@@ -101,9 +101,9 @@ class libcxx_hash_table_SynthProvider:
 				self.next_element = None
 
 		# hit the index! so we have the value
-		logger >> " : cache size ends with %d elements" % len(self.elements_cache)
+		logger >> " : cache size ends with {0:d} elements".format(len(self.elements_cache))
 		value, hash_value = self.elements_cache[index]
-		return self.valobj.CreateValueFromData('[%d] <hash %d>'%(index,hash_value), value.GetData(), value.GetType())
+		return self.valobj.CreateValueFromData('[{0:d}] <hash {1:d}>'.format(index, hash_value), value.GetData(), value.GetType())
 
 
 def __lldb_init_module(debugger,dict):

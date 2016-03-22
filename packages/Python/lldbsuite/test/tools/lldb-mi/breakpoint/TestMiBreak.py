@@ -21,7 +21,7 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
 
         self.spawnLldbMi(args = None)
 
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         self.runCmd("-break-insert -f printf")
@@ -44,7 +44,7 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
 
         self.spawnLldbMi(args = None)
 
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         self.runCmd("-break-insert -f main")
@@ -105,15 +105,15 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
 
         self.spawnLldbMi(args = None)
 
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Find the line number to break inside main() and set
         # pending BP
         line = line_number('main.cpp', '// BP_return')
-        self.runCmd("-break-insert -f main.cpp:%d" % line)
-        self.expect("\^done,bkpt={number=\"1\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"%d\",pending=\[\"main.cpp:%d\"\],times=\"0\",original-location=\"main.cpp:%d\"}" % (line, line, line))
-        self.expect("=breakpoint-modified,bkpt={number=\"1\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"%d\",pending=\[\"main.cpp:%d\"\],times=\"0\",original-location=\"main.cpp:%d\"}" % (line, line, line))
+        self.runCmd("-break-insert -f main.cpp:{0:d}".format(line))
+        self.expect("\^done,bkpt={{number=\"1\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"{0:d}\",pending=\[\"main.cpp:{1:d}\"\],times=\"0\",original-location=\"main.cpp:{2:d}\"}}".format(line, line, line))
+        self.expect("=breakpoint-modified,bkpt={{number=\"1\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"{0:d}\",pending=\[\"main.cpp:{1:d}\"\],times=\"0\",original-location=\"main.cpp:{2:d}\"}}".format(line, line, line))
 
         self.runCmd("-exec-run")
         self.expect("\^running")
@@ -126,7 +126,7 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
 
         self.spawnLldbMi(args = None)
 
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         self.runCmd("-break-insert -f main")
@@ -138,9 +138,9 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # Test that -break-insert can set non-pending BP
         line = line_number('main.cpp', '// BP_return')
-        self.runCmd("-break-insert main.cpp:%d" % line)
-        self.expect("\^done,bkpt={number=\"2\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"%d\",times=\"0\",original-location=\"main.cpp:%d\"}" % (line, line))
-        self.expect("=breakpoint-modified,bkpt={number=\"2\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"%d\",times=\"0\",original-location=\"main.cpp:%d\"}" % (line, line))
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
+        self.expect("\^done,bkpt={{number=\"2\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"{0:d}\",times=\"0\",original-location=\"main.cpp:{1:d}\"}}".format(line, line))
+        self.expect("=breakpoint-modified,bkpt={{number=\"2\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"(?!0xffffffffffffffff)0x[0-9a-f]+\",func=\"main\",file=\"main\.cpp\",fullname=\".+?main\.cpp\",line=\"{0:d}\",times=\"0\",original-location=\"main.cpp:{1:d}\"}}".format(line, line))
 
         # Test that -break-insert fails if non-pending BP can't be resolved
         self.runCmd("-break-insert unknown_file:1")
@@ -159,7 +159,7 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
 
         self.spawnLldbMi(args = None)
 
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         self.runCmd("-break-insert -f main")
@@ -172,7 +172,7 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
         import os
         path = os.path.join(os.getcwd(), "main.cpp")
         line = line_number('main.cpp', '// BP_return')
-        self.runCmd("-break-insert %s:%d" % (path, line))
+        self.runCmd("-break-insert {0!s}:{1:d}".format(path, line))
         self.expect("\^done,bkpt={number=\"2\"")
 
         self.runCmd("-exec-continue")
@@ -187,32 +187,32 @@ class MiBreakTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Set target.move-to-nearest-code=off and try to set BP #1 that shouldn't be hit
         self.runCmd("-interpreter-exec console \"settings set target.move-to-nearest-code off\"")
         self.expect("\^done")
         line = line_number('main.cpp', '// BP_before_main')
-        self.runCmd("-break-insert -f main.cpp:%d" % line)
+        self.runCmd("-break-insert -f main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
 
         # Test that non-pending BP will not be set on non-existing line if target.move-to-nearest-code=off
         # Note: this increases the BP number by 1 even though BP #2 is invalid.
-        self.runCmd("-break-insert main.cpp:%d" % line)
-        self.expect("\^error,msg=\"Command 'break-insert'. Breakpoint location 'main.cpp:%d' not found\"" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
+        self.expect("\^error,msg=\"Command 'break-insert'. Breakpoint location 'main.cpp:{0:d}' not found\"".format(line))
 
         # Set target.move-to-nearest-code=on and target.skip-prologue=on and set BP #3
         self.runCmd("-interpreter-exec console \"settings set target.move-to-nearest-code on\"")
         self.runCmd("-interpreter-exec console \"settings set target.skip-prologue on\"")
         self.expect("\^done")
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"3\"")
 
         # Set target.skip-prologue=off and set BP #4
         self.runCmd("-interpreter-exec console \"settings set target.skip-prologue off\"")
         self.expect("\^done")
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"4\"")
 
         # Test that BP #4 is located before BP #3

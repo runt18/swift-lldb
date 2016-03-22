@@ -28,7 +28,7 @@ class FileExtract:
         elif b == '<' or b == '>' or b == '@' or b == '=':
             self.byte_order = b
         else:
-            print "error: invalid byte order specified: '%s'" % b
+            print "error: invalid byte order specified: '{0!s}'".format(b)
 
     def is_in_memory(self):
         return False
@@ -135,7 +135,7 @@ class FileExtract:
         '''Extract a single fixed length C string from the binary file at the current file position, returns a single C string'''
         s = self.read_size(n)
         if s:
-            cstr, = struct.unpack(self.byte_order + ("%i" % n) + 's', s)
+            cstr, = struct.unpack(self.byte_order + ("{0:d}".format(n)) + 's', s)
             # Strip trialing NULLs
             cstr = string.strip(cstr, "\0")
             if isprint_only_with_space_padding:
@@ -160,7 +160,7 @@ class FileExtract:
         '''Extract "n" int8_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'b', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'b', s)
         else:
             return (fail_value,) * n
 
@@ -168,7 +168,7 @@ class FileExtract:
         '''Extract "n" uint8_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'B', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'B', s)
         else:
             return (fail_value,) * n
 
@@ -176,7 +176,7 @@ class FileExtract:
         '''Extract "n" int16_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(2*n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'h', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'h', s)
         else:
             return (fail_value,) * n
 
@@ -184,7 +184,7 @@ class FileExtract:
         '''Extract "n" uint16_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(2*n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'H', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'H', s)
         else:
             return (fail_value,) * n
 
@@ -192,7 +192,7 @@ class FileExtract:
         '''Extract "n" int32_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(4*n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'i', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'i', s)
         else:
             return (fail_value,) * n
 
@@ -200,7 +200,7 @@ class FileExtract:
         '''Extract "n" uint32_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(4*n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'I', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'I', s)
         else:
             return (fail_value,) * n
 
@@ -208,7 +208,7 @@ class FileExtract:
         '''Extract "n" int64_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(8*n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'q', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'q', s)
         else:
             return (fail_value,) * n
 
@@ -216,6 +216,6 @@ class FileExtract:
         '''Extract "n" uint64_t integers from the binary file at the current file position, returns a list of integers'''
         s = self.read_size(8*n)
         if s:
-            return struct.unpack(self.byte_order + ("%u" % n) + 'Q', s)
+            return struct.unpack(self.byte_order + ("{0:d}".format(n)) + 'Q', s)
         else:
             return (fail_value,) * n

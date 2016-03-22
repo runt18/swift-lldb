@@ -51,30 +51,30 @@ class RegistersIteratorTestCase(TestBase):
                     REGs = lldbutil.get_GPRs(frame)
                     num = len(REGs)
                     if self.TraceOn():
-                        print("\nNumber of general purpose registers: %d" % num)
+                        print("\nNumber of general purpose registers: {0:d}".format(num))
                     for reg in REGs:
                         self.assertTrue(reg)
                         if self.TraceOn():
-                            print("%s => %s" % (reg.GetName(), reg.GetValue()))
+                            print("{0!s} => {1!s}".format(reg.GetName(), reg.GetValue()))
 
                     REGs = lldbutil.get_FPRs(frame)
                     num = len(REGs)
                     if self.TraceOn():
-                        print("\nNumber of floating point registers: %d" % num)
+                        print("\nNumber of floating point registers: {0:d}".format(num))
                     for reg in REGs:
                         self.assertTrue(reg)
                         if self.TraceOn():
-                            print("%s => %s" % (reg.GetName(), reg.GetValue()))
+                            print("{0!s} => {1!s}".format(reg.GetName(), reg.GetValue()))
 
                     REGs = lldbutil.get_ESRs(frame)
                     if self.platformIsDarwin():
                         num = len(REGs)
                         if self.TraceOn():
-                            print("\nNumber of exception state registers: %d" % num)
+                            print("\nNumber of exception state registers: {0:d}".format(num))
                         for reg in REGs:
                             self.assertTrue(reg)
                             if self.TraceOn():
-                                print("%s => %s" % (reg.GetName(), reg.GetValue()))
+                                print("{0!s} => {1!s}".format(reg.GetName(), reg.GetValue()))
                     else:
                         self.assertIsNone(REGs)
 

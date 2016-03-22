@@ -32,15 +32,15 @@ class RegexpBreakCommandTestCase(TestBase):
         exe = os.path.join(os.getcwd(), "a.out")
         self.runCmd("file " + exe, CURRENT_EXECUTABLE_SET)
 
-        break_results = lldbutil.run_break_set_command (self, "b %d" % self.line)
+        break_results = lldbutil.run_break_set_command (self, "b {0:d}".format(self.line))
         lldbutil.check_breakpoint_result (self, break_results, file_name='main.c', line_number=self.line, num_locations=1)
 
-        break_results = lldbutil.run_break_set_command (self, "b %s:%d" % (self.source, self.line))
+        break_results = lldbutil.run_break_set_command (self, "b {0!s}:{1:d}".format(self.source, self.line))
         lldbutil.check_breakpoint_result (self, break_results, file_name='main.c', line_number=self.line, num_locations=1)
 
         # Check breakpoint with full file path.
         full_path = os.path.join(os.getcwd(), self.source)
-        break_results = lldbutil.run_break_set_command (self, "b %s:%d" % (full_path, self.line))
+        break_results = lldbutil.run_break_set_command (self, "b {0!s}:{1:d}".format(full_path, self.line))
         lldbutil.check_breakpoint_result (self, break_results, file_name='main.c', line_number=self.line, num_locations=1)
 
         self.runCmd("run", RUN_SUCCEEDED)

@@ -46,7 +46,7 @@ class NoreturnUnwind(TestBase):
         if self.TraceOn():
             print("Backtrace once we're stopped:")
             for f in thread.frames:
-                print("  %d %s" % (f.GetFrameID(), f.GetFunctionName()))
+                print("  {0:d} {1!s}".format(f.GetFrameID(), f.GetFunctionName()))
 
         # I'm going to assume that abort() ends up calling/invoking another
         # function before halting the process.  In which case if abort_frame_number

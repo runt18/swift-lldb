@@ -33,7 +33,7 @@ class DisassembleRawDataTestCase(TestBase):
         if self.TraceOn():
             print()
             print("Raw bytes:    ", [hex(x) for x in raw_bytes])
-            print("Disassembled%s" % str(inst))
+            print("Disassembled{0!s}".format(str(inst)))
  
         self.assertTrue (inst.GetMnemonic(target) == "movq")
         self.assertTrue (inst.GetOperands(target) == '%' + "rsp, " + '%' + "rbp")

@@ -8,7 +8,7 @@ import re
 import sys
 
 def extract_exe_symbol_names (arch, exe_path, match_str):
-    command = 'dsymutil --arch %s -s "%s" | grep "%s" | colrm 1 69' % (arch, exe_path, match_str)
+    command = 'dsymutil --arch {0!s} -s "{1!s}" | grep "{2!s}" | colrm 1 69'.format(arch, exe_path, match_str)
     (command_exit_status, command_output) = commands.getstatusoutput(command)
     if command_exit_status == 0:
         if command_output:
@@ -16,7 +16,7 @@ def extract_exe_symbol_names (arch, exe_path, match_str):
         else:
             print 'error: command returned no output'
     else:
-        print 'error: command failed with exit status %i\n    command: %s' % (command_exit_status, command)
+        print 'error: command failed with exit status {0:d}\n    command: {1!s}'.format(command_exit_status, command)
     return list()
 
 def verify_api(all_args):
@@ -51,7 +51,7 @@ def verify_api(all_args):
     if options.verbose:
         print "API symbols:"
         for (i, external_symbol) in enumerate(api_external_symbols):
-            print "[%u] %s" % (i, external_symbol)
+            print "[{0:d}] {1!s}".format(i, external_symbol)
     
     api_regex = None
     if options.api_regex_str:
@@ -59,7 +59,7 @@ def verify_api(all_args):
     
     for arch in options.archs:        
         for exe_path in args:
-            print 'Verifying (%s) "%s"...' % (arch, exe_path)
+            print 'Verifying ({0!s}) "{1!s}"...'.format(arch, exe_path)
             exe_errors = 0
             undefined_symbols = extract_exe_symbol_names(arch, exe_path, "(     UNDF EXT)");
             for undefined_symbol in undefined_symbols:
@@ -67,16 +67,16 @@ def verify_api(all_args):
                     match = api_regex.search(undefined_symbol)
                     if not match:
                         if options.verbose:
-                            print 'ignoring symbol: %s' % (undefined_symbol)
+                            print 'ignoring symbol: {0!s}'.format((undefined_symbol))
                         continue
                 if undefined_symbol in api_external_symbols:
                     if options.verbose:
-                        print 'verified symbol: %s' % (undefined_symbol)
+                        print 'verified symbol: {0!s}'.format((undefined_symbol))
                 else:
-                    print 'missing symbol: %s' % (undefined_symbol)
+                    print 'missing symbol: {0!s}'.format((undefined_symbol))
                     exe_errors += 1
             if exe_errors:
-                print 'error: missing %u API symbols from %s' % (exe_errors, options.libraries)
+                print 'error: missing {0:d} API symbols from {1!s}'.format(exe_errors, options.libraries)
             else:
                 print 'success'
         

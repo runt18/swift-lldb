@@ -93,10 +93,10 @@ class Curses(result_formatter.ResultsFormatter):
             self.main_window.push_first_responder(self.info_panel)
             test_start = self.results[selected_idx][0]
             test_result = self.results[selected_idx][1]
-            self.info_panel.set_line(0, "File: %s" % (test_start['test_filename']))
-            self.info_panel.set_line(1, "Test: %s.%s" % (test_start['test_class'], test_start['test_name']))
-            self.info_panel.set_line(2, "Time: %s" % (test_result['elapsed_time']))
-            self.info_panel.set_line(3, "Status: %s" % (test_result['status']))
+            self.info_panel.set_line(0, "File: {0!s}".format((test_start['test_filename'])))
+            self.info_panel.set_line(1, "Test: {0!s}.{1!s}".format(test_start['test_class'], test_start['test_name']))
+            self.info_panel.set_line(2, "Time: {0!s}".format((test_result['elapsed_time'])))
+            self.info_panel.set_line(3, "Status: {0!s}".format((test_result['status'])))
 
     def hide_info_panel(self):
         self.main_window.pop_first_responder(self.info_panel)
@@ -122,7 +122,7 @@ class Curses(result_formatter.ResultsFormatter):
             if status in self.hide_status_list:
                 continue
             name = test_result['test_class'] + '.' + test_result['test_name']
-            self.results_panel.append_line('%s (%6.2f sec) %s' % (self.status_to_short_str(status), test_result['elapsed_time'], name))
+            self.results_panel.append_line('{0!s} ({1:6.2f} sec) {2!s}'.format(self.status_to_short_str(status), test_result['elapsed_time'], name))
         if update:
             self.main_window.refresh()
 
@@ -145,7 +145,7 @@ class Curses(result_formatter.ResultsFormatter):
                         name = test_event['test_class'] + '.' + test_event['test_name']
                         self.job_tests[worker_index] = test_event
                         if 'pid' in test_event:
-                            line = 'pid: %5d ' % (test_event['pid']) + name
+                            line = 'pid: {0:5d} '.format((test_event['pid'])) + name
                         else:
                             line = name
                         self.job_panel.set_line(worker_index, line)
@@ -154,14 +154,14 @@ class Curses(result_formatter.ResultsFormatter):
                         status = test_event['status']
                         self.status_panel.increment_status(status)
                         if 'pid' in test_event:
-                            line = 'pid: %5d ' % (test_event['pid'])
+                            line = 'pid: {0:5d} '.format((test_event['pid']))
                         else:
                             line = ''
                         self.job_panel.set_line(worker_index, line)
                         name = test_event['test_class'] + '.' + test_event['test_name']
                         elapsed_time = test_event['event_time'] - self.job_tests[worker_index]['event_time']
                         if not status in self.hide_status_list:
-                            self.results_panel.append_line('%s (%6.2f sec) %s' % (self.status_to_short_str(status), elapsed_time, name))
+                            self.results_panel.append_line('{0!s} ({1:6.2f} sec) {2!s}'.format(self.status_to_short_str(status), elapsed_time, name))
                         self.main_window.refresh()
                         # Append the result pairs
                         test_event['elapsed_time'] = elapsed_time
@@ -170,7 +170,7 @@ class Curses(result_formatter.ResultsFormatter):
                     elif event == 'job_begin':
                         self.jobs[worker_index] = test_event
                         if 'pid' in test_event:
-                            line = 'pid: %5d ' % (test_event['pid'])
+                            line = 'pid: {0:5d} '.format((test_event['pid']))
                         else:
                             line = ''
                         self.job_panel.set_line(worker_index, line)

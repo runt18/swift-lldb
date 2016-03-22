@@ -21,7 +21,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Test that "target create" loads executable
-        self.runCmd("target create \"%s\"" % self.myexe)
+        self.runCmd("target create \"{0!s}\"".format(self.myexe))
         self.expect("\^done")
 
         # Test that executable was loaded properly
@@ -40,7 +40,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Test that "breakpoint set" sets a breakpoint
@@ -68,7 +68,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.expect("\^done")
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run
@@ -87,7 +87,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Test that "settings set target.run-args" passes arguments to executable
@@ -111,7 +111,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Set breakpoint
@@ -134,7 +134,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -164,7 +164,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -189,7 +189,7 @@ class MiCliSupportTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main

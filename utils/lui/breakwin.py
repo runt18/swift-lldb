@@ -75,9 +75,9 @@ class BreakWin(cui.ListWin):
         id = match.group(1)
         desc = match.group(2).strip()
         if bp.IsEnabled():
-          text = '%s: %s' % (id, desc)
+          text = '{0!s}: {1!s}'.format(id, desc)
         else:
-          text = '%s: (disabled) %s' % (id, desc)
+          text = '{0!s}: (disabled) {1!s}'.format(id, desc)
       except ValueError as e:
         # bp unparsable
         pass

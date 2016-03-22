@@ -153,12 +153,12 @@ class GdbRemoteTestCaseBase(TestBase):
         shell_cmd = lldb.SBPlatformShellCommand(cmd)
         err = platform.Run(shell_cmd)
         if err.Fail() or shell_cmd.GetStatus():
-            m = "remote_platform.RunShellCommand('%s') failed:\n" % cmd
-            m += ">>> return code: %d\n" % shell_cmd.GetStatus()
+            m = "remote_platform.RunShellCommand('{0!s}') failed:\n".format(cmd)
+            m += ">>> return code: {0:d}\n".format(shell_cmd.GetStatus())
             if err.Fail():
-                m += ">>> %s\n" % str(err).strip()
-            m += ">>> %s\n" % (shell_cmd.GetOutput() or
-                               "Command generated no output.")
+                m += ">>> {0!s}\n".format(str(err).strip())
+            m += ">>> {0!s}\n".format((shell_cmd.GetOutput() or
+                               "Command generated no output."))
             raise Exception(m)
         return shell_cmd.GetOutput().strip()
 
@@ -171,7 +171,7 @@ class GdbRemoteTestCaseBase(TestBase):
             shell_stat = self.run_shell_cmd("cat /proc/$$/stat")
             # [pid] ([executable]) [state] [*ppid*]
             pid = re.match(r"^\d+ \(.+\) . (\d+)", shell_stat).group(1)
-            ls_output = self.run_shell_cmd("ls -l /proc/%s/exe" % pid)
+            ls_output = self.run_shell_cmd("ls -l /proc/{0!s}/exe".format(pid))
             exe = ls_output.split()[-1]
 
             # If the binary has been deleted, the link name has " (deleted)" appended.
@@ -205,9 +205,9 @@ class GdbRemoteTestCaseBase(TestBase):
     def forward_adb_port(self, source, target, direction, device):
         adb = [ 'adb' ] + ([ '-s', device ] if device else []) + [ direction ]
         def remove_port_forward():
-            subprocess.call(adb + [ "--remove", "tcp:%d" % source])
+            subprocess.call(adb + [ "--remove", "tcp:{0:d}".format(source)])
 
-        subprocess.call(adb + [ "tcp:%d" % source, "tcp:%d" % target])
+        subprocess.call(adb + [ "tcp:{0:d}".format(source), "tcp:{0:d}".format(target)])
         self.addTearDownHook(remove_port_forward)
 
     def create_socket(self):
@@ -254,7 +254,7 @@ class GdbRemoteTestCaseBase(TestBase):
             commandline_args = self.debug_monitor_extra_args + ["localhost:{}".format(self.port)]
 
         if attach_pid:
-            commandline_args += ["--attach=%d" % attach_pid]
+            commandline_args += ["--attach={0:d}".format(attach_pid)]
         if self.named_pipe_path:
             commandline_args += ["--named-pipe", self.named_pipe_path]
         return commandline_args
@@ -336,7 +336,7 @@ class GdbRemoteTestCaseBase(TestBase):
             server.terminate()
 
             # Increment attempts.
-            print("connect to debug monitor on port %d failed, attempt #%d of %d" % (self.port, attempts + 1, MAX_ATTEMPTS))
+            print("connect to debug monitor on port {0:d} failed, attempt #{1:d} of {2:d}".format(self.port, attempts + 1, MAX_ATTEMPTS))
             attempts += 1
 
             # And wait a random length of time before next attempt, to avoid collisions.
@@ -345,7 +345,7 @@ class GdbRemoteTestCaseBase(TestBase):
             # Now grab a new port number.
             self.port = self.get_next_port()
 
-        raise Exception("failed to create a socket to the launched debug monitor after %d tries" % attempts)
+        raise Exception("failed to create a socket to the launched debug monitor after {0:d} tries".format(attempts))
 
     def launch_process_for_attach(self, inferior_args=None, sleep_seconds=3, exe_path=None):
         # We're going to start a child process that the debug monitor stub can later attach to.
@@ -358,7 +358,7 @@ class GdbRemoteTestCaseBase(TestBase):
         if inferior_args:
             args.extend(inferior_args)
         if sleep_seconds:
-            args.append("sleep:%d" % sleep_seconds)
+            args.append("sleep:{0:d}".format(sleep_seconds))
 
         inferior = self.spawnSubprocess(exe_path, args)
         def shutdown_process_for_attach():
@@ -411,7 +411,7 @@ class GdbRemoteTestCaseBase(TestBase):
                 remote_file_spec = lldb.SBFileSpec(remote_path, False)
                 err = lldb.remote_platform.Install(lldb.SBFileSpec(inferior_exe_path, True), remote_file_spec)
                 if err.Fail():
-                    raise Exception("remote_platform.Install('%s', '%s') failed: %s" % (inferior_exe_path, remote_path, err))
+                    raise Exception("remote_platform.Install('{0!s}', '{1!s}') failed: {2!s}".format(inferior_exe_path, remote_path, err))
                 inferior_exe_path = remote_path
 
             launch_args = [inferior_exe_path]
@@ -479,7 +479,7 @@ class GdbRemoteTestCaseBase(TestBase):
 
     def add_verified_launch_packets(self, launch_args):
         self.test_sequence.add_log_lines(
-            ["read packet: %s" % build_gdbremote_A_packet(launch_args),
+            ["read packet: {0!s}".format(build_gdbremote_A_packet(launch_args)),
              "send packet: $OK#00",
              "read packet: $qLaunchSuccess#a5",
              "send packet: $OK#00"],
@@ -763,7 +763,7 @@ class GdbRemoteTestCaseBase(TestBase):
                 supported_dict[key] = supported_type 
             # Ensure we know the supported element
             if not key in self._KNOWN_QSUPPORTED_STUB_FEATURES:
-                raise Exception("unknown qSupported stub feature reported: %s" % key)
+                raise Exception("unknown qSupported stub feature reported: {0!s}".format(key))
 
         return supported_dict
 

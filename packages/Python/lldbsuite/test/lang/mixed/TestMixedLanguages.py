@@ -21,7 +21,7 @@ class MixedLanguagesTestCase(TestBase):
         # Execute the cleanup function during test case tear down
         # to restore the frame format.
         def cleanup():
-            self.runCmd("settings set frame-format %s" % self.format_string, check=False)
+            self.runCmd("settings set frame-format {0!s}".format(self.format_string), check=False)
         self.addTearDownHook(cleanup)
         self.runCmd("settings show frame-format")
         m = re.match(
@@ -32,7 +32,7 @@ class MixedLanguagesTestCase(TestBase):
 
         # Change the default format to print the language.
         format_string = "frame #${frame.index}: ${frame.pc}{ ${module.file.basename}`${function.name}{${function.pc-offset}}}{, lang=${language}}\n"
-        self.runCmd("settings set frame-format %s" % format_string)
+        self.runCmd("settings set frame-format {0!s}".format(format_string))
         self.expect("settings show frame-format", SETTING_MSG("frame-format"),
             substrs = [format_string])
 

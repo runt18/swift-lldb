@@ -27,9 +27,9 @@ class DriverBatchModeTest (TestBase):
         try:
             self.child.expect_exact(string)
         except pexpect.EOF:
-            self.fail ("Got EOF waiting for '%s'"%(string))
+            self.fail ("Got EOF waiting for '{0!s}'".format((string)))
         except pexpect.TIMEOUT:
-            self.fail ("Timed out waiting for '%s'"%(string))
+            self.fail ("Timed out waiting for '{0!s}'".format((string)))
 
     @skipIfRemote # test not remote-ready llvm.org/pr24813
     @expectedFlakeyFreeBSD("llvm.org/pr25172 fails rarely on the buildbot")
@@ -46,7 +46,7 @@ class DriverBatchModeTest (TestBase):
 
         # Pass CRASH so the process will crash and stop in batch mode.
         run_commands = ' -b -o "break set -n main" -o "run" -o "continue" -k "frame var touch_me_not"'
-        self.child = pexpect.spawn('%s %s %s %s -- CRASH' % (lldbtest_config.lldbExec, self.lldbOption, run_commands, exe))
+        self.child = pexpect.spawn('{0!s} {1!s} {2!s} {3!s} -- CRASH'.format(lldbtest_config.lldbExec, self.lldbOption, run_commands, exe))
         child = self.child
         # Turn on logging for what the child sends back.
         if self.TraceOn():
@@ -83,7 +83,7 @@ class DriverBatchModeTest (TestBase):
 
         # Now do it again, and make sure if we don't crash, we quit:
         run_commands = ' -b -o "break set -n main" -o "run" -o "continue" '
-        self.child = pexpect.spawn('%s %s %s %s -- NOCRASH' % (lldbtest_config.lldbExec, self.lldbOption, run_commands, exe))
+        self.child = pexpect.spawn('{0!s} {1!s} {2!s} {3!s} -- NOCRASH'.format(lldbtest_config.lldbExec, self.lldbOption, run_commands, exe))
         child = self.child
         # Turn on logging for what the child sends back.
         if self.TraceOn():
@@ -124,7 +124,7 @@ class DriverBatchModeTest (TestBase):
         
         # Start up the process by hand and wait for it to get to the wait loop.
 
-        self.victim = pexpect.spawn('%s WAIT' %(exe))
+        self.victim = pexpect.spawn('{0!s} WAIT'.format((exe)))
         if self.victim == None:
             self.fail("Could not spawn ", exe, ".")
 
@@ -141,8 +141,8 @@ class DriverBatchModeTest (TestBase):
         
         self.victim.expect("Waiting")
 
-        run_commands = ' -b -o "process attach -p %d" -o "breakpoint set --file %s -p \'Stop here to unset keep_waiting\' -N keep_waiting" -o "continue" -o "break delete keep_waiting" -o "expr keep_waiting = 0" -o "continue" ' % (victim_pid, self.source)
-        self.child = pexpect.spawn('%s %s %s %s' % (lldbtest_config.lldbExec, self.lldbOption, run_commands, exe))
+        run_commands = ' -b -o "process attach -p {0:d}" -o "breakpoint set --file {1!s} -p \'Stop here to unset keep_waiting\' -N keep_waiting" -o "continue" -o "break delete keep_waiting" -o "expr keep_waiting = 0" -o "continue" '.format(victim_pid, self.source)
+        self.child = pexpect.spawn('{0!s} {1!s} {2!s} {3!s}'.format(lldbtest_config.lldbExec, self.lldbOption, run_commands, exe))
 
         child = self.child
         # Turn on logging for what the child sends back.
@@ -157,7 +157,7 @@ class DriverBatchModeTest (TestBase):
         self.expect_string(prompt + "continue")
 
         # Then we should see the process exit:
-        self.expect_string ("Process %d exited with status"%(victim_pid))
+        self.expect_string ("Process {0:d} exited with status".format((victim_pid)))
         
         victim_index = self.victim.expect([pexpect.EOF, pexpect.TIMEOUT])
         self.assertTrue(victim_index == 0, "Victim didn't really exit.")

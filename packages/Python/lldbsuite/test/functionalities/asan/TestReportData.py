@@ -56,7 +56,7 @@ class AsanTestReportDataCase(TestBase):
         self.assertEqual(self.dbg.GetSelectedTarget().process.GetSelectedThread().GetStopReason(), lldb.eStopReasonInstrumentation)
 
         self.expect("bt", "The backtrace should show the crashing line",
-            substrs = ['main.c:%d' % self.line_crash])
+            substrs = ['main.c:{0:d}'.format(self.line_crash)])
 
         self.expect("thread info -s", "The extended stop info should contain the ASan provided fields",
             substrs = ["access_size", "access_type", "address", "pc", "description", "heap-use-after-free"])

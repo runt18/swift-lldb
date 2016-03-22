@@ -50,7 +50,7 @@ class ChangedInferiorTestCase(TestBase):
                 STOPPED_DUE_TO_EXC_BAD_ACCESS)
 
         # And it should report the correct line number.
-        self.expect("thread backtrace all", substrs = ['main.c:%d' % self.line1])
+        self.expect("thread backtrace all", substrs = ['main.c:{0:d}'.format(self.line1)])
 
     def inferior_not_crashing(self):
         """Test lldb reloads the inferior after it was changed during the session."""

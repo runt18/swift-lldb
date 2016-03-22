@@ -56,4 +56,4 @@ class TestBenchmarkLibcxxMap(BenchBase):
         self.expect('frame variable -A map', substrs=['[300]', '300'])
         sw.stop()
             
-        print("time to print: %s" % (sw))
+        print("time to print: {0!s}".format((sw)))

@@ -22,7 +22,7 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -38,12 +38,12 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         addr = int(self.child.after.split("\"")[1].split(" ")[0], 16)
 
         # Test -data-disassemble: try to disassemble some address
-        self.runCmd("-data-disassemble -s %#x -e %#x -- 0" % (addr, addr + 0x10))
-        self.expect("\^done,asm_insns=\[{address=\"0x0*%x\",func-name=\"main\",offset=\"0\",size=\"[1-9]+\",inst=\".+?\"}," % addr)
+        self.runCmd("-data-disassemble -s {0:#x} -e {1:#x} -- 0".format(addr, addr + 0x10))
+        self.expect("\^done,asm_insns=\[{{address=\"0x0*{0:x}\",func-name=\"main\",offset=\"0\",size=\"[1-9]+\",inst=\".+?\"}},".format(addr))
         
         # Test -data-disassemble without "--"
-        self.runCmd("-data-disassemble -s %#x -e %#x 0" % (addr, addr + 0x10))
-        self.expect("\^done,asm_insns=\[{address=\"0x0*%x\",func-name=\"main\",offset=\"0\",size=\"[1-9]+\",inst=\".+?\"}," % addr)
+        self.runCmd("-data-disassemble -s {0:#x} -e {1:#x} 0".format(addr, addr + 0x10))
+        self.expect("\^done,asm_insns=\[{{address=\"0x0*{0:x}\",func-name=\"main\",offset=\"0\",size=\"[1-9]+\",inst=\".+?\"}},".format(addr))
 
         # Run to hello_world
         self.runCmd("-break-insert -f hello_world")
@@ -58,7 +58,7 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         addr = int(self.child.after.split("\"")[1].split(" ")[0], 16)
 
         # Test -data-disassemble: try to disassemble some address
-        self.runCmd("-data-disassemble -s %#x -e %#x -- 0" % (addr, addr + 0x10))
+        self.runCmd("-data-disassemble -s {0:#x} -e {1:#x} -- 0".format(addr, addr + 0x10))
 
         # This matches a line similar to:
         # Darwin: {address="0x0000000100000f18",func-name="hello_world()",offset="8",size="7",inst="leaq 0x65(%rip), %rdi; \"Hello, World!\\n\""},
@@ -77,7 +77,7 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -94,8 +94,8 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         size = 5
 
         # Test that -data-read-memory-bytes works for char[] type (global)
-        self.runCmd("-data-read-memory-bytes %#x %d" % (addr, size))
-        self.expect("\^done,memory=\[{begin=\"0x0*%x\",offset=\"0x0+\",end=\"0x0*%x\",contents=\"1112131400\"}\]" % (addr, addr + size))
+        self.runCmd("-data-read-memory-bytes {0:#x} {1:d}".format(addr, size))
+        self.expect("\^done,memory=\[{{begin=\"0x0*{0:x}\",offset=\"0x0+\",end=\"0x0*{1:x}\",contents=\"1112131400\"}}\]".format(addr, addr + size))
 
         # Get address of static char[]
         self.runCmd("-data-evaluate-expression &s_CharArray")
@@ -104,8 +104,8 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         size = 5
 
         # Test that -data-read-memory-bytes works for static char[] type
-        self.runCmd("-data-read-memory-bytes %#x %d" % (addr, size))
-        self.expect("\^done,memory=\[{begin=\"0x0*%x\",offset=\"0x0+\",end=\"0x0*%x\",contents=\"1112131400\"}\]" % (addr, addr + size))
+        self.runCmd("-data-read-memory-bytes {0:#x} {1:d}".format(addr, size))
+        self.expect("\^done,memory=\[{{begin=\"0x0*{0:x}\",offset=\"0x0+\",end=\"0x0*{1:x}\",contents=\"1112131400\"}}\]".format(addr, addr + size))
 
     @skipIfWindows #llvm.org/pr24452: Get lldb-mi tests working on Windows
     @skipIfFreeBSD # llvm.org/pr22411: Failure presumably due to known thread races
@@ -115,12 +115,12 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd('-file-exec-and-symbols %s' % self.myexe)
+        self.runCmd('-file-exec-and-symbols {0!s}'.format(self.myexe))
         self.expect(r'\^done')
 
         # Run to BP_local_array_test_inner
         line = line_number('main.cpp', '// BP_local_array_test_inner')
-        self.runCmd('-break-insert main.cpp:%d' % line)
+        self.runCmd('-break-insert main.cpp:{0:d}'.format(line))
         self.expect(r'\^done,bkpt=\{number="1"')
         self.runCmd('-exec-run')
         self.expect(r'\^running')
@@ -133,16 +133,16 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         size = 4
 
         # Test that an unquoted hex literal address works
-        self.runCmd('-data-read-memory-bytes %#x %d' % (addr, size))
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
+        self.runCmd('-data-read-memory-bytes {0:#x} {1:d}'.format(addr, size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="01020304"\}}\]'.format(addr, addr + size))
 
         # Test that a double-quoted hex literal address works
-        self.runCmd('-data-read-memory-bytes "%#x" %d' % (addr, size))
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
+        self.runCmd('-data-read-memory-bytes "{0:#x}" {1:d}'.format(addr, size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="01020304"\}}\]'.format(addr, addr + size))
 
         # Test that unquoted expressions work
-        self.runCmd('-data-read-memory-bytes &array %d' % size)
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
+        self.runCmd('-data-read-memory-bytes &array {0:d}'.format(size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="01020304"\}}\]'.format(addr, addr + size))
 
         # This doesn't work, and perhaps that makes sense, but it does work on GDB
         self.runCmd('-data-read-memory-bytes array 4')
@@ -150,28 +150,28 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         #self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
 
         self.runCmd('-data-read-memory-bytes &array[2] 2')
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="0304"\}\]' % (addr + 2, addr + size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="0304"\}}\]'.format(addr + 2, addr + size))
 
-        self.runCmd('-data-read-memory-bytes first_element_ptr %d' % size)
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
+        self.runCmd('-data-read-memory-bytes first_element_ptr {0:d}'.format(size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="01020304"\}}\]'.format(addr, addr + size))
 
         # Test that double-quoted expressions work
-        self.runCmd('-data-read-memory-bytes "&array" %d' % size)
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
+        self.runCmd('-data-read-memory-bytes "&array" {0:d}'.format(size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="01020304"\}}\]'.format(addr, addr + size))
 
         self.runCmd('-data-read-memory-bytes "&array[0] + 1" 3')
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="020304"\}\]' % (addr + 1, addr + size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="020304"\}}\]'.format(addr + 1, addr + size))
 
         self.runCmd('-data-read-memory-bytes "first_element_ptr + 1" 3')
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="020304"\}\]' % (addr + 1, addr + size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="020304"\}}\]'.format(addr + 1, addr + size))
 
         # Test the -o (offset) option
         self.runCmd('-data-read-memory-bytes -o 1 &array 3')
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="020304"\}\]' % (addr + 1, addr + size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="020304"\}}\]'.format(addr + 1, addr + size))
 
         # Test the --thread option
         self.runCmd('-data-read-memory-bytes --thread 1 &array 4')
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="01020304"\}}\]'.format(addr, addr + size))
 
         # Test the --thread option with an invalid value
         self.runCmd('-data-read-memory-bytes --thread 999 &array 4')
@@ -179,7 +179,7 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # Test the --frame option (current frame)
         self.runCmd('-data-read-memory-bytes --frame 0 &array 4')
-        self.expect(r'\^done,memory=\[\{begin="0x0*%x",offset="0x0+",end="0x0*%x",contents="01020304"\}\]' % (addr, addr + size))
+        self.expect(r'\^done,memory=\[\{{begin="0x0*{0:x}",offset="0x0+",end="0x0*{1:x}",contents="01020304"\}}\]'.format(addr, addr + size))
 
         # Test the --frame option (outer frame)
         self.runCmd('-data-read-memory-bytes --frame 1 &array 4')
@@ -224,7 +224,7 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -250,7 +250,7 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -276,7 +276,7 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -293,12 +293,12 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         line = line_number('main.cpp', '// FUNC_main')
 
         # Test that -data-info-line works for address
-        self.runCmd("-data-info-line *%#x" % addr)
-        self.expect("\^done,start=\"0x0*%x\",end=\"0x[0-9a-f]+\",file=\".+?main.cpp\",line=\"%d\"" % (addr, line))
+        self.runCmd("-data-info-line *{0:#x}".format(addr))
+        self.expect("\^done,start=\"0x0*{0:x}\",end=\"0x[0-9a-f]+\",file=\".+?main.cpp\",line=\"{1:d}\"".format(addr, line))
 
         # Test that -data-info-line works for file:line
-        self.runCmd("-data-info-line main.cpp:%d" % line)
-        self.expect("\^done,start=\"0x0*%x\",end=\"0x[0-9a-f]+\",file=\".+?main.cpp\",line=\"%d\"" % (addr, line))
+        self.runCmd("-data-info-line main.cpp:{0:d}".format(line))
+        self.expect("\^done,start=\"0x0*{0:x}\",end=\"0x[0-9a-f]+\",file=\".+?main.cpp\",line=\"{1:d}\"".format(addr, line))
 
         # Test that -data-info-line fails when invalid address is specified
         self.runCmd("-data-info-line *0x0")
@@ -322,11 +322,11 @@ class MiDataTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         line = line_number('main.cpp', '// BP_local_2d_array_test')
-        self.runCmd('-break-insert main.cpp:%d' % line)
+        self.runCmd('-break-insert main.cpp:{0:d}'.format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")

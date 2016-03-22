@@ -50,8 +50,8 @@ class TestStepOverWatchpoint(TestBase):
         # resolve_location=True, read=True, write=False
         read_watchpoint = read_value.Watch(True, True, False, error)
         self.assertTrue(error.Success(),
-                        "Error while setting watchpoint: %s" %
-                        error.GetCString())
+                        "Error while setting watchpoint: {0!s}".format(
+                        error.GetCString()))
         self.assertTrue(read_watchpoint, "Failed to set read watchpoint.")
 
         thread.StepOver()
@@ -79,8 +79,8 @@ class TestStepOverWatchpoint(TestBase):
         write_watchpoint = write_value.Watch(True, False, True, error)
         self.assertTrue(read_watchpoint, "Failed to set write watchpoint.")
         self.assertTrue(error.Success(),
-                        "Error while setting watchpoint: %s" %
-                        error.GetCString())
+                        "Error while setting watchpoint: {0!s}".format(
+                        error.GetCString()))
 
         thread.StepOver()
         self.assertTrue(thread.GetStopReason() == lldb.eStopReasonWatchpoint,
@@ -102,7 +102,7 @@ class TestStepOverWatchpoint(TestBase):
             stop_reason = self.thread().GetStopReason()
             if stop_reason == lldb.eStopReasonWatchpoint:
                 self.assertFalse(watchpoint_hit, "Watchpoint already hit.")
-                expected_stop_desc = "watchpoint %d" % wp_id
+                expected_stop_desc = "watchpoint {0:d}".format(wp_id)
                 actual_stop_desc = self.thread().GetStopDescription(20)
                 self.assertTrue(actual_stop_desc == expected_stop_desc,
                                 "Watchpoint ID didn't match.")

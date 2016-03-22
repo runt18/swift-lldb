@@ -20,7 +20,7 @@ def safe_str(obj):
         return object.__str__(obj)
 
 def strclass(cls):
-    return "%s.%s" % (cls.__module__, cls.__name__)
+    return "{0!s}.{1!s}".format(cls.__module__, cls.__name__)
 
 def sorted_list_difference(expected, actual):
     """Finds elements in only one or the other of two, sorted input lists.

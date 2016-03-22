@@ -99,7 +99,7 @@ def daemonize (stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
         if pid > 0:
             sys.exit(0)   # Exit first parent.
     except OSError, e: 
-        sys.stderr.write ("fork #1 failed: (%d) %s\n" % (e.errno, e.strerror) )
+        sys.stderr.write ("fork #1 failed: ({0:d}) {1!s}\n".format(e.errno, e.strerror) )
         sys.exit(1)
 
     # Decouple from parent environment.
@@ -113,7 +113,7 @@ def daemonize (stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
         if pid > 0:
             sys.exit(0)   # Exit second parent.
     except OSError, e: 
-        sys.stderr.write ("fork #2 failed: (%d) %s\n" % (e.errno, e.strerror) )
+        sys.stderr.write ("fork #2 failed: ({0:d}) {1!s}\n".format(e.errno, e.strerror) )
         sys.exit(1)
 
     # Now I am a daemon!
@@ -165,7 +165,7 @@ def main ():
         port = int(options['--port'])
     if '--username' in options:
         username = options['--username']
-    print "Login for %s@%s:%s" % (username, hostname, port)
+    print "Login for {0!s}@{1!s}:{2!s}".format(username, hostname, port)
     if '--password' in options:
         password = options['--password']
     else:
@@ -176,7 +176,7 @@ def main ():
         daemonize()
         #daemonize('/dev/null','/tmp/daemon.log','/tmp/daemon.log')
     
-    sys.stdout.write ('server started with pid %d\n' % os.getpid() )
+    sys.stdout.write ('server started with pid {0:d}\n'.format(os.getpid()) )
 
     virtual_screen = ANSI.ANSI (24,80) 
     child = pxssh.pxssh()
@@ -236,7 +236,7 @@ def main ():
                 time.sleep(0.2)
                 shell_window = str(virtual_screen)
             elif cmd == ':cursor':
-                shell_window = '%x%x' % (virtual_screen.cur_r, virtual_screen.cur_c)
+                shell_window = '{0:x}{1:x}'.format(virtual_screen.cur_r, virtual_screen.cur_c)
             elif cmd == ':refresh':
                 shell_window = str(virtual_screen)
 

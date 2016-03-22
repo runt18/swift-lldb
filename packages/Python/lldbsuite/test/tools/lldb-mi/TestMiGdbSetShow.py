@@ -54,7 +54,7 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         self.expect("\^done,value=\"on\"")
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Test that program is executed in async mode
@@ -76,7 +76,7 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         self.expect("\^done,value=\"off\"")
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Test that program is executed in async mode
@@ -84,7 +84,7 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         unexpected = [ "\*running" ] # "\*running" is async notification
         it = self.expect(unexpected + [ "@\"argc=1\\\\r\\\\n" ])
         if it < len(unexpected):
-            self.fail("unexpected found: %s" % unexpected[it])
+            self.fail("unexpected found: {0!s}".format(unexpected[it]))
 
     @expectedFailureWindows("llvm.org/pr22274: need a pexpect replacement for windows")
     @skipIfFreeBSD # llvm.org/pr22411: Failure presumably due to known thread races
@@ -105,7 +105,7 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -151,12 +151,12 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to BP_printf
         line = line_number('main.cpp', '// BP_printf')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running");

@@ -84,6 +84,6 @@ class WatchLocationUsingWatchpointSetTestCase(TestBase):
         # stopped on a watchpoint.
         threads = lldbutil.get_stopped_threads(self.process(), lldb.eStopReasonWatchpoint)
         self.expect("watchpoint list -v",
-            substrs = ['hit_count = %d' % len(threads)])
+            substrs = ['hit_count = {0:d}'.format(len(threads))])
 
         self.runCmd("thread backtrace all")

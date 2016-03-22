@@ -84,7 +84,7 @@ class ArrayTypesTestCase(TestBase):
         bp = str(breakpoint)
         self.expect(bp, msg="Breakpoint looks good", exe=False,
             substrs = ["file = 'main.c'",
-                       "line = %d" % self.line,
+                       "line = {0:d}".format(self.line),
                        "locations = 1"])
         self.expect(bp, msg="Breakpoint is not resolved as yet", exe=False, matching=False,
             substrs = ["resolved = 1"])
@@ -113,9 +113,9 @@ class ArrayTypesTestCase(TestBase):
         # match the check in Core/FormatEntity.cpp in the function FormatEntity::Format() for
         # the Entry::Type::ThreadID case of the switch statement.
         if self.getPlatform() == "linux" or self.getPlatform() == "freebsd":
-            tidstr = "tid = %u" % thread.GetThreadID()
+            tidstr = "tid = {0:d}".format(thread.GetThreadID())
         else:
-            tidstr = "tid = 0x%4.4x" % thread.GetThreadID()
+            tidstr = "tid = 0x{0:4.4x}".format(thread.GetThreadID())
         self.expect(thr, "Thread looks good with stop reason = breakpoint", exe=False,
             substrs = [tidstr])
 
@@ -126,23 +126,23 @@ class ArrayTypesTestCase(TestBase):
         bp = str(breakpoint)
         self.expect(bp, "Breakpoint looks good and is resolved", exe=False,
             substrs = ["file = 'main.c'",
-                       "line = %d" % self.line,
+                       "line = {0:d}".format(self.line),
                        "locations = 1"])
 
         # Sanity check the print representation of frame.
         frame = thread.GetFrameAtIndex(0)
         frm = str(frame)
         self.expect(frm,
-                    "Frame looks good with correct index %d" % frame.GetFrameID(),
+                    "Frame looks good with correct index {0:d}".format(frame.GetFrameID()),
                     exe=False,
-            substrs = ["#%d" % frame.GetFrameID()])
+            substrs = ["#{0:d}".format(frame.GetFrameID())])
 
         # Lookup the "strings" string array variable and sanity check its print
         # representation.
         variable = frame.FindVariable("strings")
         var = str(variable)
         self.expect(var, "Variable for 'strings' looks good with correct name", exe=False,
-            substrs = ["%s" % variable.GetName()])
+            substrs = ["{0!s}".format(variable.GetName())])
         self.DebugSBValue(variable)
         self.assertTrue(variable.GetNumChildren() == 4,
                         "Variable 'strings' should have 4 children")
@@ -189,10 +189,10 @@ class ArrayTypesTestCase(TestBase):
         # and "argc" has eValueTypeVariableArgument.
         from lldbsuite.test.lldbutil import value_type_to_str
         self.assertTrue(variable.GetValueType() == lldb.eValueTypeVariableLocal,
-                        "Variable 'long_6' should have '%s' value type." %
-                        value_type_to_str(lldb.eValueTypeVariableLocal))
+                        "Variable 'long_6' should have '{0!s}' value type.".format(
+                        value_type_to_str(lldb.eValueTypeVariableLocal)))
         argc = frame.FindVariable("argc")
         self.DebugSBValue(argc)
         self.assertTrue(argc.GetValueType() == lldb.eValueTypeVariableArgument,
-                        "Variable 'argc' should have '%s' value type." %
-                        value_type_to_str(lldb.eValueTypeVariableArgument))
+                        "Variable 'argc' should have '{0!s}' value type.".format(
+                        value_type_to_str(lldb.eValueTypeVariableArgument)))

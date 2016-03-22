@@ -1292,7 +1292,7 @@ class RawPickledFormatter(ResultsFormatter):
         # Send it as {serialized_length_of_serialized_bytes}{serialized_bytes}
         import struct
         msg = cPickle.dumps(test_event)
-        packet = struct.pack("!I%ds" % len(msg), len(msg), msg)
+        packet = struct.pack("!I{0:d}s".format(len(msg)), len(msg), msg)
         self.out_file.send(packet)
 
 

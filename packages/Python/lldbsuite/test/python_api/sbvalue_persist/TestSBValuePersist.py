@@ -71,4 +71,4 @@ class SBValuePersistTestCase(TestBase):
         self.assertTrue(barPersist.GetPointeeData().sint32[0] == 4, "barPersist != 4")
         self.assertTrue(bazPersist.GetSummary() == '"85"', "bazPersist != 85")
         
-        self.expect("expr *(%s)" % (barPersist.GetName()), substrs = ['= 4'])
+        self.expect("expr *({0!s})".format((barPersist.GetName())), substrs = ['= 4'])

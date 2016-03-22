@@ -42,9 +42,9 @@ class TestIndirectEnumVariables(TestBase):
 
     def check_enum(self, enum, value=None, summary=None, child_path=None, child_value=None, child_summary=None):
         if value:
-            self.assertTrue(enum.GetValue() == value, "%s.GetValue() == %s" % (enum.GetName(), value))
+            self.assertTrue(enum.GetValue() == value, "{0!s}.GetValue() == {1!s}".format(enum.GetName(), value))
         if summary:
-            self.assertTrue(enum.GetSummary() == summary, "%s.GetSummary() == %s" % (enum.GetName(), summary))
+            self.assertTrue(enum.GetSummary() == summary, "{0!s}.GetSummary() == {1!s}".format(enum.GetName(), summary))
 
         if child_path:
             child = enum
@@ -52,11 +52,11 @@ class TestIndirectEnumVariables(TestBase):
                 child = child.GetChildAtIndex(child_index)
                 child.SetPreferDynamicValue(lldb.eDynamicCanRunTarget)
                 child.SetPreferSyntheticValue(True)
-            self.assertTrue(child.IsValid(), "child at path %s valid" % (child_path))
+            self.assertTrue(child.IsValid(), "child at path {0!s} valid".format((child_path)))
             if child_value:
-                self.assertTrue(child.GetValue() == child_value, "%s.GetValue() == %s" % (child.GetName(), child_value))
+                self.assertTrue(child.GetValue() == child_value, "{0!s}.GetValue() == {1!s}".format(child.GetName(), child_value))
             if child_summary:
-                self.assertTrue(child.GetSummary() == child_summary, "%s.GetSummary() == %s" % (child.GetName(), child_summary))
+                self.assertTrue(child.GetSummary() == child_summary, "{0!s}.GetSummary() == {1!s}".format(child.GetName(), child_summary))
 
 
     def do_test(self):

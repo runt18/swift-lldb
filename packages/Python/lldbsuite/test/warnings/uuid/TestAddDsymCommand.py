@@ -66,7 +66,7 @@ class AddDsymCommandCase(TestBase):
             content = f.read()
 
         new_content = content.replace('%ADD_EXTRA_CODE%',
-                                      'printf("This is version %d\\n");' % version)
+                                      'printf("This is version {0:d}\\n");'.format(version))
         src = os.path.join(os.getcwd(), self.source)
         with open(src, 'w') as f:
             f.write(new_content)
@@ -80,11 +80,11 @@ class AddDsymCommandCase(TestBase):
         """Test that the 'add-dsym' command informs the user about failures."""
         self.runCmd("file " + exe_name, CURRENT_EXECUTABLE_SET)
 
-        wrong_path = os.path.join("%s.dSYM" % exe_name, "Contents")
+        wrong_path = os.path.join("{0!s}.dSYM".format(exe_name), "Contents")
         self.expect("add-dsym " + wrong_path, error=True,
             substrs = ['invalid module path'])
 
-        right_path = os.path.join("%s.dSYM" % exe_name, "Contents", "Resources", "DWARF", exe_name)
+        right_path = os.path.join("{0!s}.dSYM".format(exe_name), "Contents", "Resources", "DWARF", exe_name)
         self.expect("add-dsym " + right_path, error=True,
             substrs = ['symbol file', 'does not match'])
 
@@ -93,7 +93,7 @@ class AddDsymCommandCase(TestBase):
         self.runCmd("file " + exe_name, CURRENT_EXECUTABLE_SET)
 
         # This time, the UUID should match and we expect some feedback from lldb.
-        right_path = os.path.join("%s.dSYM" % exe_name, "Contents", "Resources", "DWARF", exe_name)
+        right_path = os.path.join("{0!s}.dSYM".format(exe_name), "Contents", "Resources", "DWARF", exe_name)
         self.expect("add-dsym " + right_path,
             substrs = ['symbol file', 'has been added to'])
 
@@ -102,6 +102,6 @@ class AddDsymCommandCase(TestBase):
         self.runCmd("file " + exe_name, CURRENT_EXECUTABLE_SET)
 
         # This time, the UUID should be found inside the bundle
-        right_path = "%s.dSYM" % exe_name
+        right_path = "{0!s}.dSYM".format(exe_name)
         self.expect("add-dsym " + right_path,
             substrs = ['symbol file', 'has been added to'])

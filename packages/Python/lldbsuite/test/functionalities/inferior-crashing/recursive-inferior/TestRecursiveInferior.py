@@ -103,7 +103,7 @@ class CrashingRecursiveInferiorTestCase(TestBase):
         # And it should report the correct line number.
         self.expect("thread backtrace all",
             substrs = [stop_reason,
-                       'main.c:%d' % self.line])
+                       'main.c:{0:d}'.format(self.line)])
 
     def recursive_inferior_crashing_python(self):
         """Inferior crashes upon launching; lldb should catch the event and stop."""
@@ -159,7 +159,7 @@ class CrashingRecursiveInferiorTestCase(TestBase):
         self.runCmd("run", RUN_SUCCEEDED)
 
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = ['main.c:%d' % self.line,
+            substrs = ['main.c:{0:d}'.format(self.line),
                        'stop reason = breakpoint'])
 
         self.runCmd("next")
@@ -174,7 +174,7 @@ class CrashingRecursiveInferiorTestCase(TestBase):
 
         # And it should report the correct line number.
         self.expect("thread backtrace all",
-            substrs = ['main.c:%d' % self.line])
+            substrs = ['main.c:{0:d}'.format(self.line)])
 
     def recursive_inferior_crashing_step_after_break(self):
         """Test that lldb behaves correctly when stepping after a crash."""

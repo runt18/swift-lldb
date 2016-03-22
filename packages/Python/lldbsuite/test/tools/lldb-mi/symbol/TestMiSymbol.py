@@ -22,7 +22,7 @@ class MiSymbolTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -40,7 +40,7 @@ class MiSymbolTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # Test that -symbol-list-lines works on valid data
         self.runCmd("-symbol-list-lines main.cpp")
-        self.expect("\^done,lines=\[\{pc=\"0x0*%x\",line=\"%d\"\}(,\{pc=\"0x[0-9a-f]+\",line=\"\d+\"\})+\]" % (addr, line))
+        self.expect("\^done,lines=\[\{{pc=\"0x0*{0:x}\",line=\"{1:d}\"\}}(,\{{pc=\"0x[0-9a-f]+\",line=\"\d+\"\}})+\]".format(addr, line))
 
         # Test that -symbol-list-lines doesn't include lines from other sources
         # by checking the first and last line, and making sure the other lines
@@ -48,7 +48,7 @@ class MiSymbolTestCase(lldbmi_testcase.MiTestCaseBase):
         sline = line_number('symbol_list_lines_inline_test2.cpp', '// FUNC_gfunc2')
         eline = line_number('symbol_list_lines_inline_test2.cpp', '// END_gfunc2')
         self.runCmd("-symbol-list-lines symbol_list_lines_inline_test2.cpp")
-        self.expect("\^done,lines=\[\{pc=\"0x[0-9a-f]+\",line=\"%d\"\}(,\{pc=\"0x[0-9a-f]+\",line=\"3\d\"\})*,\{pc=\"0x[0-9a-f]+\",line=\"%d\"\}(,\{pc=\"0x[0-9a-f]+\",line=\"3\d\"\})*\]" % (sline, eline))
+        self.expect("\^done,lines=\[\{{pc=\"0x[0-9a-f]+\",line=\"{0:d}\"\}}(,\{{pc=\"0x[0-9a-f]+\",line=\"3\d\"\}})*,\{{pc=\"0x[0-9a-f]+\",line=\"{1:d}\"\}}(,\{{pc=\"0x[0-9a-f]+\",line=\"3\d\"\}})*\]".format(sline, eline))
         ##FIXME: This doesn't work for symbol_list_lines_inline_test.cpp due to clang bug llvm.org/pr24716 (fixed in newer versions of clang)
         ##sline = line_number('symbol_list_lines_inline_test.cpp', '// FUNC_gfunc')
         ##eline = line_number('symbol_list_lines_inline_test.cpp', '// STRUCT_s')
@@ -60,7 +60,7 @@ class MiSymbolTestCase(lldbmi_testcase.MiTestCaseBase):
         sline = line_number('symbol_list_lines_inline_test.h', '// FUNC_ifunc')
         eline = line_number('symbol_list_lines_inline_test.h', '// FUNC_mfunc')
         self.runCmd("-symbol-list-lines symbol_list_lines_inline_test.h")
-        self.expect("\^done,lines=\[\{pc=\"0x[0-9a-f]+\",line=\"%d\"\}(,\{pc=\"0x[0-9a-f]+\",line=\"\d\"\})*(,\{pc=\"0x[0-9a-f]+\",line=\"1\d\"\})*,\{pc=\"0x[0-9a-f]+\",line=\"%d\"\}(,\{pc=\"0x[0-9a-f]+\",line=\"2\d\"\})*\]" % (sline, eline))
+        self.expect("\^done,lines=\[\{{pc=\"0x[0-9a-f]+\",line=\"{0:d}\"\}}(,\{{pc=\"0x[0-9a-f]+\",line=\"\d\"\}})*(,\{{pc=\"0x[0-9a-f]+\",line=\"1\d\"\}})*,\{{pc=\"0x[0-9a-f]+\",line=\"{1:d}\"\}}(,\{{pc=\"0x[0-9a-f]+\",line=\"2\d\"\}})*\]".format(sline, eline))
 
         # Test that -symbol-list-lines fails when file doesn't exist
         self.runCmd("-symbol-list-lines unknown_file")
@@ -73,8 +73,8 @@ class MiSymbolTestCase(lldbmi_testcase.MiTestCaseBase):
         # Test that -symbol-list-lines works when file is specified using absolute path
         import os
         path = os.path.join(os.getcwd(), "main.cpp")
-        self.runCmd("-symbol-list-lines \"%s\"" % path)
-        self.expect("\^done,lines=\[\{pc=\"0x0*%x\",line=\"%d\"\}(,\{pc=\"0x[0-9a-f]+\",line=\"\d+\"\})+\]" % (addr, line))
+        self.runCmd("-symbol-list-lines \"{0!s}\"".format(path))
+        self.expect("\^done,lines=\[\{{pc=\"0x0*{0:x}\",line=\"{1:d}\"\}}(,\{{pc=\"0x[0-9a-f]+\",line=\"\d+\"\}})+\]".format(addr, line))
 
         # Test that -symbol-list-lines fails when file doesn't exist
         self.runCmd("-symbol-list-lines unknown_dir/main.cpp")

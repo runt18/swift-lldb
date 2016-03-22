@@ -33,15 +33,15 @@ class VimSign(object):
 
   def define(self, sign_text, highlight_colour):
     """ Defines sign and highlight (if highlight_colour is not None). """
-    sign_name = "sign%d" % VimSign.name_id
+    sign_name = "sign{0:d}".format(VimSign.name_id)
     if highlight_colour is None:
-      vim.command("sign define %s text=%s" % (sign_name, sign_text))
+      vim.command("sign define {0!s} text={1!s}".format(sign_name, sign_text))
     else:
-      self.highlight_name = "highlight%d" % VimSign.name_id
-      vim.command("highlight %s ctermbg=%s guibg=%s" % (self.highlight_name,
+      self.highlight_name = "highlight{0:d}".format(VimSign.name_id)
+      vim.command("highlight {0!s} ctermbg={1!s} guibg={2!s}".format(self.highlight_name,
                                                         highlight_colour,
                                                         highlight_colour))
-      vim.command("sign define %s text=%s linehl=%s texthl=%s" % (sign_name,
+      vim.command("sign define {0!s} text={1!s} linehl={2!s} texthl={3!s}".format(sign_name,
                                                                   sign_text,
                                                                   self.highlight_name,
                                                                   self.highlight_name))
@@ -53,11 +53,11 @@ class VimSign(object):
   def show(self, name, buffer_number, line_number):
     self.id = VimSign.sign_id
     VimSign.sign_id += 1
-    vim.command("sign place %d name=%s line=%d buffer=%s" % (self.id, name, line_number, buffer_number))
+    vim.command("sign place {0:d} name={1!s} line={2:d} buffer={3!s}".format(self.id, name, line_number, buffer_number))
     pass
 
   def hide(self):
-    vim.command("sign unplace %d" % self.id)
+    vim.command("sign unplace {0:d}".format(self.id))
     pass
 
 class BreakpointSign(VimSign):

@@ -21,7 +21,7 @@ class MiSyntaxTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("000-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("000-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("000\^done")
 
         # Run to main
@@ -50,10 +50,10 @@ class MiSyntaxTestCase(lldbmi_testcase.MiTestCaseBase):
         os.symlink(self.myexe, complicated_myexe)
         self.addTearDownHook(lambda: os.unlink(complicated_myexe))
 
-        self.spawnLldbMi(args = "\"%s\"" % complicated_myexe)
+        self.spawnLldbMi(args = "\"{0!s}\"".format(complicated_myexe))
 
         # Test that the executable was loaded
-        self.expect("-file-exec-and-symbols \"%s\"" % complicated_myexe, exactly = True)
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(complicated_myexe), exactly = True)
         self.expect("\^done")
 
         # Check that it was loaded correctly
@@ -72,7 +72,7 @@ class MiSyntaxTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run

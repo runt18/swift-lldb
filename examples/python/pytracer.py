@@ -18,7 +18,7 @@ class TracebackFancy:
 	def __str__(self):
 		if self.t == None:
 			return ""
-		str_self = "%s @ %s" % (self.getFrame().getName(), self.getLineNumber())
+		str_self = "{0!s} @ {1!s}".format(self.getFrame().getName(), self.getLineNumber())
 		return str_self + "\n" + self.getNext().__str__()
 
 class ExceptionFancy:
@@ -74,7 +74,7 @@ class ArgsFancy:
 		count = 0
 		size = len(args)
 		for arg in args:
-			ret = ret + ("%s = %s" % (arg, args[arg]))
+			ret = ret + ("{0!s} = {1!s}".format(arg, args[arg]))
 			count = count + 1
 			if count < size:
 				ret = ret + ", "
@@ -218,7 +218,7 @@ class LoggingTracer:
 		print "return from " + frame.getName() + " value is " + str(retval) + " locals are " + str(frame.getLocals())
 
 	def exceptionEvent(self,frame,exception):
-		print "exception %s %s raised from %s @ %s" %  (exception.getType(), str(exception.getValue()), frame.getName(), frame.getLineNumber())
+		print "exception {0!s} {1!s} raised from {2!s} @ {3!s}".format(exception.getType(), str(exception.getValue()), frame.getName(), frame.getLineNumber())
 		print "tb: " + str(exception.getTraceback())
 
 # the same functionality as LoggingTracer, but with a little more lldb-specific smarts
@@ -227,7 +227,7 @@ class LLDBAwareTracer:
 		if frame.getName() == "<module>":
 			return
 		if frame.getName() == "run_one_line":
-			print "call run_one_line(%s)" % (frame.getArgumentInfo().getArgs()["input_string"])
+			print "call run_one_line({0!s})".format((frame.getArgumentInfo().getArgs()["input_string"]))
 			return
 		if "Python.framework" in frame.getFileName():
 			print "call into Python at " + frame.getName()
@@ -241,7 +241,7 @@ class LLDBAwareTracer:
 			for arg in args:
 				if arg == "dict" or arg == "internal_dict":
 					continue
-				strout = strout + ("%s = %s " % (arg,args[arg]))
+				strout = strout + ("{0!s} = {1!s} ".format(arg, args[arg]))
 		else:
 			strout += " from " + frame.getCaller().getName() + " @ " + str(frame.getCaller().getLineNumber()) + " args are " + str(frame.getArgumentInfo())
 		print strout
@@ -250,7 +250,7 @@ class LLDBAwareTracer:
 		if frame.getName() == "<module>":
 			return
 		if frame.getName() == "run_one_line":
-			print "running run_one_line(%s) @ %s" % (frame.getArgumentInfo().getArgs()["input_string"],frame.getLineNumber())
+			print "running run_one_line({0!s}) @ {1!s}".format(frame.getArgumentInfo().getArgs()["input_string"], frame.getLineNumber())
 			return
 		if "Python.framework" in frame.getFileName():
 			print "running into Python at " + frame.getName() + " @ " + str(frame.getLineNumber())
@@ -261,7 +261,7 @@ class LLDBAwareTracer:
 			for local in locals:
 				if local == "dict" or local == "internal_dict":
 					continue
-				strout = strout + ("%s = %s " % (local,locals[local]))
+				strout = strout + ("{0!s} = {1!s} ".format(local, locals[local]))
 		else:
 			strout = strout + str(frame.getLocals())
 		strout = strout + " in " + frame.getFileName()
@@ -271,7 +271,7 @@ class LLDBAwareTracer:
 		if frame.getName() == "<module>":
 			return
 		if frame.getName() == "run_one_line":
-			print "return from run_one_line(%s) return value is %s" % (frame.getArgumentInfo().getArgs()["input_string"],retval)
+			print "return from run_one_line({0!s}) return value is {1!s}".format(frame.getArgumentInfo().getArgs()["input_string"], retval)
 			return
 		if "Python.framework" in frame.getFileName():
 			print "return from Python at " + frame.getName() + " return value is " + str(retval)
@@ -282,7 +282,7 @@ class LLDBAwareTracer:
 			for local in locals:
 				if local == "dict" or local == "internal_dict":
 					continue
-				strout = strout + ("%s = %s " % (local,locals[local]))
+				strout = strout + ("{0!s} = {1!s} ".format(local, locals[local]))
 		else:
 			strout = strout + str(frame.getLocals())
 		strout = strout + " in " + frame.getFileName()
@@ -291,7 +291,7 @@ class LLDBAwareTracer:
 	def exceptionEvent(self,frame,exception):
 		if frame.getName() == "<module>":
 			return
-		print "exception %s %s raised from %s @ %s" %  (exception.getType(), str(exception.getValue()), frame.getName(), frame.getLineNumber())
+		print "exception {0!s} {1!s} raised from {2!s} @ {3!s}".format(exception.getType(), str(exception.getValue()), frame.getName(), frame.getLineNumber())
 		print "tb: " + str(exception.getTraceback())
 
 def f(x,y=None):
@@ -305,7 +305,7 @@ def g(x):
 def print_keyword_args(**kwargs):
      # kwargs is a dict of the keyword args passed to the function
      for key, value in kwargs.iteritems():
-         print "%s = %s" % (key, value)
+         print "{0!s} = {1!s}".format(key, value)
 
 def total(initial=5, *numbers, **keywords):
     count = initial

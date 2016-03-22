@@ -592,7 +592,7 @@ class stddeque_SynthProvider:
         except:
             self.block_size = -1
             self.element_size = -1
-        logger.write("block_size=%d, element_size=%d" % (self.block_size, self.element_size))
+        logger.write("block_size={0:d}, element_size={1:d}".format(self.block_size, self.element_size))
 
     def find_block_size(self):
         # in order to use the deque we must have the block size, or else
@@ -636,7 +636,7 @@ class stddeque_SynthProvider:
         try:
             i, j = divmod(self.start+index, self.block_size)
             return self.first.CreateValueFromExpression('[' + str(index) + ']',
-                                                        '*(*(%s + %d) + %d)' % (self.first.get_expr_path(), i, j))
+                                                        '*(*({0!s} + {1:d}) + {2:d})'.format(self.first.get_expr_path(), i, j))
         except:
             return None
 
@@ -695,7 +695,7 @@ class stddeque_SynthProvider:
             elif not (end_row-1)*self.block_size <= start+count < end_row*self.block_size:
                 logger.write("nth element must be before the 'end' row")
                 return
-            logger.write("update success: count=%r, start=%r, first=%r" % (count,start,first))
+            logger.write("update success: count={0!r}, start={1!r}, first={2!r}".format(count, start, first))
             # if consistent, save all we really need:
             self.count = count
             self.start = start

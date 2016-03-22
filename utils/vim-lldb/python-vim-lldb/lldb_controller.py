@@ -155,7 +155,7 @@ class LLDBController(object):
     self.ui.activate()
     self.pid = self.process.GetProcessID()
 
-    print "Attached to %s (pid=%d)" % (process_name, self.pid)
+    print "Attached to {0!s} (pid={1:d})".format(process_name, self.pid)
 
   def doDetach(self):
     if self.process is not None and self.process.IsValid():
@@ -186,7 +186,7 @@ class LLDBController(object):
     self.processListener = lldb.SBListener("process_event_listener")
     self.process.GetBroadcaster().AddListener(self.processListener, lldb.SBProcess.eBroadcastBitStateChanged)
 
-    print "Launched %s %s (pid=%d)" % (exe, args, self.pid)
+    print "Launched {0!s} {1!s} (pid={2:d})".format(exe, args, self.pid)
 
     if not stop_at_entry:
       self.doContinue()
@@ -221,11 +221,11 @@ class LLDBController(object):
     err = lldb.SBError()
     self.target = self.dbg.CreateTarget(exe, None, None, self.load_dependent_modules, err)
     if not self.target:
-      sys.stderr.write("Error creating target %s. %s" % (str(exe), str(err)))
+      sys.stderr.write("Error creating target {0!s}. {1!s}".format(str(exe), str(err)))
       return
 
     self.ui.activate()
-    self.ui.update(self.target, "created target %s" % str(exe), self)
+    self.ui.update(self.target, "created target {0!s}".format(str(exe)), self)
 
   def doContinue(self):
     """ Handle 'contiue' command.
@@ -257,10 +257,10 @@ class LLDBController(object):
       # ask it if there already is one or more breakpoints at (file, line)...
       if self.ui.haveBreakpoint(name, line):
         bps = self.ui.getBreakpoints(name, line)
-        args = "delete %s" % " ".join([str(b.GetID()) for b in bps])
+        args = "delete {0!s}".format(" ".join([str(b.GetID()) for b in bps]))
         self.ui.deleteBreakpoints(name, line)
       else:
-        args = "set -f %s -l %d" % (name, line)
+        args = "set -f {0!s} -l {1:d}".format(name, line)
     else:
       show_output = True
 
@@ -292,7 +292,7 @@ class LLDBController(object):
   def getCommandResult(self, command, command_args):
     """ Run cmd in the command interpreter and returns (success, output) """
     result = lldb.SBCommandReturnObject()
-    cmd = "%s %s" % (command, command_args)
+    cmd = "{0!s} {1!s}".format(command, command_args)
 
     self.commandInterpreter.HandleCommand(cmd, result)
     return (result.Succeeded(), result.GetOutput() if result.Succeeded() else result.GetError())
@@ -310,7 +310,7 @@ class LLDBController(object):
   def getCommandOutput(self, command, command_args=""):
     """ runs cmd in the command interpreter andreturns (status, result) """
     result = lldb.SBCommandReturnObject()
-    cmd = "%s %s" % (command, command_args)
+    cmd = "{0!s} {1!s}".format(command, command_args)
     self.commandInterpreter.HandleCommand(cmd, result)
     return (result.Succeeded(), result.GetOutput() if result.Succeeded() else result.GetError())
 
@@ -369,7 +369,7 @@ def returnCompleteCommand(a, l, p):
   """
   separator = "\n"
   results = ctrl.completeCommand(a, l, p)
-  vim.command('return "%s%s"' % (separator.join(results), separator))
+  vim.command('return "{0!s}{1!s}"'.format(separator.join(results), separator))
 
 def returnCompleteWindow(a, l, p):
   """ Returns a "\n"-separated string with possible completion results
@@ -378,7 +378,7 @@ def returnCompleteWindow(a, l, p):
   """
   separator = "\n"
   results = ['breakpoints', 'backtrace', 'disassembly', 'locals', 'threads', 'registers']
-  vim.command('return "%s%s"' % (separator.join(results), separator))
+  vim.command('return "{0!s}{1!s}"'.format(separator.join(results), separator))
 
 global ctrl
 ctrl = LLDBController()

@@ -32,22 +32,22 @@ def find_session_dir():
     return os.path.join(os.getcwd(),session_dir)
 
 def process_no_bug(path,txt):
-    print 'Failure %s has no bug tracking (says %s) - why?' % (path,txt)
+    print 'Failure {0!s} has no bug tracking (says {1!s}) - why?'.format(path, txt)
 
 def process_llvm_bug(path,pr):
-    print 'Failure %s has an LLVM bug tracking: %s - why no radar?' % (path,pr.group(1))
+    print 'Failure {0!s} has an LLVM bug tracking: {1!s} - why no radar?'.format(path, pr.group(1))
 
 def process_radar_bug(path,rdr):
     rdr = get_radar_details(rdr.group(1))
     if not rdr:
-        print 'Failure %s claims to be tracked by rdar://%s but no such bug exists - consider filing one' % (path,rdr.group(1))
+        print 'Failure {0!s} claims to be tracked by rdar://{1!s} but no such bug exists - consider filing one'.format(path, rdr.group(1))
         return
-    print 'Failure %s has a radar bug tracking: rdar://%s %s - cool' % (path,rdr.id,rdr.title)
+    print 'Failure {0!s} has a radar bug tracking: rdar://{1!s} {2!s} - cool'.format(path, rdr.id, rdr.title)
     if rdr.state != 'Analyze':
         print 'This radar is not in Analyze anymore - Consider filing a new one, or editing the test case'
-    print '  Assignee: %s %s' % (rdr.assignee.firstName,rdr.assignee.lastName)
-    print '  Milestone: %s' % (rdr.milestone[u'name'] if rdr.milestone else 'None')
-    print '  Priority: %s' % (rdr.priority)
+    print '  Assignee: {0!s} {1!s}'.format(rdr.assignee.firstName, rdr.assignee.lastName)
+    print '  Milestone: {0!s}'.format((rdr.milestone[u'name'] if rdr.milestone else 'None'))
+    print '  Priority: {0!s}'.format((rdr.priority))
 
 global_radar_client = None
 

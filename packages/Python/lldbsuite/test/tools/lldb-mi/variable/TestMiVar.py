@@ -21,12 +21,12 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to program return
         line = line_number('main.cpp', '// BP_return')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")
@@ -115,11 +115,11 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # Print argument "argv[0]"
         self.runCmd("-data-evaluate-expression \"argv[0]\"")
-        self.expect("\^done,value=\"0x[0-9a-f]+ \\\\\\\".*?%s\\\\\\\"\"" % self.myexe)
+        self.expect("\^done,value=\"0x[0-9a-f]+ \\\\\\\".*?{0!s}\\\\\\\"\"".format(self.myexe))
         self.runCmd("-var-create var6 * \"argv[0]\"")
-        self.expect("\^done,name=\"var6\",numchild=\"1\",value=\"0x[0-9a-f]+ \\\\\\\".*?%s\\\\\\\"\",type=\"const char \*\",thread-id=\"1\",has_more=\"0\"" % self.myexe)
+        self.expect("\^done,name=\"var6\",numchild=\"1\",value=\"0x[0-9a-f]+ \\\\\\\".*?{0!s}\\\\\\\"\",type=\"const char \*\",thread-id=\"1\",has_more=\"0\"".format(self.myexe))
         self.runCmd("-var-evaluate-expression var6")
-        self.expect("\^done,value=\"0x[0-9a-f]+ \\\\\\\".*?%s\\\\\\\"\"" % self.myexe)
+        self.expect("\^done,value=\"0x[0-9a-f]+ \\\\\\\".*?{0!s}\\\\\\\"\"".format(self.myexe))
         self.runCmd("-var-show-attributes var6")
         self.expect("\^done,status=\"editable\"")
         self.runCmd("-var-list-children --all-values var6")
@@ -135,12 +135,12 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to BP_var_update_test_init
         line = line_number('main.cpp', '// BP_var_update_test_init')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")
@@ -156,7 +156,7 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # Go to BP_var_update_test_l
         line = line_number('main.cpp', '// BP_var_update_test_l')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"2\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -168,7 +168,7 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # Go to BP_var_update_test_complx
         line = line_number('main.cpp', '// BP_var_update_test_complx')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"3\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -180,7 +180,7 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # Go to BP_var_update_test_complx_array
         line = line_number('main.cpp', '// BP_var_update_test_complx_array')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"4\"")
         self.runCmd("-exec-continue")
         self.expect("\^running")
@@ -198,7 +198,7 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -217,7 +217,7 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
         # Note that message is different in Darwin and Linux:
         # Darwin: "^done,name=\"var_reg\",numchild=\"0\",value=\"0x[0-9a-f]+\",type=\"unsigned long\",thread-id=\"1\",has_more=\"0\"
         # Linux:  "^done,name=\"var_reg\",numchild=\"0\",value=\"0x[0-9a-f]+\",type=\"unsigned int\",thread-id=\"1\",has_more=\"0\"
-        self.runCmd("-var-create var_reg * $%s" % register_name)
+        self.runCmd("-var-create var_reg * ${0!s}".format(register_name))
         self.expect("\^done,name=\"var_reg\",numchild=\"0\",value=\"0x[0-9a-f]+\",type=\"unsigned (long|int)\",thread-id=\"1\",has_more=\"0\"")
 
         # Assign value to variable
@@ -238,12 +238,12 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to BP_var_list_children_test
         line = line_number('main.cpp', '// BP_var_list_children_test')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")
@@ -339,12 +339,12 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to BP_gdb_set_show_print_char_array_as_string_test
         line = line_number('main.cpp', '// BP_cpp_stl_types_test')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")
@@ -363,12 +363,12 @@ class MiVarTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to breakpoint
         line = line_number('main.cpp', '// BP_unnamed_objects_test')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")

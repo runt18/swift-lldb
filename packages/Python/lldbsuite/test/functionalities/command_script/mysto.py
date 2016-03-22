@@ -14,7 +14,7 @@ def StepOver(debugger, args, result, dict):
 	count = int(arg_split[0])
 	for i in range(0,count):
 		debugger.GetSelectedTarget().GetProcess().GetSelectedThread().StepOver(lldb.eOnlyThisThread)
-		print("step<%d>"%i)
+		print("step<{0:d}>".format(i))
 
 def __lldb_init_module(debugger, session_dict):
 	# by default, --synchronicity is set to synchronous

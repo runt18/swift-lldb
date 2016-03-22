@@ -72,12 +72,12 @@ class NamespaceTestCase(TestBase):
 
         # 'frame variable' with basename 'i' should work.
         self.expect("frame variable --show-declaration --show-globals i",
-            startstr = "main.cpp:%d: (int) (anonymous namespace)::i = 3" % self.line_var_i)
+            startstr = "main.cpp:{0:d}: (int) (anonymous namespace)::i = 3".format(self.line_var_i))
         # main.cpp:12: (int) (anonymous namespace)::i = 3
 
         # 'frame variable' with basename 'j' should work, too.
         self.expect("frame variable --show-declaration --show-globals j",
-            startstr = "main.cpp:%d: (int) A::B::j = 4" % self.line_var_j)
+            startstr = "main.cpp:{0:d}: (int) A::B::j = 4".format(self.line_var_j))
         # main.cpp:19: (int) A::B::j = 4
 
         # 'frame variable' should support address-of operator.

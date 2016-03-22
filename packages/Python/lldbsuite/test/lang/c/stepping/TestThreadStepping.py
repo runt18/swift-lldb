@@ -46,8 +46,8 @@ class ThreadSteppingTestCase(TestBase):
         # in function name 'c'.  And frame #3 should point to main.c:37.
         self.expect("thread backtrace", STOPPED_DUE_TO_BREAKPOINT,
             substrs = ["stop reason = breakpoint"],
-            patterns = ["frame #0.*main.c:%d" % self.line1,
-                        "frame #3.*main.c:%d" % self.line2])
+            patterns = ["frame #0.*main.c:{0:d}".format(self.line1),
+                        "frame #3.*main.c:{0:d}".format(self.line2)])
 
         # We want to move the pc to frame #3.  This can be accomplished by
         # 'frame select 2', followed by 'thread step-out'.
@@ -55,7 +55,7 @@ class ThreadSteppingTestCase(TestBase):
         self.runCmd("thread step-out")
         self.expect("thread backtrace", STEP_OUT_SUCCEEDED,
             substrs = ["stop reason = step out"],
-            patterns = ["frame #0.*main.c:%d" % self.line2])
+            patterns = ["frame #0.*main.c:{0:d}".format(self.line2)])
 
         # Let's move on to a single step-out case.
         self.runCmd("process continue")
@@ -66,7 +66,7 @@ class ThreadSteppingTestCase(TestBase):
         self.runCmd("thread step-out")
         self.expect("thread backtrace", STEP_OUT_SUCCEEDED,
             substrs = ["stop reason = step out"],
-            patterns = ["frame #0.*main.c:%d" % self.line3])
+            patterns = ["frame #0.*main.c:{0:d}".format(self.line3)])
 
         # Do another frame selct, followed by thread step-out.
         self.runCmd("process continue")
@@ -78,4 +78,4 @@ class ThreadSteppingTestCase(TestBase):
         self.runCmd("thread step-out")
         self.expect("thread backtrace", STEP_OUT_SUCCEEDED,
             substrs = ["stop reason = step out"],
-            patterns = ["frame #0.*main.c:%d" % self.line4])
+            patterns = ["frame #0.*main.c:{0:d}".format(self.line4)])

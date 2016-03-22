@@ -47,8 +47,8 @@ def llvm_mc_loop(mc, mc_options):
                 contents[:] = []
 
             # Invoke llvm-mc with our newly created file.
-            mc_cmd = '%s %s %s' % (mc, mc_options, fname)
-            sys.stdout.write("Executing command: %s\n" % mc_cmd)
+            mc_cmd = '{0!s} {1!s} {2!s}'.format(mc, mc_options, fname)
+            sys.stdout.write("Executing command: {0!s}\n".format(mc_cmd))
             os.system(mc_cmd)
         else:
             # Keep accumulating our input.

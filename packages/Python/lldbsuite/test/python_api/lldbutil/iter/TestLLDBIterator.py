@@ -51,8 +51,8 @@ class LLDBIteratorTestCase(TestBase):
         self.assertTrue(len(yours) == len(mine))
         for i in range(len(yours)):
             if self.TraceOn():
-                print("yours[%d]='%s'" % (i, get_description(yours[i])))
-                print("mine[%d]='%s'" % (i, get_description(mine[i])))
+                print("yours[{0:d}]='{1!s}'".format(i, get_description(yours[i])))
+                print("mine[{0:d}]='{1!s}'".format(i, get_description(mine[i])))
             self.assertTrue(yours[i] == mine[i],
                             "UUID+FileSpec of yours[{0}] and mine[{0}] matches".format(i))
 
@@ -83,8 +83,8 @@ class LLDBIteratorTestCase(TestBase):
         self.assertTrue(len(yours) == len(mine))
         for i in range(len(yours)):
             if self.TraceOn():
-                print("yours[%d]='%s'" % (i, get_description(yours[i])))
-                print("mine[%d]='%s'" % (i, get_description(mine[i])))
+                print("yours[{0:d}]='{1!s}'".format(i, get_description(yours[i])))
+                print("mine[{0:d}]='{1!s}'".format(i, get_description(mine[i])))
             self.assertTrue(yours[i] == mine[i],
                             "ID of yours[{0}] and mine[{0}] matches".format(i))
 

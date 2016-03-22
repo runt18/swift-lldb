@@ -83,7 +83,7 @@ class SBBreakpointCallbackCase(TestBase):
 
         env = {self.dylibPath : self.getLLDBLibraryEnvVal()}
         if self.TraceOn():
-            print("Running test %s" % " ".join(exe))
+            print("Running test {0!s}".format(" ".join(exe)))
             check_call(exe, env=env)
         else:
             with open(os.devnull, 'w') as fnull:

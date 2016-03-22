@@ -16,7 +16,7 @@ class BaseTestSuite(unittest.TestSuite):
         self.addTests(tests)
 
     def __repr__(self):
-        return "<%s tests=%s>" % (util.strclass(self.__class__), list(self))
+        return "<{0!s} tests={1!s}>".format(util.strclass(self.__class__), list(self))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -41,7 +41,7 @@ class BaseTestSuite(unittest.TestSuite):
     def addTest(self, test):
         # sanity checks
         if not hasattr(test, '__call__'):
-            raise TypeError("%r is not callable" % (repr(test),))
+            raise TypeError("{0!r} is not callable".format(repr(test)))
         if isinstance(test, type) and issubclass(test,
                                                  (case.TestCase, TestSuite)):
             raise TypeError("TestCases and TestSuites must be instantiated "
@@ -144,7 +144,7 @@ class TestSuite(BaseTestSuite):
                     raise
                 currentClass._classSetupFailed = True
                 className = util.strclass(currentClass)
-                errorName = 'setUpClass (%s)' % className
+                errorName = 'setUpClass ({0!s})'.format(className)
                 self._addClassOrModuleLevelException(result, e, errorName)
     
     def _get_previous_module(self, result):
@@ -177,7 +177,7 @@ class TestSuite(BaseTestSuite):
                 if isinstance(result, _DebugResult):
                     raise
                 result._moduleSetUpFailed = True
-                errorName = 'setUpModule (%s)' % currentModule
+                errorName = 'setUpModule ({0!s})'.format(currentModule)
                 self._addClassOrModuleLevelException(result, e, errorName)
 
     def _addClassOrModuleLevelException(self, result, exception, errorName):
@@ -207,7 +207,7 @@ class TestSuite(BaseTestSuite):
             except Exception as e:
                 if isinstance(result, _DebugResult):
                     raise
-                errorName = 'tearDownModule (%s)' % previousModule
+                errorName = 'tearDownModule ({0!s})'.format(previousModule)
                 self._addClassOrModuleLevelException(result, e, errorName)
     
     def _tearDownPreviousClass(self, test, result):
@@ -230,7 +230,7 @@ class TestSuite(BaseTestSuite):
                 if isinstance(result, _DebugResult):
                     raise
                 className = util.strclass(previousClass)
-                errorName = 'tearDownClass (%s)' % className
+                errorName = 'tearDownClass ({0!s})'.format(className)
                 self._addClassOrModuleLevelException(result, e, errorName)
 
 
@@ -256,7 +256,7 @@ class _ErrorHolder(object):
         return None
 
     def __repr__(self):
-        return "<ErrorHolder description=%r>" % (self.description,)
+        return "<ErrorHolder description={0!r}>".format(self.description)
 
     def __str__(self):
         return self.id()

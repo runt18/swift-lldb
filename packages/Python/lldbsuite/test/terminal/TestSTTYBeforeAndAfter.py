@@ -67,7 +67,7 @@ class TestSTTYBeforeAndAfter(TestBase):
         child.logfile_read = None
 
         # Invoke the lldb command.
-        child.sendline('%s %s' % (lldbtest_config.lldbExec, self.lldbOption))
+        child.sendline('{0!s} {1!s}'.format(lldbtest_config.lldbExec, self.lldbOption))
         child.expect_exact(lldb_prompt)
 
         # Immediately quit.
@@ -114,7 +114,7 @@ class TestSTTYBeforeAndAfter(TestBase):
         zipped = list(zip(stty_output1_lines, stty_output2_lines))
         for tuple in zipped:
             if self.TraceOn():
-                print("tuple->%s" % str(tuple))
+                print("tuple->{0!s}".format(str(tuple)))
             # Every line should compare equal until the first blank line.
             if len(tuple[0]) == 0:
                 break

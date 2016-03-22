@@ -56,7 +56,7 @@ class XunitFormatter(ResultsFormatter):
 
         # Build up an array of range expressions.
         illegal_ranges = [
-            "%s-%s" % (six.unichr(low), six.unichr(high))
+            "{0!s}-{1!s}".format(six.unichr(low), six.unichr(high))
             for (low, high) in illegal_chars_u]
 
         # Compile the regex

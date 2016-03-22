@@ -53,7 +53,7 @@ class TestSwiftGenericExpressions(lldbtest.TestBase):
             answer = value.GetSummary()
         else:
             answer = value.GetValue()
-        report_str = "Use summary: %d %s expected: %s got: %s" % (
+        report_str = "Use summary: {0:d} {1!s} expected: {2!s} got: {3!s}".format(
             use_summary, expression, expected_result, answer)
         self.assertTrue(answer == expected_result, report_str)
 

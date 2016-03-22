@@ -102,7 +102,7 @@ class variable(object):
     def __getitem__(self, key):
         # Allow array access if this value has children...
         if type(key) is int:
-            return variable(self.sbvalue.GetValueForExpressionPath("[%i]" % key))
+            return variable(self.sbvalue.GetValueForExpressionPath("[{0:d}]".format(key)))
         raise TypeError
 
     def __getattr__(self, name):
@@ -248,8 +248,8 @@ class variable(object):
         return float (self.sbvalue.GetValueAsSigned())
         
     def __oct__(self):
-        return '0%o' % self.sbvalue.GetValueAsSigned()
+        return '0{0:o}'.format(self.sbvalue.GetValueAsSigned())
         
     def __hex__(self):
-        return '0x%x' % self.sbvalue.GetValueAsSigned()
+        return '0x{0:x}'.format(self.sbvalue.GetValueAsSigned())
     

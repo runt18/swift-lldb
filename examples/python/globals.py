@@ -41,13 +41,13 @@ def get_globals(raw_path, options):
                         if global_variable_list:
                             # Print results for anything that matched
                             for global_variable in global_variable_list:
-                                print 'name = %s' % global_variable.name    # returns the global variable name as a string
-                                print 'value = %s' % global_variable.value  # Returns the variable value as a string
-                                print 'type = %s' % global_variable.type    # Returns an lldb.SBType object
-                                print 'addr = %s' % global_variable.addr    # Returns an lldb.SBAddress (section offset address) for this global
-                                print 'file_addr = 0x%x' % global_variable.addr.file_addr    # Returns the file virtual address for this global
-                                print 'location = %s' % global_variable.location    # returns the global variable value as a string
-                                print 'size = %s' % global_variable.size    # Returns the size in bytes of this global variable
+                                print 'name = {0!s}'.format(global_variable.name)    # returns the global variable name as a string
+                                print 'value = {0!s}'.format(global_variable.value)  # Returns the variable value as a string
+                                print 'type = {0!s}'.format(global_variable.type)    # Returns an lldb.SBType object
+                                print 'addr = {0!s}'.format(global_variable.addr)    # Returns an lldb.SBAddress (section offset address) for this global
+                                print 'file_addr = 0x{0:x}'.format(global_variable.addr.file_addr)    # Returns the file virtual address for this global
+                                print 'location = {0!s}'.format(global_variable.location)    # returns the global variable value as a string
+                                print 'size = {0!s}'.format(global_variable.size)    # Returns the size in bytes of this global variable
                                 print
 
 def globals(command_args):

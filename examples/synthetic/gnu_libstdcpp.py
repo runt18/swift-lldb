@@ -23,7 +23,7 @@ class StdListSynthProvider:
 		logger = lldb.formatters.Logger.Logger()
 		valid = self.value(self.next_node(node)) != self.node_address
 		if valid:
-			logger >> "%s is valid" % str(self.valobj.GetName())
+			logger >> "{0!s} is valid".format(str(self.valobj.GetName()))
 		else:
 			logger >> "synthetic value is not valid"
 		return valid
@@ -246,7 +246,7 @@ class StdVectorSynthProvider:
 				value_expr = "(bool)true"
 			else:
 				value_expr = "(bool)false"
-			return self.valobj.CreateValueFromExpression("[%d]" % index, value_expr)
+			return self.valobj.CreateValueFromExpression("[{0:d}]".format(index), value_expr)
 
 		def update(self):
 			try:

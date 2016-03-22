@@ -38,7 +38,7 @@ class BreakpointLocationsTestCase(TestBase):
 
         # The breakpoint list should show 3 locations.
         self.expect("breakpoint list -f", "Breakpoint locations shown correctly",
-            substrs = ["1: file = 'main.c', line = %d, exact_match = 0, locations = 3" % self.line],
+            substrs = ["1: file = 'main.c', line = {0:d}, exact_match = 0, locations = 3".format(self.line)],
             patterns = ["where = a.out`func_inlined .+unresolved, hit count = 0",
                         "where = a.out`main .+\[inlined\].+unresolved, hit count = 0"])
 

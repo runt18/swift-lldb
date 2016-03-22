@@ -43,7 +43,7 @@ class FoundationDisassembleTestCase(TestBase):
                 break
 
         self.assertTrue(foundation_framework != None, "Foundation.framework path located")
-        self.runCmd("image dump symtab '%s'" % foundation_framework)
+        self.runCmd("image dump symtab '{0!s}'".format(foundation_framework))
         raw_output = self.res.GetOutput()
         # Now, grab every 'Code' symbol and feed it into the command:
         # 'disassemble -n func'.
@@ -62,7 +62,7 @@ class FoundationDisassembleTestCase(TestBase):
                 func = match.group(1)
                 #print("line:", line)
                 #print("func:", func)
-                self.runCmd('disassemble -n "%s"' % func)
+                self.runCmd('disassemble -n "{0!s}"'.format(func))
         
 
     def test_simple_disasm(self):
@@ -79,7 +79,7 @@ class FoundationDisassembleTestCase(TestBase):
 
         # Stop at +[NSString stringWithFormat:].
         symbol_name = "+[NSString stringWithFormat:]"
-        break_results = lldbutil.run_break_set_command (self, "_regexp-break %s"%(symbol_name))
+        break_results = lldbutil.run_break_set_command (self, "_regexp-break {0!s}".format((symbol_name)))
         
         lldbutil.check_breakpoint_result (self, break_results, symbol_name=symbol_name, num_locations=1)
 

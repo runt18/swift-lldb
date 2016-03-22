@@ -60,7 +60,7 @@ class DataFormatterSynthValueTestCase(TestBase):
         z_val = z.GetValueAsUnsigned
         
         if self.TraceOn():
-            print("x_val = %s; y_val = %s; z_val = %s" % (x_val(),y_val(),z_val()))
+            print("x_val = {0!s}; y_val = {1!s}; z_val = {2!s}".format(x_val(), y_val(), z_val()))
 
         self.assertFalse(x_val() == 3, "x == 3 before synthetics")
         self.assertFalse(y_val() == 4, "y == 4 before synthetics")
@@ -72,7 +72,7 @@ class DataFormatterSynthValueTestCase(TestBase):
         self.runCmd("type synth add -l myArraySynthProvider myArray")
         
         if self.TraceOn():
-            print("x_val = %s; y_val = %s; z_val = %s" % (x_val(),y_val(),z_val()))
+            print("x_val = {0!s}; y_val = {1!s}; z_val = {2!s}".format(x_val(), y_val(), z_val()))
         
         self.assertTrue(x_val() == 3, "x != 3 after synthetics")
         self.assertTrue(y_val() == 4, "y != 4 after synthetics")

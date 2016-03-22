@@ -57,7 +57,7 @@ class WatchpointPythonCommandTestCase(TestBase):
         # Now let's set a write-type watchpoint for 'global'.
         self.expect("watchpoint set variable -w write global", WATCHPOINT_CREATED,
             substrs = ['Watchpoint created', 'size = 4', 'type = w',
-                       '%s:%d' % (self.source, self.decl)])
+                       '{0!s}:{1:d}'.format(self.source, self.decl)])
 
         self.runCmd('watchpoint command add -s python 1 -o \'frame.EvaluateExpression("cookie = 777")\'')
 

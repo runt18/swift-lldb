@@ -125,7 +125,7 @@ class SettingsCommandTestCase(TestBase):
         self.runCmd("file " + exe, CURRENT_EXECUTABLE_SET)
 
         def cleanup():
-            self.runCmd("settings set frame-format %s" % self.format_string, check=False)
+            self.runCmd("settings set frame-format {0!s}".format(self.format_string), check=False)
 
         # Execute the cleanup function during test case tear down.
         self.addTearDownHook(cleanup)
@@ -139,7 +139,7 @@ class SettingsCommandTestCase(TestBase):
 
         # Change the default format to print function.name rather than function.name-with-args
         format_string = "frame #${frame.index}: ${frame.pc}{ ${module.file.basename}`${function.name}{${function.pc-offset}}}{ at ${line.file.fullpath}:${line.number}}{, lang=${language}}\n"
-        self.runCmd("settings set frame-format %s" % format_string)
+        self.runCmd("settings set frame-format {0!s}".format(format_string))
 
         # Immediately test the setting.
         self.expect("settings show frame-format", SETTING_MSG("frame-format"),
@@ -393,10 +393,10 @@ class SettingsCommandTestCase(TestBase):
         # file
         path1 = os.path.join(os.getcwd(), "path1.txt")
         path2 = os.path.join(os.getcwd(), "path2.txt")
-        self.runCmd ("settings set target.output-path %s" % path1)   # Set to known value
+        self.runCmd ("settings set target.output-path {0!s}".format(path1))   # Set to known value
         self.expect ("settings show target.output-path", SETTING_MSG("target.output-path"),
             startstr = 'target.output-path (file) = ', substrs=[path1])
-        self.runCmd ("settings set target.output-path %s " % path2) # Set to new value with trailing whitespaces
+        self.runCmd ("settings set target.output-path {0!s} ".format(path2)) # Set to new value with trailing whitespaces
         self.expect ("settings show target.output-path", SETTING_MSG("target.output-path"),
             startstr = 'target.output-path (file) = ', substrs=[path2])
         self.runCmd("settings clear target.output-path", check=False)

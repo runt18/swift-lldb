@@ -42,7 +42,7 @@ class WatchpointForMultipleThreadsTestCase(TestBase):
 
     def hello_multiple_threads(self):
         """Test that lldb watchpoint works for multiple threads."""
-        self.runCmd("file %s" % os.path.join(os.getcwd(), 'a.out'), CURRENT_EXECUTABLE_SET)
+        self.runCmd("file {0!s}".format(os.path.join(os.getcwd(), 'a.out')), CURRENT_EXECUTABLE_SET)
 
         # Add a breakpoint to set a watchpoint when stopped on the breakpoint.
         lldbutil.run_break_set_by_file_and_line (self, None, self.first_stop, num_expected_locations=1)
@@ -86,7 +86,7 @@ class WatchpointForMultipleThreadsTestCase(TestBase):
 
     def hello_multiple_threads_wp_set_and_then_delete(self):
         """Test that lldb watchpoint works for multiple threads, and after the watchpoint is deleted, the watchpoint event should no longer fires."""
-        self.runCmd("file %s" % os.path.join(os.getcwd(), 'a.out'), CURRENT_EXECUTABLE_SET)
+        self.runCmd("file {0!s}".format(os.path.join(os.getcwd(), 'a.out')), CURRENT_EXECUTABLE_SET)
 
         # Add a breakpoint to set a watchpoint when stopped on the breakpoint.
         lldbutil.run_break_set_by_file_and_line (self, None, self.first_stop, num_expected_locations=1)
@@ -128,7 +128,7 @@ class WatchpointForMultipleThreadsTestCase(TestBase):
                     self.fail("Watchpoint hits not supposed to exceed 1 by design!")
                 # Good, we verified that the watchpoint works!  Now delete the watchpoint.
                 if self.TraceOn():
-                    print("watchpoint_stops=%d at the moment we delete the watchpoint" % watchpoint_stops)
+                    print("watchpoint_stops={0:d} at the moment we delete the watchpoint".format(watchpoint_stops))
                 self.runCmd("watchpoint delete 1")
                 self.expect("watchpoint list -v",
                     substrs = ['No watchpoints currently set.'])

@@ -59,14 +59,14 @@ class BreakpointCommandTestCase(TestBase):
 
         # The breakpoint list now only contains breakpoint 1.
         self.expect("breakpoint list", "Breakpoints 1 & 2 created",
-            substrs = ["2: file = 'main.c', line = %d, exact_match = 0, locations = 1" % self.line],
-            patterns = ["1: file = '.*main.c', line = %d, exact_match = 0, locations = 1" % self.line] )
+            substrs = ["2: file = 'main.c', line = {0:d}, exact_match = 0, locations = 1".format(self.line)],
+            patterns = ["1: file = '.*main.c', line = {0:d}, exact_match = 0, locations = 1".format(self.line)] )
 
         self.expect("breakpoint list -f", "Breakpoints 1 & 2 created",
-            substrs = ["2: file = 'main.c', line = %d, exact_match = 0, locations = 1" % self.line],
-            patterns = ["1: file = '.*main.c', line = %d, exact_match = 0, locations = 1" % self.line,
-                        "1.1: .+at main.c:%d, .+unresolved, hit count = 0" % self.line,
-                        "2.1: .+at main.c:%d, .+unresolved, hit count = 0" % self.line])
+            substrs = ["2: file = 'main.c', line = {0:d}, exact_match = 0, locations = 1".format(self.line)],
+            patterns = ["1: file = '.*main.c', line = {0:d}, exact_match = 0, locations = 1".format(self.line),
+                        "1.1: .+at main.c:{0:d}, .+unresolved, hit count = 0".format(self.line),
+                        "2.1: .+at main.c:{0:d}, .+unresolved, hit count = 0".format(self.line)])
 
         self.expect("breakpoint command list 1", "Breakpoint 1 command ok",
             substrs = ["Breakpoint commands:",
@@ -146,14 +146,14 @@ class BreakpointCommandTestCase(TestBase):
 
         # The breakpoint list now only contains breakpoint 1.
         self.expect("breakpoint list -f", "Breakpoint 1 exists",
-            patterns = ["1: file = '.*main.c', line = %d, exact_match = 0, locations = 1, resolved = 1" %
-                        self.line,
+            patterns = ["1: file = '.*main.c', line = {0:d}, exact_match = 0, locations = 1, resolved = 1".format(
+                        self.line),
                        "hit count = 1"])
 
         # Not breakpoint 2.
         self.expect("breakpoint list -f", "No more breakpoint 2", matching=False,
-            substrs = ["2: file = 'main.c', line = %d, exact_match = 0, locations = 1, resolved = 1" %
-                        self.line])
+            substrs = ["2: file = 'main.c', line = {0:d}, exact_match = 0, locations = 1, resolved = 1".format(
+                        self.line)])
 
         # Run the program again, with breakpoint 1 remaining.
         self.runCmd("run", RUN_SUCCEEDED)

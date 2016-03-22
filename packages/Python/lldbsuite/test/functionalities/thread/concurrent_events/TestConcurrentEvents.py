@@ -325,18 +325,18 @@ class ConcurrentEventsTestCase(TestBase):
             if reason == lldb.eStopReasonBreakpoint:
                 bpid = x.GetStopReasonDataAtIndex(0)
                 bp = self.inferior_target.FindBreakpointByID(bpid)
-                reason_str = "%s hit %d times" % (lldbutil.get_description(bp), bp.GetHitCount())
+                reason_str = "{0!s} hit {1:d} times".format(lldbutil.get_description(bp), bp.GetHitCount())
             elif reason == lldb.eStopReasonWatchpoint:
                 watchid = x.GetStopReasonDataAtIndex(0)
                 watch = self.inferior_target.FindWatchpointByID(watchid)
-                reason_str = "%s hit %d times" % (lldbutil.get_description(watch), watch.GetHitCount())
+                reason_str = "{0!s} hit {1:d} times".format(lldbutil.get_description(watch), watch.GetHitCount())
             elif reason == lldb.eStopReasonSignal:
                 signals = self.inferior_process.GetUnixSignals()
                 signal_name = signals.GetSignalAsCString(x.GetStopReasonDataAtIndex(0))
-                reason_str = "signal %s" % signal_name
+                reason_str = "signal {0!s}".format(signal_name)
 
             location = "\t".join([lldbutil.get_description(x.GetFrameAtIndex(i)) for i in range(x.GetNumFrames())])
-            ret.append("thread %d %s due to %s at\n\t%s" % (id, status, reason_str, location))
+            ret.append("thread {0:d} {1!s} due to {2!s} at\n\t{3!s}".format(id, status, reason_str, location))
         return ret
 
     def add_breakpoint(self, line, descriptions):
@@ -346,7 +346,7 @@ class ConcurrentEventsTestCase(TestBase):
 
         bpno = lldbutil.run_break_set_by_file_and_line(self, self.filename, line, num_expected_locations=-1)
         bp = self.inferior_target.FindBreakpointByID(bpno)
-        descriptions.append(": file = 'main.cpp', line = %d" % self.finish_breakpoint_line)
+        descriptions.append(": file = 'main.cpp', line = {0:d}".format(self.finish_breakpoint_line))
         return bp
 
     def inferior_done(self):
@@ -419,15 +419,15 @@ class ConcurrentEventsTestCase(TestBase):
         # threads doing each action (break/crash/signal/watch)
         self.assertEqual(self.inferior_process.GetNumThreads(), 1, 'Expected to stop before any additional threads are spawned.')
 
-        self.runCmd("expr num_breakpoint_threads=%d" % num_breakpoint_threads)
-        self.runCmd("expr num_crash_threads=%d" % num_crash_threads)
-        self.runCmd("expr num_signal_threads=%d" % num_signal_threads)
-        self.runCmd("expr num_watchpoint_threads=%d" % num_watchpoint_threads)
+        self.runCmd("expr num_breakpoint_threads={0:d}".format(num_breakpoint_threads))
+        self.runCmd("expr num_crash_threads={0:d}".format(num_crash_threads))
+        self.runCmd("expr num_signal_threads={0:d}".format(num_signal_threads))
+        self.runCmd("expr num_watchpoint_threads={0:d}".format(num_watchpoint_threads))
 
-        self.runCmd("expr num_delay_breakpoint_threads=%d" % num_delay_breakpoint_threads)
-        self.runCmd("expr num_delay_crash_threads=%d" % num_delay_crash_threads)
-        self.runCmd("expr num_delay_signal_threads=%d" % num_delay_signal_threads)
-        self.runCmd("expr num_delay_watchpoint_threads=%d" % num_delay_watchpoint_threads)
+        self.runCmd("expr num_delay_breakpoint_threads={0:d}".format(num_delay_breakpoint_threads))
+        self.runCmd("expr num_delay_crash_threads={0:d}".format(num_delay_crash_threads))
+        self.runCmd("expr num_delay_signal_threads={0:d}".format(num_delay_signal_threads))
+        self.runCmd("expr num_delay_watchpoint_threads={0:d}".format(num_delay_watchpoint_threads))
 
         # Continue the inferior so threads are spawned
         self.runCmd("continue")
@@ -440,7 +440,7 @@ class ConcurrentEventsTestCase(TestBase):
                              + num_watchpoint_threads + num_delay_watchpoint_threads \
                              + num_crash_threads + num_delay_crash_threads + 1
         self.assertEqual(num_threads, expected_num_threads,
-            'Expected to see %d threads, but seeing %d. Details:\n%s' % (expected_num_threads,
+            'Expected to see {0:d} threads, but seeing {1:d}. Details:\n{2!s}'.format(expected_num_threads,
                                                                          num_threads,
                                                                          "\n\t".join(self.describe_threads())))
 
@@ -458,7 +458,7 @@ class ConcurrentEventsTestCase(TestBase):
         if num_crash_threads > 0 or num_delay_crash_threads > 0:
             # Expecting a crash
             self.assertTrue(self.crash_count > 0,
-                "Expecting at least one thread to crash. Details: %s" % "\t\n".join(self.describe_threads()))
+                "Expecting at least one thread to crash. Details: {0!s}".format("\t\n".join(self.describe_threads())))
 
             # Ensure the zombie process is reaped
             self.runCmd("process kill")
@@ -468,7 +468,7 @@ class ConcurrentEventsTestCase(TestBase):
             self.assertEqual(1, self.finish_breakpoint.GetHitCount(), "Expected main thread (finish) breakpoint to be hit once")
 
             num_threads = self.inferior_process.GetNumThreads()
-            self.assertEqual(1, num_threads, "Expecting 1 thread but seeing %d. Details:%s" % (num_threads,
+            self.assertEqual(1, num_threads, "Expecting 1 thread but seeing {0:d}. Details:{1!s}".format(num_threads,
                                                                                              "\n\t".join(self.describe_threads())))
             self.runCmd("continue")
 
@@ -480,13 +480,13 @@ class ConcurrentEventsTestCase(TestBase):
             expected_breakpoint_threads = num_delay_breakpoint_threads + num_breakpoint_threads
             breakpoint_hit_count = self.thread_breakpoint.GetHitCount() if expected_breakpoint_threads > 0 else 0
             self.assertEqual(expected_breakpoint_threads, breakpoint_hit_count,
-                "Expected %d breakpoint hits, but got %d" % (expected_breakpoint_threads, breakpoint_hit_count))
+                "Expected {0:d} breakpoint hits, but got {1:d}".format(expected_breakpoint_threads, breakpoint_hit_count))
 
             expected_signal_threads = num_delay_signal_threads + num_signal_threads
             self.assertEqual(expected_signal_threads, self.signal_count,
-                "Expected %d stops due to signal delivery, but got %d" % (expected_signal_threads, self.signal_count))
+                "Expected {0:d} stops due to signal delivery, but got {1:d}".format(expected_signal_threads, self.signal_count))
 
             expected_watchpoint_threads = num_delay_watchpoint_threads + num_watchpoint_threads
             watchpoint_hit_count = self.thread_watchpoint.GetHitCount() if expected_watchpoint_threads > 0 else 0
             self.assertEqual(expected_watchpoint_threads, watchpoint_hit_count,
-                "Expected %d watchpoint hits, got %d" % (expected_watchpoint_threads, watchpoint_hit_count))
+                "Expected {0:d} watchpoint hits, got {1:d}".format(expected_watchpoint_threads, watchpoint_hit_count))

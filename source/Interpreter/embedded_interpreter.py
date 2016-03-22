@@ -97,7 +97,7 @@ def run_python_interpreter (local_dict):
     except SystemExit as e:
         global g_builtin_override_called
         if not g_builtin_override_called:
-            print('Script exited with %s' %(e))
+            print('Script exited with {0!s}'.format((e)))
 
 def run_one_line (local_dict, input_string):
     global g_run_one_line_str
@@ -112,4 +112,4 @@ def run_one_line (local_dict, input_string):
     except SystemExit as e:
         global g_builtin_override_called
         if not g_builtin_override_called:
-            print('Script exited with %s' %(e))
+            print('Script exited with {0!s}'.format((e)))

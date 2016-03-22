@@ -22,7 +22,7 @@ class LaunchWithShellExpandTestCase(TestBase):
         self.build()
         exe = os.path.join (os.getcwd(), "a.out")
         
-        self.runCmd("target create %s" % exe)
+        self.runCmd("target create {0!s}".format(exe))
         
         # Create the target
         target = self.dbg.CreateTarget(exe)
@@ -31,7 +31,7 @@ class LaunchWithShellExpandTestCase(TestBase):
         breakpoint = target.BreakpointCreateBySourceRegex ('break here', lldb.SBFileSpec ("main.cpp", False))
         self.assertTrue(breakpoint, VALID_BREAKPOINT)
 
-        self.runCmd("process launch -X true -w %s -- fi*.tx?" % (os.getcwd()))
+        self.runCmd("process launch -X true -w {0!s} -- fi*.tx?".format((os.getcwd())))
 
         process = self.process()
 
@@ -56,7 +56,7 @@ class LaunchWithShellExpandTestCase(TestBase):
 
         self.runCmd("process kill")
 
-        self.runCmd('process launch -X true -w %s -- "foo bar"' % (os.getcwd()))
+        self.runCmd('process launch -X true -w {0!s} -- "foo bar"'.format((os.getcwd())))
         
         process = self.process()
 
@@ -77,7 +77,7 @@ class LaunchWithShellExpandTestCase(TestBase):
 
         self.runCmd("process kill")
 
-        self.runCmd('process launch -X true -w %s -- foo\ bar' % (os.getcwd()))
+        self.runCmd('process launch -X true -w {0!s} -- foo\ bar'.format((os.getcwd())))
         
         process = self.process()
 

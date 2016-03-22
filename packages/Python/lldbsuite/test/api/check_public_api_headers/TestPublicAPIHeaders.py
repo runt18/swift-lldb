@@ -66,15 +66,15 @@ class SBDirCheckerCase(TestBase):
     def sanity_check_executable(self, exe_name):
         """Sanity check executable compiled from the auto-generated program."""
         exe = os.path.join(os.getcwd(), exe_name)
-        self.runCmd("file %s" % exe, CURRENT_EXECUTABLE_SET)
+        self.runCmd("file {0!s}".format(exe), CURRENT_EXECUTABLE_SET)
 
         self.line_to_break = line_number(self.source, '// Set breakpoint here.')
 
-        env_cmd = "settings set target.env-vars %s=%s" %(self.dylibPath, self.getLLDBLibraryEnvVal())
+        env_cmd = "settings set target.env-vars {0!s}={1!s}".format(self.dylibPath, self.getLLDBLibraryEnvVal())
         if self.TraceOn():
             print("Set environment to: ", env_cmd)
         self.runCmd(env_cmd)
-        self.addTearDownHook(lambda: self.dbg.HandleCommand("settings remove target.env-vars %s" % self.dylibPath))
+        self.addTearDownHook(lambda: self.dbg.HandleCommand("settings remove target.env-vars {0!s}".format(self.dylibPath)))
 
         lldbutil.run_break_set_by_file_and_line (self, self.source, self.line_to_break, num_expected_locations = -1)
 

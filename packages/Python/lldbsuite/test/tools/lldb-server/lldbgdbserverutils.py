@@ -584,7 +584,7 @@ class MultiResponseGdbRemoteEntry(GdbRemoteEntryBase):
 
         # Append the suffix as needed.
         if self._append_iteration_suffix:
-            payload += "%x" % self._iteration
+            payload += "{0:x}".format(self._iteration)
 
         # Keep track of the iteration.
         self._iteration += 1
@@ -623,8 +623,7 @@ class MultiResponseGdbRemoteEntry(GdbRemoteEntryBase):
 
         # Check for a runaway response cycle.
         if len(context[self._save_key]) >= self._runaway_response_count:
-            raise Exception("runaway query/response cycle detected: %d responses captured so far. Last response: %s" %
-                (len(context[self._save_key]), context[self._save_key][-1]))
+            raise Exception("runaway query/response cycle detected: {0:d} responses captured so far. Last response: {1!s}".format(len(context[self._save_key]), context[self._save_key][-1]))
 
         # Flip the mode to send for generating the query.
         self._is_send_to_remote = True
@@ -789,7 +788,7 @@ class GdbRemoteTestSequence(object):
                     capture = line.get("capture", None)
                     self.entries.append(MatchRemoteOutputEntry(regex=regex, regex_mode=regex_mode, capture=capture))
                 else:
-                    raise Exception("unknown entry type \"%s\"" % entry_type)
+                    raise Exception("unknown entry type \"{0!s}\"".format(entry_type))
 
 def process_is_running(pid, unknown_value=True):
     """If possible, validate that the given pid represents a running process on the local system.
@@ -810,7 +809,7 @@ def process_is_running(pid, unknown_value=True):
         return the value provided by the unknown_value arg.
     """
     if not isinstance(pid, six.integer_types):
-        raise Exception("pid must be an integral type (actual type: %s)" % str(type(pid)))
+        raise Exception("pid must be an integral type (actual type: {0!s})".format(str(type(pid))))
 
     process_ids = []
 

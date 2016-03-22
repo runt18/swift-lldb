@@ -39,7 +39,7 @@ class FrameVariableResponseBench(BenchBase):
         self.stopwatch.reset()
         for i in range(count):
             # So that the child gets torn down after the test.
-            self.child = pexpect.spawn('%s %s %s' % (lldbtest_config.lldbExec, self.lldbOption, exe))
+            self.child = pexpect.spawn('{0!s} {1!s} {2!s}'.format(lldbtest_config.lldbExec, self.lldbOption, exe))
             child = self.child
 
             # Turn on logging for what the child sends back.
@@ -47,7 +47,7 @@ class FrameVariableResponseBench(BenchBase):
                 child.logfile_read = sys.stdout
 
             # Set our breakpoint.
-            child.sendline('breakpoint set %s' % break_spec)
+            child.sendline('breakpoint set {0!s}'.format(break_spec))
             child.expect_exact(prompt)
 
             # Run the target and expect it to be stopped due to breakpoint.

@@ -30,11 +30,11 @@ class ExecTestCase(TestBase):
         if self.getArchitecture() == 'x86_64':
             source = os.path.join (os.getcwd(), "main.cpp")
             o_file = os.path.join (os.getcwd(), "main.o")
-            execute_command ("'%s' -g -O0 -arch i386 -arch x86_64 '%s' -c -o '%s'" % (os.environ["CC"], source, o_file))
-            execute_command ("'%s' -g -O0 -arch i386 -arch x86_64 '%s'" % (os.environ["CC"], o_file))
+            execute_command ("'{0!s}' -g -O0 -arch i386 -arch x86_64 '{1!s}' -c -o '{2!s}'".format(os.environ["CC"], source, o_file))
+            execute_command ("'{0!s}' -g -O0 -arch i386 -arch x86_64 '{1!s}'".format(os.environ["CC"], o_file))
             if self.debug_info != "dsym":
                 dsym_path = os.path.join (os.getcwd(), "a.out.dSYM")
-                execute_command ("rm -rf '%s'" % (dsym_path))
+                execute_command ("rm -rf '{0!s}'".format((dsym_path)))
         else:
             self.build()
 

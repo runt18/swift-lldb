@@ -37,7 +37,7 @@ class AppleTypesTestCase(TestBase):
         if not self.TraceOn():
             self.HideStdout()
 
-        print("Number of modules for the target: %d" % target.GetNumModules())
+        print("Number of modules for the target: {0:d}".format(target.GetNumModules()))
         for module in target.module_iter():
             print(module)
 
@@ -47,7 +47,7 @@ class AppleTypesTestCase(TestBase):
         dwarf_section = exe_module.FindSection("__DWARF")
         self.assertTrue(dwarf_section)
         print("__DWARF section:", dwarf_section)
-        print("Number of sub-sections: %d" % dwarf_section.GetNumSubSections())
+        print("Number of sub-sections: {0:d}".format(dwarf_section.GetNumSubSections()))
         INDENT = ' ' * 4
         for subsec in dwarf_section:
             print(INDENT + str(subsec))

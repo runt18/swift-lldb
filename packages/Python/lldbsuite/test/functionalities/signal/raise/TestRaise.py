@@ -39,7 +39,7 @@ class RaiseTestCase(TestBase):
     def set_handle(self, signal, pass_signal, stop_at_signal, notify_signal):
         return_obj = lldb.SBCommandReturnObject()
         self.dbg.GetCommandInterpreter().HandleCommand(
-                "process handle %s -p %s -s %s -n %s" % (signal, pass_signal, stop_at_signal, notify_signal),
+                "process handle {0!s} -p {1!s} -s {2!s} -n {3!s}".format(signal, pass_signal, stop_at_signal, notify_signal),
                 return_obj)
         self.assertTrue (return_obj.Succeeded() == True, "Setting signal handling failed")
 
@@ -59,7 +59,7 @@ class RaiseTestCase(TestBase):
 
         # retrieve default signal disposition
         return_obj = lldb.SBCommandReturnObject()
-        self.dbg.GetCommandInterpreter().HandleCommand("process handle %s " % signal, return_obj)
+        self.dbg.GetCommandInterpreter().HandleCommand("process handle {0!s} ".format(signal), return_obj)
         match = re.match('NAME *PASS *STOP *NOTIFY.*(false|true) *(false|true) *(false|true)',
                 return_obj.GetOutput(), re.IGNORECASE | re.DOTALL)
         if not match:
@@ -76,7 +76,7 @@ class RaiseTestCase(TestBase):
         self.assertTrue(thread.IsValid(), "Thread should be stopped due to a signal")
         self.assertTrue(thread.GetStopReasonDataCount() >= 1, "There was data in the event.")
         self.assertEqual(thread.GetStopReasonDataAtIndex(0), signo,
-                "The stop signal was %s" % signal)
+                "The stop signal was {0!s}".format(signal))
 
         # Continue until we exit.
         process.Continue()
@@ -118,7 +118,7 @@ class RaiseTestCase(TestBase):
         self.assertTrue(thread.GetStopReasonDataCount() >= 1, "There was data in the event.")
         self.assertEqual(thread.GetStopReasonDataAtIndex(0),
                 process.GetUnixSignals().GetSignalNumberFromName(signal),
-                "The stop signal was %s" % signal)
+                "The stop signal was {0!s}".format(signal))
 
         # Continue until we exit. The process should receive the signal.
         process.Continue()
@@ -215,7 +215,7 @@ class RaiseTestCase(TestBase):
         self.assertTrue(thread.GetStopReasonDataCount() >= 1, "There was data in the event.")
         signo = process.GetUnixSignals().GetSignalNumberFromName("SIGSTOP")
         self.assertEqual(thread.GetStopReasonDataAtIndex(0), signo,
-                "The stop signal was %s" % signal)
+                "The stop signal was {0!s}".format(signal))
 
         # We are done
         process.Kill()

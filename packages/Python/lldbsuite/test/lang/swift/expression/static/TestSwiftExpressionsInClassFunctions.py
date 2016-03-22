@@ -41,7 +41,7 @@ class TestSwiftExpressionsInClassFunctions(TestBase):
             answer = value.GetSummary()
         else:
             answer = value.GetValue()
-        report_str = "%s expected: %s got: %s"%(expression, expected_result, answer)
+        report_str = "{0!s} expected: {1!s} got: {2!s}".format(expression, expected_result, answer)
         self.assertTrue(answer == expected_result, report_str)
 
     def do_test(self):
@@ -58,7 +58,7 @@ class TestSwiftExpressionsInClassFunctions(TestBase):
         # Set the breakpoints
         for i in range(1,8):
             breakpoints.append(target.BreakpointCreateBySourceRegex("breakpoint " + str(i), self.main_source_spec))
-            self.assertTrue(breakpoints[i].GetNumLocations() > 0, "Didn't get valid breakpoint for %s"%(str(i)))
+            self.assertTrue(breakpoints[i].GetNumLocations() > 0, "Didn't get valid breakpoint for {0!s}".format((str(i))))
 
         # Launch the process, and do not stop at the entry point.
         process = target.LaunchSimple(None, None, os.getcwd())

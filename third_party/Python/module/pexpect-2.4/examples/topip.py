@@ -86,7 +86,7 @@ def send_alert (message, subject, addr_from, addr_to, smtp_server='localhost'):
     """This sends an email alert.
     """
 
-    message = 'From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n' % (addr_from, addr_to, subject) + message
+    message = 'From: {0!s}\r\nTo: {1!s}\r\nSubject: {2!s}\r\n\r\n'.format(addr_from, addr_to, subject) + message
     server = smtplib.SMTP(smtp_server)
     server.sendmail(addr_from, addr_to, message)
     server.quit()
@@ -237,13 +237,13 @@ def main():
         if verbose: print 'The maxip has been above trigger for two consecutive samples.'
         if alert_flag:
             if verbose: print 'SENDING ALERT EMAIL'
-            send_alert(str(s), 'ALERT on %s' % hostname, alert_addr_from, alert_addr_to)
+            send_alert(str(s), 'ALERT on {0!s}'.format(hostname), alert_addr_from, alert_addr_to)
         if log_flag:
             if verbose: print 'LOGGING THIS EVENT'
             fout = file(TOPIP_LOG_FILE,'a')
             #dts = time.strftime('%Y:%m:%d:%H:%M:%S', time.localtime())
             dts = time.asctime()
-            fout.write ('%s - %d connections from %s\n' % (dts,s['maxip'][1],str(s['maxip'][0])))
+            fout.write ('{0!s} - {1:d} connections from {2!s}\n'.format(dts, s['maxip'][1], str(s['maxip'][0])))
             fout.close()
 
     # save state to TOPIP_LAST_RUN_STATS

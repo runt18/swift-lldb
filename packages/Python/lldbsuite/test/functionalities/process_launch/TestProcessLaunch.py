@@ -134,15 +134,15 @@ class ProcessLaunchTestCase(TestBase):
             pass
 
         # Check that we get an error when we have a nonexisting path
-        launch_command = "process launch -w %s -o %s -e %s" % (my_working_dir_path + 'z',
+        launch_command = "process launch -w {0!s} -o {1!s} -e {2!s}".format(my_working_dir_path + 'z',
                                                                out_file_path,
                                                                err_file_path)
 
         self.expect(launch_command, error=True,
-                patterns = ["error:.* No such file or directory: %sz" % my_working_dir_path])
+                patterns = ["error:.* No such file or directory: {0!s}z".format(my_working_dir_path)])
 
         # Really launch the process
-        launch_command = "process launch -w %s -o %s -e %s" % (my_working_dir_path,
+        launch_command = "process launch -w {0!s} -o {1!s} -e {2!s}".format(my_working_dir_path,
                                                                out_file_path,
                                                                err_file_path)
 
@@ -197,7 +197,7 @@ class ProcessLaunchTestCase(TestBase):
 
         out = out[:len(evil_var)]
         if out != evil_var:
-            self.fail('The environment variable was mis-coded: %s\n' % repr(out))
+            self.fail('The environment variable was mis-coded: {0!s}\n'.format(repr(out)))
 
         newline = process.GetSTDOUT(1)
         self.assertIsNotNone(newline, "Encountered an error reading the process's output")

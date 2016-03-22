@@ -39,24 +39,24 @@ class TestInOutVariables(TestBase):
             # At present the expression parser strips off the @lvalue bit:
             message_end = "from EvaluateExpression"
             x_actual = self.frame.EvaluateExpression ("x",lldb.eDynamicCanRunTarget)
-            self.assertTrue(x_actual.GetError().Success(), "Expression evaluation failed: %s"%(x_actual.GetError().GetCString()))
+            self.assertTrue(x_actual.GetError().Success(), "Expression evaluation failed: {0!s}".format((x_actual.GetError().GetCString())))
         else:
             message_end = "from FindVariable"
             x = self.frame.FindVariable("x").GetDynamicValue(lldb.eDynamicCanRunTarget)
-            self.assertTrue(x.IsValid(), "did not find x %s"%(message_end))
+            self.assertTrue(x.IsValid(), "did not find x {0!s}".format((message_end)))
             if is_wrapped:
-                self.assertTrue(x.GetNumChildren() == 1, "x has too many children %s"%(message_end))
+                self.assertTrue(x.GetNumChildren() == 1, "x has too many children {0!s}".format((message_end)))
                 x_actual = x.GetChildAtIndex(0).GetDynamicValue(lldb.eDynamicCanRunTarget)
-                self.assertTrue(x_actual.IsValid(),"did not find the child of x %s"%(message_end))
+                self.assertTrue(x_actual.IsValid(),"did not find the child of x {0!s}".format((message_end)))
             else:
                 x_actual = x
 
         ivar = x_actual.GetChildAtIndex(0).GetChildAtIndex(0)
         ovar = x_actual.GetChildAtIndex(1)
-        self.assertTrue(ivar.GetName() == "ivar", "Name: %s is not ivar %s"%(ivar.GetName(), message_end))
-        self.assertTrue(ovar.GetName() == "ovar", "ovar is not ovar %s"%(message_end))
-        self.assertTrue(ivar.GetValue() == ivar_value, "ivar wrong %s"%(message_end))
-        self.assertTrue(ovar.GetValue() == ovar_value, "ovar wrong %s"%(message_end))
+        self.assertTrue(ivar.GetName() == "ivar", "Name: {0!s} is not ivar {1!s}".format(ivar.GetName(), message_end))
+        self.assertTrue(ovar.GetName() == "ovar", "ovar is not ovar {0!s}".format((message_end)))
+        self.assertTrue(ivar.GetValue() == ivar_value, "ivar wrong {0!s}".format((message_end)))
+        self.assertTrue(ovar.GetValue() == ovar_value, "ovar wrong {0!s}".format((message_end)))
 
     def check_class (self, ivar_value, ovar_value, is_wrapped = True):
         self.check_class_internal (ivar_value, ovar_value, True, is_wrapped)
@@ -70,12 +70,12 @@ class TestInOutVariables(TestBase):
             x = self.frame.FindVariable("x").GetDynamicValue(lldb.eDynamicCanRunTarget)
             message_end = "from FindVariable"
 
-        self.assertTrue(x.IsValid(), "did not find x %s"%(message_end))
-        self.assertTrue(x.GetNumChildren() == 1, "x has too many children %s"%(message_end))
+        self.assertTrue(x.IsValid(), "did not find x {0!s}".format((message_end)))
+        self.assertTrue(x.GetNumChildren() == 1, "x has too many children {0!s}".format((message_end)))
         ivar = x.GetChildAtIndex(0)
         if not use_expression: ivar = ivar.GetChildAtIndex(0)
-        self.assertTrue(ivar.GetName() == "ivar", "ivar is not ivar %s"%(message_end))
-        self.assertTrue(ivar.GetValue() == ivar_value, "ivar wrong %s"%(message_end))
+        self.assertTrue(ivar.GetName() == "ivar", "ivar is not ivar {0!s}".format((message_end)))
+        self.assertTrue(ivar.GetValue() == ivar_value, "ivar wrong {0!s}".format((message_end)))
 
     def check_struct (self, ivar_value):
         self.check_struct_internal(ivar_value, True)

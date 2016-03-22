@@ -54,7 +54,7 @@ class Enum(LookupDictionary):
     def __str__(self):
         s = self.get_first_key_for_value (self.value, None)
         if s == None:
-            s = "%#8.8x" % self.value
+            s = "{0:#8.8x}".format(self.value)
         return s
     
     def __repr__(self):

@@ -4,10 +4,10 @@ def pyobj_summary (value,unused):
 	if value == None or value.IsValid() == False or value.GetValueAsUnsigned(0) == 0:
 		return "<invalid>"
 	refcnt = value.GetChildMemberWithName("ob_refcnt")
-	expr = "(char*)PyString_AsString( (PyObject*)PyObject_Str( (PyObject*)0x%x) )" % (value.GetValueAsUnsigned(0))
+	expr = "(char*)PyString_AsString( (PyObject*)PyObject_Str( (PyObject*)0x{0:x}) )".format((value.GetValueAsUnsigned(0)))
 	expr_summary = value.target.EvaluateExpression(expr,lldb.SBExpressionOptions()).GetSummary()
-	refcnt_value = "rc = %d" % (refcnt.GetValueAsUnsigned(0))
-	return "%s (%s)" % (expr_summary,refcnt_value)
+	refcnt_value = "rc = {0:d}".format((refcnt.GetValueAsUnsigned(0)))
+	return "{0!s} ({1!s})".format(expr_summary, refcnt_value)
 
 def __lldb_init_module(debugger, unused):
 	debugger.HandleCommand("type summary add PyObject --python-function pysummary.pyobj_summary")

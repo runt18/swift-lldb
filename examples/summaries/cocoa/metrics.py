@@ -78,8 +78,7 @@ class Metrics:
 			return MetricsPrinter_Compact(self)
 		if name == 'verbose':
 			return MetricsPrinter_Verbose(self)
-		raise AttributeError("%r object has no attribute %r" %
-			                         (type(self).__name__, name))
+		raise AttributeError("{0!r} object has no attribute {1!r}".format(type(self).__name__, name))
 
 	def __str__(self):
 		return str(self.verbose)

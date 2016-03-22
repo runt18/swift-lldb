@@ -22,7 +22,7 @@ def normalize_configuration(config_text):
     if config_lower in ["debug", "release"]:
         return config_lower
     else:
-        raise Exception("unknown configuration specified: %s" % config_text)
+        raise Exception("unknown configuration specified: {0!s}".format(config_text))
 
 def parse_args():
     DEFAULT_REMOTE_ROOT_DIR = "/mnt/ssd/work/macosx.sync"
@@ -65,7 +65,7 @@ def parse_args():
     command_line_args = sys.argv[1:]
     if os.path.exists(OPTIONS_FILENAME):
         # Prepend the file so that command line args override the file contents.
-        command_line_args.insert(0, "@%s" % OPTIONS_FILENAME)
+        command_line_args.insert(0, "@{0!s}".format(OPTIONS_FILENAME))
 
     return parser.parse_args(command_line_args)
 
@@ -74,7 +74,7 @@ def maybe_create_remote_root_dir(args):
     commandline = [
         "ssh",
         "-p", args.port,
-        "%s@%s" % (args.user, args.remote_address),
+        "{0!s}@{1!s}".format(args.user, args.remote_address),
         "mkdir",
         "-p",
         args.remote_dir]
@@ -90,7 +90,7 @@ def init_with_args(args):
     args.configuration = normalize_configuration(args.configuration)
     args.remote_build_dir = os.path.join(
         args.remote_dir,
-        "build-%s" % args.configuration)
+        "build-{0!s}".format(args.configuration))
 
     # We assume the local lldb directory is really named 'lldb'.
     # This is because on the remote end, the local lldb root dir
@@ -102,15 +102,15 @@ def init_with_args(args):
             "local lldb root needs to be called 'lldb' but was {} instead"
             .format(os.path.basename(args.local_lldb_dir)))
 
-    args.lldb_dir_relative_regex = re.compile("%s/llvm/tools/lldb/" % args.remote_dir)
-    args.llvm_dir_relative_regex = re.compile("%s/" % args.remote_dir)
+    args.lldb_dir_relative_regex = re.compile("{0!s}/llvm/tools/lldb/".format(args.remote_dir))
+    args.llvm_dir_relative_regex = re.compile("{0!s}/".format(args.remote_dir))
 
     print("Xcode action:", args.xcode_action)
 
     # Ensure the remote directory exists.
     result = maybe_create_remote_root_dir(args)
     if result == 0:
-        print("using remote root dir: %s" % args.remote_dir)
+        print("using remote root dir: {0!s}".format(args.remote_dir))
     else:
         print("remote root dir doesn't exist and could not be created, "
               + "error code:", result)
@@ -125,8 +125,8 @@ def sync_llvm(args):
     commandline.append("--exclude=/llvm/tools/lldb")
     commandline.extend(["-e", "ssh -p {}".format(args.port)])
     commandline.extend([
-        "%s/llvm" % args.local_lldb_dir,
-        "%s@%s:%s" % (args.user, args.remote_address, args.remote_dir)])
+        "{0!s}/llvm".format(args.local_lldb_dir),
+        "{0!s}@{1!s}:{2!s}".format(args.user, args.remote_address, args.remote_dir)])
     if args.debug:
         print("going to execute llvm sync: {}".format(commandline))
     return subprocess.call(commandline)
@@ -140,7 +140,7 @@ def sync_lldb(args):
     commandline.extend(["-e", "ssh -p {}".format(args.port)])
     commandline.extend([
         args.local_lldb_dir,
-        "%s@%s:%s/llvm/tools" % (args.user, args.remote_address, args.remote_dir)])
+        "{0!s}@{1!s}:{2!s}/llvm/tools".format(args.user, args.remote_address, args.remote_dir)])
     if args.debug:
         print("going to execute lldb sync: {}".format(commandline))
     return subprocess.call(commandline)
@@ -168,10 +168,10 @@ def build_cmake_command(args):
         "-DCMAKE_CXX_COMPILER=clang",
         "-DCMAKE_C_COMPILER=clang",
         # "-DCMAKE_CXX_FLAGS=%s" % cxx_flags,
-        "-DCMAKE_SHARED_LINKER_FLAGS=%s" % ld_flags,
-        "-DCMAKE_EXE_LINKER_FLAGS=%s" % ld_flags,
-        "-DCMAKE_INSTALL_PREFIX:PATH=%s" % install_dir,
-        "-DCMAKE_BUILD_TYPE=%s" % build_type_name,
+        "-DCMAKE_SHARED_LINKER_FLAGS={0!s}".format(ld_flags),
+        "-DCMAKE_EXE_LINKER_FLAGS={0!s}".format(ld_flags),
+        "-DCMAKE_INSTALL_PREFIX:PATH={0!s}".format(install_dir),
+        "-DCMAKE_BUILD_TYPE={0!s}".format(build_type_name),
         "-Wno-dev",
         os.path.join("..", "llvm")
         ]
@@ -183,7 +183,7 @@ def maybe_configure(args):
     commandline = [
         "ssh",
         "-p", args.port,
-        "%s@%s" % (args.user, args.remote_address),
+        "{0!s}@{1!s}".format(args.user, args.remote_address),
         "cd", args.remote_dir, "&&",
         "mkdir", "-p", args.remote_build_dir, "&&",
         "cd", args.remote_build_dir, "&&"
@@ -211,7 +211,7 @@ def run_remote_build_command(args, build_command_list):
     commandline = [
         "ssh",
         "-p", args.port,
-        "%s@%s" % (args.user, args.remote_address),
+        "{0!s}@{1!s}".format(args.user, args.remote_address),
         "cd", args.remote_build_dir, "&&"]
     commandline.extend(build_command_list)
 

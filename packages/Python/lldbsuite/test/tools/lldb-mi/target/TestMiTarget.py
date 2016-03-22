@@ -29,11 +29,11 @@ class MiTargetTestCase(lldbmi_testcase.MiTestCaseBase):
         
         # Load executable
         # FIXME: -file-exec-and-sybmols is not required for target attach, but the test will not pass without this
-        self.runCmd("-file-exec-and-symbols %s" % exeName)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(exeName))
         self.expect("\^done")
         
         # Set up attach
-        self.runCmd("-target-attach -n %s --waitfor" % exeName)
+        self.runCmd("-target-attach -n {0!s} --waitfor".format(exeName))
         time.sleep(4) # Give attach time to setup
               
         # Start target process
@@ -43,7 +43,7 @@ class MiTargetTestCase(lldbmi_testcase.MiTestCaseBase):
         
         # Set breakpoint on printf
         line = line_number('test_attach.cpp', '// BP_i++')
-        self.runCmd("-break-insert -f test_attach.cpp:%d" % line)
+        self.runCmd("-break-insert -f test_attach.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         
         # Continue to breakpoint
@@ -73,12 +73,12 @@ class MiTargetTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
         
         # Set up atatch
-        self.runCmd("-target-attach -n %s" % exeName)
+        self.runCmd("-target-attach -n {0!s}".format(exeName))
         self.expect("\^done")
         
         # Set breakpoint on printf
         line = line_number('test_attach.cpp', '// BP_i++')
-        self.runCmd("-break-insert -f test_attach.cpp:%d" % line)
+        self.runCmd("-break-insert -f test_attach.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         
         # Continue to breakpoint
@@ -108,12 +108,12 @@ class MiTargetTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
         
         # Set up atatch
-        self.runCmd("-target-attach %d" % targetProcess.pid)
+        self.runCmd("-target-attach {0:d}".format(targetProcess.pid))
         self.expect("\^done")
         
         # Set breakpoint on printf
         line = line_number('test_attach.cpp', '// BP_i++')
-        self.runCmd("-break-insert -f test_attach.cpp:%d" % line)
+        self.runCmd("-break-insert -f test_attach.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         
         # Continue to breakpoint

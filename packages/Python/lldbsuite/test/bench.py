@@ -62,10 +62,10 @@ Run the standard benchmarks defined in the list named 'benches'.\
 
     for item in benches:
         command = item.replace('%E',
-                               '-e "%s"' % opts.exe if opts.exe else '')
+                               '-e "{0!s}"'.format(opts.exe) if opts.exe else '')
         command = command.replace('%X',
-                               '-x "%s"' % opts.break_spec if opts.break_spec else '')
-        print("Running %s" % (command))
+                               '-x "{0!s}"'.format(opts.break_spec) if opts.break_spec else '')
+        print("Running {0!s}".format((command)))
         os.system(command)
 
     print("Bench runner done.")

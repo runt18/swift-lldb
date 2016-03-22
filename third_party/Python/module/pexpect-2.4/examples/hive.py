@@ -165,13 +165,13 @@ def login (args, cli_username=None, cli_password=None):
         elif cli_username is not None:
             username = cli_username
         else:
-            username = raw_input('%s username: ' % hostname)
+            username = raw_input('{0!s} username: '.format(hostname))
         if len(hcd['password']) > 0:
             password = hcd['password']
         elif cli_password is not None:
             password = cli_password
         else:
-            password = getpass.getpass('%s password: ' % hostname)
+            password = getpass.getpass('{0!s} password: '.format(hostname))
         host_names.append(hostname)
         hive_connect_info[hostname] = (hostname, username, password, port)
     # build up the list of hive connections using the connection information.
@@ -257,7 +257,7 @@ def main ():
                     if hive[hostname] is not None:
                         hive[hostname].set_unique_prompt()
                 except Exception, e:
-                    print "Had trouble communicating with %s, so removing it from the target list." % hostname
+                    print "Had trouble communicating with {0!s}, so removing it from the target list.".format(hostname)
                     print str(e)
                     hive[hostname] = None
             continue
@@ -268,7 +268,7 @@ def main ():
                     if hive[hostname] is not None:
                         hive[hostname].send(txt)
                 except Exception, e:
-                    print "Had trouble communicating with %s, so removing it from the target list." % hostname
+                    print "Had trouble communicating with {0!s}, so removing it from the target list.".format(hostname)
                     print str(e)
                     hive[hostname] = None
             continue
@@ -287,7 +287,7 @@ def main ():
                 print '\\-----------------------------------------------------------------------------'
                 print hive[hostname].before
             except Exception, e:
-                print "Had trouble communicating with %s, so removing it from the target list." % hostname
+                print "Had trouble communicating with {0!s}, so removing it from the target list.".format(hostname)
                 print str(e)
                 hive[hostname] = None
             continue
@@ -300,7 +300,7 @@ def main ():
                         hive[hostname].expect(pattern)
                         print hive[hostname].before
             except Exception, e:
-                print "Had trouble communicating with %s, so removing it from the target list." % hostname
+                print "Had trouble communicating with {0!s}, so removing it from the target list.".format(hostname)
                 print str(e)
                 hive[hostname] = None
             continue
@@ -324,7 +324,7 @@ def main ():
                     if hive[hostname] is not None:
                         hive[hostname].sendcontrol(c)
                 except Exception, e:
-                    print "Had trouble communicating with %s, so removing it from the target list." % hostname
+                    print "Had trouble communicating with {0!s}, so removing it from the target list.".format(hostname)
                     print str(e)
                     hive[hostname] = None
             continue
@@ -341,7 +341,7 @@ def main ():
                 if hive[hostname] is not None:
                     hive[hostname].sendline (cmd)
             except Exception, e:
-                print "Had trouble communicating with %s, so removing it from the target list." % hostname
+                print "Had trouble communicating with {0!s}, so removing it from the target list.".format(hostname)
                 print str(e)
                 hive[hostname] = None
 
@@ -362,7 +362,7 @@ def main ():
                         print '\\-----------------------------------------------------------------------------'
                         print hive[hostname].before
                 except Exception, e:
-                    print "Had trouble communicating with %s, so removing it from the target list." % hostname
+                    print "Had trouble communicating with {0!s}, so removing it from the target list.".format(hostname)
                     print str(e)
                     hive[hostname] = None
             print '=============================================================================='

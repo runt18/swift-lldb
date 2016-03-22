@@ -81,17 +81,17 @@ class TestExpressionErrors(TestBase):
         # FIXME: pull the "try" back out when we fix <rdar://problem/21949031>
         enum_value = self.frame.EvaluateExpression ("IThrowEnumOver10(101)", options)
         self.assertTrue(enum_value.IsValid(), "Got a valid enum value.")
-        self.assertTrue(enum_value.GetError().Success(), "Got error %s getting enum value"%(enum_value.GetError().GetCString()))
-        self.assertTrue(enum_value.GetValue() == "ImportantError", "Expected 'ImportantError', got %s"%(enum_value.GetValue()))
+        self.assertTrue(enum_value.GetError().Success(), "Got error {0!s} getting enum value".format((enum_value.GetError().GetCString())))
+        self.assertTrue(enum_value.GetValue() == "ImportantError", "Expected 'ImportantError', got {0!s}".format((enum_value.GetValue())))
 
         object_value = self.frame.EvaluateExpression("IThrowObjectOver10(101)", options)
         self.assertTrue(object_value.IsValid(), "Got a valid object value.")
-        self.assertTrue(object_value.GetError().Success(), "Got error %s getting object value"%(object_value.GetError().GetCString()))
+        self.assertTrue(object_value.GetError().Success(), "Got error {0!s} getting object value".format((object_value.GetError().GetCString())))
 
         message = object_value.GetChildMemberWithName("m_message")
         self.assertTrue(message.IsValid(), "Found some m_message child.")
         self.assertTrue(message.GetError().Success(), "No errors fetching m_message value")
-        self.assertTrue(message.GetSummary() == '"Over 100"', "Expected 'Over 100', got %s"%(message.GetSummary()))
+        self.assertTrue(message.GetSummary() == '"Over 100"', "Expected 'Over 100', got {0!s}".format((message.GetSummary())))
 
 if __name__ == '__main__':
     import atexit

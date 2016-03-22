@@ -29,11 +29,11 @@ def prettyTime(t):
   if t == 0.0:
     return "0s"
   if t < 0.000001:
-    return ("%.3f" % (t * 1000000000.0)) + "ns"
+    return ("{0:.3f}".format((t * 1000000000.0))) + "ns"
   if t < 0.001:
-    return ("%.3f" % (t * 1000000.0)) + "µs"
+    return ("{0:.3f}".format((t * 1000000.0))) + "µs"
   if t < 1:
-    return ("%.3f" % (t * 1000.0)) + "ms"
+    return ("{0:.3f}".format((t * 1000.0))) + "ms"
   return str(t) + "s"
 
 class ExecutionTimes:
