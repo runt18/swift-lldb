@@ -88,7 +88,7 @@ class TestInlineStepping(TestBase):
         if test_stack_depth and real_stack_depth != expected_stack_depth:
             destination_description = lldb.SBStream()
             destination_line_entry.GetDescription(destination_description)
-            self.fail ("Step %s to %s got wrong number of frames, should be: %d was: %d."%(step_type, destination_description.GetData(), expected_stack_depth, real_stack_depth))
+            self.fail ("Step {0!s} to {1!s} got wrong number of frames, should be: {2:d} was: {3:d}.".format(step_type, destination_description.GetData(), expected_stack_depth, real_stack_depth))
             
     def run_step_sequence(self, step_sequence):
         """This function takes a list of duples instructing how to run the program.  The first element in each duple is

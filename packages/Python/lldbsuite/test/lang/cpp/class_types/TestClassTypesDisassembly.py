@@ -34,7 +34,7 @@ class IterateFrameAndDisassembleTestCase(TestBase):
                 function = match.group(1)
                 #print("line:", line)
                 #print("function:", function)
-                self.runCmd("disassemble -n '%s'" % function)
+                self.runCmd("disassemble -n '{0!s}'".format(function))
 
     @add_test_categories(['pyapi'])
     def test_and_python_api(self):
@@ -84,7 +84,7 @@ class IterateFrameAndDisassembleTestCase(TestBase):
         # The stop reason of the thread should be breakpoint.
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
             substrs = ['stopped',
-                       'stop reason = breakpoint %d.'%(bpno)])
+                       'stop reason = breakpoint {0:d}.'.format((bpno))])
 
         # This test was failing because we fail to put the C:: in front of constructore.
         # We should maybe make another testcase to cover that specifically, but we shouldn't

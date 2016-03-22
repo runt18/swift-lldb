@@ -16,7 +16,7 @@ import StringIO
 
 def usage(problem_file=None):
     if problem_file:
-        print "%s is not a file" % problem_file
+        print "{0!s} is not a file".format(problem_file)
     print "Usage: convert.py raw-message-source [raw-message-source2 ...]"
     sys.exit(0)
 
@@ -25,7 +25,7 @@ def do_convert(file):
     Then for each line ('From: ' header included), replace the dos style CRLF
     end-of-line with unix style LF end-of-line.
     """
-    print "converting %s ..." % file
+    print "converting {0!s} ...".format(file)
 
     with open(file, 'r') as f_in:
         content = f_in.read()

@@ -190,6 +190,5 @@ class TestResult(unittest.TestResult):
         return length
 
     def __repr__(self):
-        return "<%s run=%i errors=%i failures=%i>" % \
-               (util.strclass(self.__class__), self.testsRun, len(self.errors),
+        return "<{0!s} run={1:d} errors={2:d} failures={3:d}>".format(util.strclass(self.__class__), self.testsRun, len(self.errors),
                 len(self.failures))

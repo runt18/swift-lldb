@@ -78,13 +78,13 @@ class LLDBTestResult(unittest2.TextTestResult):
     def _config_string(self, test):
         compiler = getattr(test, "getCompiler", None)
         arch = getattr(test, "getArchitecture", None)
-        return "%s-%s" % (compiler() if compiler else "", arch() if arch else "")
+        return "{0!s}-{1!s}".format(compiler() if compiler else "", arch() if arch else "")
 
     def _exc_info_to_string(self, err, test):
         """Overrides superclass TestResult's method in order to append
         our test config info string to the exception info string."""
         if hasattr(test, "getArchitecture") and hasattr(test, "getCompiler"):
-            return '%sConfig=%s-%s' % (super(LLDBTestResult, self)._exc_info_to_string(err, test),
+            return '{0!s}Config={1!s}-{2!s}'.format(super(LLDBTestResult, self)._exc_info_to_string(err, test),
                                                         test.getArchitecture(),
                                                         test.getCompiler())
         else:
@@ -119,7 +119,7 @@ class LLDBTestResult(unittest2.TextTestResult):
     def startTest(self, test):
         if configuration.shouldSkipBecauseOfCategories(self.getCategoriesForTest(test)):
             self.hardMarkAsSkipped(test)
-        configuration.setCrashInfoHook("%s at %s" % (str(test),inspect.getfile(test.__class__)))
+        configuration.setCrashInfoHook("{0!s} at {1!s}".format(str(test), inspect.getfile(test.__class__)))
         self.counter += 1
         #if self.counter == 4:
         #    import crashinfo
@@ -135,7 +135,7 @@ class LLDBTestResult(unittest2.TextTestResult):
     def addSuccess(self, test):
         super(LLDBTestResult, self).addSuccess(test)
         if configuration.parsable:
-            self.stream.write("PASS: LLDB (%s) :: %s\n" % (self._config_string(test), str(test)))
+            self.stream.write("PASS: LLDB ({0!s}) :: {1!s}\n".format(self._config_string(test), str(test)))
         if self.results_formatter:
             self.results_formatter.handle_event(
                 EventBuilder.event_for_success(test))
@@ -147,7 +147,7 @@ class LLDBTestResult(unittest2.TextTestResult):
         if method:
             method()
         if configuration.parsable:
-            self.stream.write("FAIL: LLDB (%s) :: %s\n" % (self._config_string(test), str(test)))
+            self.stream.write("FAIL: LLDB ({0!s}) :: {1!s}\n".format(self._config_string(test), str(test)))
         if self.results_formatter:
             self.results_formatter.handle_event(
                 EventBuilder.event_for_error(test, err))
@@ -159,7 +159,7 @@ class LLDBTestResult(unittest2.TextTestResult):
         if method:
             method()
         if configuration.parsable:
-            self.stream.write("CLEANUP ERROR: LLDB (%s) :: %s\n" % (self._config_string(test), str(test)))
+            self.stream.write("CLEANUP ERROR: LLDB ({0!s}) :: {1!s}\n".format(self._config_string(test), str(test)))
         if self.results_formatter:
             self.results_formatter.handle_event(
                 EventBuilder.event_for_cleanup_error(
@@ -172,7 +172,7 @@ class LLDBTestResult(unittest2.TextTestResult):
         if method:
             method()
         if configuration.parsable:
-            self.stream.write("FAIL: LLDB (%s) :: %s\n" % (self._config_string(test), str(test)))
+            self.stream.write("FAIL: LLDB ({0!s}) :: {1!s}\n".format(self._config_string(test), str(test)))
         if configuration.useCategories:
             test_categories = self.getCategoriesForTest(test)
             for category in test_categories:
@@ -192,7 +192,7 @@ class LLDBTestResult(unittest2.TextTestResult):
         if method:
             method(err, bugnumber)
         if configuration.parsable:
-            self.stream.write("XFAIL: LLDB (%s) :: %s\n" % (self._config_string(test), str(test)))
+            self.stream.write("XFAIL: LLDB ({0!s}) :: {1!s}\n".format(self._config_string(test), str(test)))
         if self.results_formatter:
             self.results_formatter.handle_event(
                 EventBuilder.event_for_expected_failure(
@@ -205,7 +205,7 @@ class LLDBTestResult(unittest2.TextTestResult):
         if method:
             method()
         if configuration.parsable:
-            self.stream.write("UNSUPPORTED: LLDB (%s) :: %s (%s) \n" % (self._config_string(test), str(test), reason))
+            self.stream.write("UNSUPPORTED: LLDB ({0!s}) :: {1!s} ({2!s}) \n".format(self._config_string(test), str(test), reason))
         if self.results_formatter:
             self.results_formatter.handle_event(
                 EventBuilder.event_for_skip(test, reason))
@@ -217,7 +217,7 @@ class LLDBTestResult(unittest2.TextTestResult):
         if method:
             method(bugnumber)
         if configuration.parsable:
-            self.stream.write("XPASS: LLDB (%s) :: %s\n" % (self._config_string(test), str(test)))
+            self.stream.write("XPASS: LLDB ({0!s}) :: {1!s}\n".format(self._config_string(test), str(test)))
         if self.results_formatter:
             self.results_formatter.handle_event(
                 EventBuilder.event_for_unexpected_success(

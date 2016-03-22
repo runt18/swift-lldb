@@ -237,7 +237,7 @@ def parseOptionsAndInitTestdirs():
     else:
         # Use a compiler appropriate appropriate for the Apple SDK if one was specified
         if platform_system == 'Darwin' and args.apple_sdk:
-            configuration.compilers = [seven.get_command_output('xcrun -sdk "%s" -find clang 2> /dev/null' % (args.apple_sdk))]
+            configuration.compilers = [seven.get_command_output('xcrun -sdk "{0!s}" -find clang 2> /dev/null'.format((args.apple_sdk)))]
         else:
             # 'clang' on ubuntu 14.04 is 3.4 so we try clang-3.5 first
             candidateCompilers = ['clang-3.5', 'clang', 'gcc']
@@ -254,7 +254,7 @@ def parseOptionsAndInitTestdirs():
 
     # Set SDKROOT if we are using an Apple SDK
     if platform_system == 'Darwin' and args.apple_sdk:
-        os.environ['SDKROOT'] = seven.get_command_output('xcrun --sdk "%s" --show-sdk-path 2> /dev/null' % (args.apple_sdk))
+        os.environ['SDKROOT'] = seven.get_command_output('xcrun --sdk "{0!s}" --show-sdk-path 2> /dev/null'.format((args.apple_sdk)))
 
     if args.archs:
         configuration.archs = args.archs
@@ -286,7 +286,7 @@ def parseOptionsAndInitTestdirs():
         os.environ['CFLAGS_EXTRAS'] = cflags_extras
 
     if args.d:
-        sys.stdout.write("Suspending the process %d to wait for debugger to attach...\n" % os.getpid())
+        sys.stdout.write("Suspending the process {0:d} to wait for debugger to attach...\n".format(os.getpid()))
         sys.stdout.flush()
         os.kill(os.getpid(), signal.SIGSTOP)
 
@@ -604,7 +604,7 @@ def setupSysPath():
     os.environ["LLDB_IMPLIB_DIR"] = lldbImpLibDir
     print("LLDB library dir:", os.environ["LLDB_LIB_DIR"])
     print("LLDB import library dir:", os.environ["LLDB_IMPLIB_DIR"])
-    os.system('%s -v' % lldbtest_config.lldbExec)
+    os.system('{0!s} -v'.format(lldbtest_config.lldbExec))
 
     # Assume lldb-mi is in same place as lldb
     # If not found, disable the lldb-mi tests
@@ -677,7 +677,7 @@ def setupSysPath():
                 print("     location of LLDB\'s site-packages folder.")
                 print("  3) A different version of Python than that which was built against is exported in")
                 print("     the system\'s PATH environment variable, causing conflicts.")
-                print("  4) The executable '%s' could not be found.  Please check " % lldbExecutable)
+                print("  4) The executable '{0!s}' could not be found.  Please check ".format(lldbExecutable))
                 print("     that it exists and is executable.")
 
     if lldbPythonDir:
@@ -709,7 +709,7 @@ def visit(prefix, dir, names):
         if '.py' == os.path.splitext(name)[1] and name.startswith(prefix):
 
             if name in configuration.all_tests:
-                raise Exception("Found multiple tests with the name %s" % name)
+                raise Exception("Found multiple tests with the name {0!s}".format(name))
             configuration.all_tests.add(name)
 
             # Try to match the regexp pattern, if specified.
@@ -833,7 +833,7 @@ def checkDsymForUUIDIsNotOn():
     pipe = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
     cmd_output = pipe.stdout.read()
     if cmd_output and "DBGFileMappedPaths = " in cmd_output:
-        print("%s =>" % ' '.join(cmd))
+        print("{0!s} =>".format(' '.join(cmd)))
         print(cmd_output)
         print("Disable automatic lookup and caching of dSYMs before running the test suite!")
         print("Exiting...")
@@ -855,7 +855,7 @@ def isMultiprocessTestRunner():
 
 def getVersionForSDK(sdk):
     sdk = str.lower(sdk)
-    full_path = seven.get_command_output('xcrun -sdk %s --show-sdk-path' % sdk)
+    full_path = seven.get_command_output('xcrun -sdk {0!s} --show-sdk-path'.format(sdk))
     basename = os.path.basename(full_path)
     basename = os.path.splitext(basename)[0]
     basename = str.lower(basename)
@@ -864,13 +864,13 @@ def getVersionForSDK(sdk):
 
 def getPathForSDK(sdk):
     sdk = str.lower(sdk)
-    full_path = seven.get_command_output('xcrun -sdk %s --show-sdk-path' % sdk)
+    full_path = seven.get_command_output('xcrun -sdk {0!s} --show-sdk-path'.format(sdk))
     if os.path.exists(full_path): return full_path
     return None
 
 def setDefaultTripleForPlatform():
     if configuration.lldb_platform_name == 'ios-simulator':
-        triple_str = 'x86_64-apple-ios%s' % (getVersionForSDK('iphonesimulator'))
+        triple_str = 'x86_64-apple-ios{0!s}'.format((getVersionForSDK('iphonesimulator')))
         os.environ['TRIPLE'] = triple_str
         return {'TRIPLE':triple_str}
     return {}
@@ -919,21 +919,21 @@ def run_suite():
     lldb.DBG = lldb.SBDebugger.Create()
 
     if configuration.lldb_platform_name:
-        print("Setting up remote platform '%s'" % (configuration.lldb_platform_name))
+        print("Setting up remote platform '{0!s}'".format((configuration.lldb_platform_name)))
         lldb.remote_platform = lldb.SBPlatform(configuration.lldb_platform_name)
         lldb.remote_platform_name = configuration.lldb_platform_name
         if not lldb.remote_platform.IsValid():
-            print("error: unable to create the LLDB platform named '%s'." % (configuration.lldb_platform_name))
+            print("error: unable to create the LLDB platform named '{0!s}'.".format((configuration.lldb_platform_name)))
             exitTestSuite(1)
         if configuration.lldb_platform_url:
             # We must connect to a remote platform if a LLDB platform URL was specified
-            print("Connecting to remote platform '%s' at '%s'..." % (configuration.lldb_platform_name, configuration.lldb_platform_url))
+            print("Connecting to remote platform '{0!s}' at '{1!s}'...".format(configuration.lldb_platform_name, configuration.lldb_platform_url))
             platform_connect_options = lldb.SBPlatformConnectOptions(configuration.lldb_platform_url)
             err = lldb.remote_platform.ConnectRemote(platform_connect_options)
             if err.Success():
                 print("Connected.")
             else:
-                print("error: failed to connect to remote platform using URL '%s': %s" % (configuration.lldb_platform_url, err))
+                print("error: failed to connect to remote platform using URL '{0!s}': {1!s}".format(configuration.lldb_platform_url, err))
                 exitTestSuite(1)
         else:
             configuration.lldb_platform_url = None
@@ -944,10 +944,10 @@ def run_suite():
         if first:
             print("Environment variables setup for platform support:")
             first = False
-        print("%s = %s" % (key,platform_changes[key]))
+        print("{0!s} = {1!s}".format(key, platform_changes[key]))
 
     if configuration.lldb_platform_working_dir:
-        print("Setting remote platform working directory to '%s'..." % (configuration.lldb_platform_working_dir))
+        print("Setting remote platform working directory to '{0!s}'...".format((configuration.lldb_platform_working_dir)))
         lldb.remote_platform.SetWorkingDirectory(configuration.lldb_platform_working_dir)
         lldb.remote_platform_working_directory = configuration.lldb_platform_working_dir
         lldb.DBG.SetSelectedPlatform(lldb.remote_platform)
@@ -999,7 +999,7 @@ def run_suite():
 
     sys.stderr.write("\nSession logs for test failures/errors/unexpected successes"
                         " will go into directory '%s'\n" % configuration.sdir_name)
-    sys.stderr.write("Command invoked: %s\n" % getMyCommandLine())
+    sys.stderr.write("Command invoked: {0!s}\n".format(getMyCommandLine()))
 
     if not os.path.isdir(configuration.sdir_name):
         try:
@@ -1008,11 +1008,11 @@ def run_suite():
             if exception.errno != errno.EEXIST:
                 raise
     where_to_save_session = os.getcwd()
-    fname = os.path.join(configuration.sdir_name, "TestStarted-%d" % os.getpid())
+    fname = os.path.join(configuration.sdir_name, "TestStarted-{0:d}".format(os.getpid()))
     with open(fname, "w") as f:
-        print("Test started at: %s\n" % timestamp_started, file=f)
+        print("Test started at: {0!s}\n".format(timestamp_started), file=f)
         print(configuration.svn_info, file=f)
-        print("Command invoked: %s\n" % getMyCommandLine(), file=f)
+        print("Command invoked: {0!s}\n".format(getMyCommandLine()), file=f)
 
     #
     # Invoke the default TextTestRunner to run the test suite, possibly iterating
@@ -1041,14 +1041,14 @@ def run_suite():
                 cmd_output = pipe.stdout.read()
                 if cmd_output:
                     if "not found" in cmd_output:
-                        print("dropping %s from the compilers used" % c)
+                        print("dropping {0!s} from the compilers used".format(c))
                         configuration.compilers.remove(i)
                     else:
                         configuration.compilers[i] = cmd_output.split('\n')[0]
-                        print("'xcrun -find %s' returning %s" % (c, configuration.compilers[i]))
+                        print("'xcrun -find {0!s}' returning {1!s}".format(c, configuration.compilers[i]))
 
     if not configuration.parsable:
-        print("compilers=%s" % str(configuration.compilers))
+        print("compilers={0!s}".format(str(configuration.compilers)))
 
     if not configuration.compilers or len(configuration.compilers) == 0:
         print("No eligible compiler found, exiting.")
@@ -1069,7 +1069,7 @@ def run_suite():
         archConfig = ""
         if iterArchs:
             os.environ["ARCH"] = configuration.archs[ia]
-            archConfig = "arch=%s" % configuration.archs[ia]
+            archConfig = "arch={0!s}".format(configuration.archs[ia])
         for ic in range(len(configuration.compilers) if iterCompilers else 1):
             if iterCompilers:
                 os.environ["CC"] = configuration.compilers[ic]
@@ -1077,17 +1077,17 @@ def run_suite():
                     os.environ["SWIFTCC"] = configuration.swiftCompiler
                 if configuration.swiftLibrary:
                     os.environ["USERSWIFTLIBRARY"] = configuration.swiftLibrary
-                configString = "%s compiler=%s" % (archConfig, configuration.compilers[ic])
+                configString = "{0!s} compiler={1!s}".format(archConfig, configuration.compilers[ic])
             elif sys.platform.startswith("darwin"):
                 pipe = subprocess.Popen(['xcrun', '-find', c], stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
                 cmd_output = pipe.stdout.read()
                 if cmd_output:
                     if "not found" in cmd_output:
-                        print("dropping %s from the compilers used" % c)
+                        print("dropping {0!s} from the compilers used".format(c))
                         compilers.remove(i)
                     else:
                         compilers[i] = cmd_output.split('\n')[0]
-                        print("'xcrun -find %s' returning %s" % (c, compilers[i]))
+                        print("'xcrun -find {0!s}' returning {1!s}".format(c, compilers[i]))
             if iterArchs or iterCompilers:
                 # Translate ' ' to '-' for pathname component.
                 if six.PY2:
@@ -1107,8 +1107,7 @@ def run_suite():
             # First, write out the number of collected test cases.
             if not configuration.parsable:
                 sys.stderr.write(configuration.separator + "\n")
-                sys.stderr.write("Collected %d test%s\n\n"
-                                 % (configuration.suite.countTestCases(),
+                sys.stderr.write("Collected {0:d} test{1!s}\n\n".format(configuration.suite.countTestCases(),
                                     configuration.suite.countTestCases() != 1 and "s" or ""))
 
             if configuration.parsable:
@@ -1141,18 +1140,18 @@ def run_suite():
     if configuration.useCategories and len(configuration.failuresPerCategory) > 0:
         sys.stderr.write("Failures per category:\n")
         for category in configuration.failuresPerCategory:
-            sys.stderr.write("%s - %d\n" % (category, configuration.failuresPerCategory[category]))
+            sys.stderr.write("{0!s} - {1:d}\n".format(category, configuration.failuresPerCategory[category]))
 
     os.chdir(where_to_save_session)
-    fname = os.path.join(configuration.sdir_name, "TestFinished-%d" % os.getpid())
+    fname = os.path.join(configuration.sdir_name, "TestFinished-{0:d}".format(os.getpid()))
     with open(fname, "w") as f:
-        print("Test finished at: %s\n" % datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S"), file=f)
+        print("Test finished at: {0!s}\n".format(datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")), file=f)
 
     # Terminate the test suite if ${LLDB_TESTSUITE_FORCE_FINISH} is defined.
     # This should not be necessary now.
     if ("LLDB_TESTSUITE_FORCE_FINISH" in os.environ):
         print("Terminating Test suite...")
-        subprocess.Popen(["/bin/sh", "-c", "kill %s; exit 0" % (os.getpid())])
+        subprocess.Popen(["/bin/sh", "-c", "kill {0!s}; exit 0".format((os.getpid()))])
 
     # Exiting.
     exitTestSuite(configuration.failed)

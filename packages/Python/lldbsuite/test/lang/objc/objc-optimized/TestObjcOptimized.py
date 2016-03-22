@@ -25,7 +25,7 @@ class ObjcOptimizedTestCase(TestBase):
     mydir = TestBase.compute_mydir(__file__)
     myclass = "MyClass"
     mymethod = "description"
-    method_spec = "-[%s %s]" % (myclass, mymethod)
+    method_spec = "-[{0!s} {1!s}]".format(myclass, mymethod)
 
     def test_break(self):
         """Test 'expr member' continues to work for optimized build."""
@@ -38,7 +38,7 @@ class ObjcOptimizedTestCase(TestBase):
         self.runCmd("run", RUN_SUCCEEDED)
         self.expect("thread backtrace", STOPPED_DUE_TO_BREAKPOINT,
             substrs = ["stop reason = breakpoint"],
-            patterns = ["frame.*0:.*%s %s" % (self.myclass, self.mymethod)])
+            patterns = ["frame.*0:.*{0!s} {1!s}".format(self.myclass, self.mymethod)])
 
         self.expect('expression member',
             startstr = "(int) $0 = 5")
@@ -57,7 +57,7 @@ class ObjcOptimizedTestCase(TestBase):
             desired_pointer = mo.group(0)
 
         self.expect('expression (self)',
-            substrs = [("(%s *) $1 = " % self.myclass), desired_pointer])
+            substrs = [("({0!s} *) $1 = ".format(self.myclass)), desired_pointer])
 
         self.expect('expression self->non_member', error=True,
             substrs = ["does not have a member named 'non_member'"])

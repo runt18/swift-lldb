@@ -60,7 +60,7 @@ class TestWatchpointEvents (TestBase):
         error = lldb.SBError()
         local_watch = local_var.Watch(True, True, True, error)
         if not error.Success():
-            self.fail ("Failed to make watchpoint for local_var: %s"%(error.GetCString()))
+            self.fail ("Failed to make watchpoint for local_var: {0!s}".format((error.GetCString())))
 
         self.GetWatchpointEvent (lldb.eWatchpointEventTypeAdded)
         # Now change some of the features of this watchpoint and make sure we get events:
@@ -80,7 +80,7 @@ class TestWatchpointEvents (TestBase):
         self.assertTrue(success == True, "Successfully got watchpoint event")
         self.assertTrue (lldb.SBWatchpoint.EventIsWatchpointEvent(event), "Event is a watchpoint event.")
         found_type = lldb.SBWatchpoint.GetWatchpointEventTypeFromEvent (event)
-        self.assertTrue (found_type == event_type, "Event is not correct type, expected: %d, found: %d"%(event_type, found_type))
+        self.assertTrue (found_type == event_type, "Event is not correct type, expected: {0:d}, found: {1:d}".format(event_type, found_type))
         # There shouldn't be another event waiting around:
         found_event = self.listener.PeekAtNextEventForBroadcasterWithType (self.target_bcast, lldb.SBTarget.eBroadcastBitBreakpointChanged, event)
         if found_event:

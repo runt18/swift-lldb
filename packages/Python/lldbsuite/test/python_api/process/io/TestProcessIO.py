@@ -195,12 +195,12 @@ class ProcessIOTestCase(TestBase):
             # once "input line=>1" appears in stdout.
             # See also main.c.
         if self.TraceOn():
-            print("output = '%s'" % output)
-            print("error = '%s'" % error)
+            print("output = '{0!s}'".format(output))
+            print("error = '{0!s}'".format(error))
         
         for line in self.lines:
-            check_line = 'input line to stdout: %s' % (line)
+            check_line = 'input line to stdout: {0!s}'.format((line))
             self.assertTrue(check_line in output, "verify stdout line shows up in STDOUT")
         for line in self.lines:
-            check_line = 'input line to stderr: %s' % (line)
+            check_line = 'input line to stderr: {0!s}'.format((line))
             self.assertTrue(check_line in error, "verify stderr line shows up in STDERR")

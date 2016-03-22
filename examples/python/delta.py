@@ -38,8 +38,8 @@ def start_gdb_log(debugger, command, result, dict):
             log_file = args[0]
 
         if log_file:
-            debugger.HandleCommand('log enable --threadsafe --timestamp --file "%s" gdb-remote packets' % log_file);
-            result.PutCString ("GDB packet logging enable with log file '%s'\nUse the 'stop_gdb_log' command to stop logging and show packet statistics." % log_file)
+            debugger.HandleCommand('log enable --threadsafe --timestamp --file "{0!s}" gdb-remote packets'.format(log_file));
+            result.PutCString ("GDB packet logging enable with log file '{0!s}'\nUse the 'stop_gdb_log' command to stop logging and show packet statistics.".format(log_file))
             return
 
         result.PutCString ('error: invalid log file path')
@@ -76,7 +76,7 @@ def parse_log_file(file, options):
     a long time during a preset set of debugger commands.'''
 
     print '#----------------------------------------------------------------------'
-    print "# Log file: '%s'" % file
+    print "# Log file: '{0!s}'".format(file)
     print '#----------------------------------------------------------------------'
 
     timestamp_regex = re.compile('(\s*)([1-9][0-9]+\.[0-9]+)([^0-9].*)$')
@@ -95,7 +95,7 @@ def parse_log_file(file, options):
             else:
                 base_time = curr_time
 
-            print '%s%.6f %+.6f%s' % (match.group(1), curr_time - base_time, delta, match.group(3))
+            print '{0!s}{1:.6f} {2:+.6f}{3!s}'.format(match.group(1), curr_time - base_time, delta, match.group(3))
             last_time = curr_time
         else:
             print line

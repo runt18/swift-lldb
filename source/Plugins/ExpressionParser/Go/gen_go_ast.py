@@ -70,10 +70,10 @@ class Member(object):
             self.mtype = typename
         elif self.is_list:
             self.argtype = 'GoAST' + typename[2:]
-            self.mtype = 'std::vector<std::unique_ptr<%s> >' % self.argtype
+            self.mtype = 'std::vector<std::unique_ptr<{0!s}> >'.format(self.argtype)
         else:
             self.argtype = 'GoAST' + typename
-            self.mtype = 'std::unique_ptr<%s>' % self.argtype
+            self.mtype = 'std::unique_ptr<{0!s}>'.format(self.argtype)
             self.mname = self.mname + '_up'
     
 
@@ -84,17 +84,17 @@ walker = StringIO.StringIO()
 
 def startClass(name, parent, out):
     out.write("""
-class GoAST%s : public GoAST%s
-{
+class GoAST{0!s} : public GoAST{1!s}
+{{
   public:
-""" % (name, parent))
+""".format(name, parent))
 
 def endClass(name, out):
     out.write("""
-    %(name)s(const %(name)s &) = delete;
-    const %(name)s &operator=(const %(name)s &) = delete;
-};
-""" % {'name': 'GoAST' + name})
+    {name!s}(const {name!s} &) = delete;
+    const {name!s} &operator=(const {name!s} &) = delete;
+}};
+""".format(**{'name': 'GoAST' + name}))
 
 def addNode(name, parent, *children):
     startClass(name, parent, childClasses)
@@ -105,16 +105,16 @@ def addNode(name, parent, *children):
     childClasses.write("""
     const char *
     GetKindName() const override
-    {
-        return "%(name)s";
-    }
+    {{
+        return "{name!s}";
+    }}
 
     static bool
     classof(const GoASTNode *n)
-    {
-        return n->GetKind() == e%(name)s;
-    }
-    """ % {'name':name})
+    {{
+        return n->GetKind() == e{name!s};
+    }}
+    """.format(**{'name':name}))
     addChildren(name, children)
     endClass(name, childClasses)
 
@@ -129,7 +129,7 @@ def isValueType(typename):
 def createMembers(name, children):
     l = len(children)
     if (l % 2) != 0:
-        raise Exception("Invalid children for %s: %s" % (name, children))
+        raise Exception("Invalid children for {0!s}: {1!s}".format(name, children))
     return [Member(children[i], children[i + 1]) for i in xrange(0, l, 2)]
 
 
@@ -141,7 +141,7 @@ def addConstructor(name, parent, children):
     childClasses.write('    ')
     if len(children) == 1:
         childClasses.write('explicit ')
-    childClasses.write('GoAST%s(' % name)
+    childClasses.write('GoAST{0!s}('.format(name))
     for i in xrange(len(children)):
         if i > 0:
             childClasses.write(', ')
@@ -151,79 +151,79 @@ def addConstructor(name, parent, children):
             childClasses.write(c.argtype)
             childClasses.write(' ')
         else:
-            childClasses.write('%s *' % c.argtype)
+            childClasses.write('{0!s} *'.format(c.argtype))
         childClasses.write(c.sname)
-    childClasses.write(') : GoAST%s(e%s)' % (parent, name))
+    childClasses.write(') : GoAST{0!s}(e{1!s})'.format(parent, name))
     for c in children:
         childClasses.write(', ')
-        childClasses.write('%(mname)s(%(sname)s)' % c.__dict__)
-    childClasses.write(""" {}
-    ~GoAST%s() override = default;
-""" % name)
+        childClasses.write('{mname!s}({sname!s})'.format(**c.__dict__))
+    childClasses.write(""" {{}}
+    ~GoAST{0!s}() override = default;
+""".format(name))
 
     
 def addChildren(name, children):
     if len(children) == 0:
         return
     walker.write("""
-    case e%(n)s:
-        {
-            GoAST%(n)s *n = llvm::cast<GoAST%(n)s>(this);
-            (void)n;""" % {'n':name})
+    case e{n!s}:
+        {{
+            GoAST{n!s} *n = llvm::cast<GoAST{n!s}>(this);
+            (void)n;""".format(**{'n':name}))
     for c in children:
         if c.is_list:
             childClasses.write("""
     size_t
-    Num%(title)s() const
-    {
-        return %(mname)s.size();
-    }
-    const %(argtype)s *
-    Get%(title)s(int i) const
-    {
-        return %(mname)s[i].get();
-    }
+    Num{title!s}() const
+    {{
+        return {mname!s}.size();
+    }}
+    const {argtype!s} *
+    Get{title!s}(int i) const
+    {{
+        return {mname!s}[i].get();
+    }}
     void
-    Add%(title)s(%(argtype)s *%(sname)s)
-    {
-        %(mname)s.push_back(std::unique_ptr<%(argtype)s>(%(sname)s));
-    }
-""" % c.__dict__)
+    Add{title!s}({argtype!s} *{sname!s})
+    {{
+        {mname!s}.push_back(std::unique_ptr<{argtype!s}>({sname!s}));
+    }}
+""".format(**c.__dict__))
             walker.write("""
-            for (auto& e : n->%s) { v(e.get()); }""" % c.mname)
+            for (auto& e : n->{0!s}) {{ v(e.get()); }}""".format(c.mname))
         else:
             const = ''
             get = ''
             set = ''
             t = c.argtype
             if isValueType(t):
-                set = '%(mname)s = %(sname)s' % c.__dict__
+                set = '{mname!s} = {sname!s}'.format(**c.__dict__)
                 t = t + ' '
             else:
                 t = t + ' *'
                 const = 'const '
                 get = '.get()'
-                set = '%(mname)s.reset(%(sname)s)' % c.__dict__
+                set = '{mname!s}.reset({sname!s})'.format(**c.__dict__)
                 walker.write("""
-            v(n->%s.get());""" % c.mname)
+            v(n->{0!s}.get());""".format(c.mname))
             childClasses.write("""
-    %(const)s%(type)s
-    Get%(title)s() const
-    {
-        return %(mname)s%(get)s;
-    }
+    {const!s}{type!s}
+    Get{title!s}() const
+    {{
+        return {mname!s}{get!s};
+    }}
     void
-    Set%(title)s(%(type)s%(sname)s)
-    {
-        %(set)s;
-    }
-""" % {'const':const, 'title': c.title, 'sname': c.sname, 'get': get, 'set': set, 'type': t, 'mname': c.mname})
+    Set{title!s}({type!s}{sname!s})
+    {{
+        {set!s};
+    }}
+""".format(**{'const':const, 'title': c.title, 'sname': c.sname, 'get': get, 'set': set, 'type': t, 'mname': c.mname}))
     childClasses.write('\n  private:\n    friend class GoASTNode;\n')
     walker.write("""
             return;
         }""")
     for c in children:
-        childClasses.write('    %s %s;\n' %(c.mtype, c.mname))
+        childClasses.write('    {0!s} {1!s};\n'.format(c.mtype, c.mname))
     
 
 def addParent(name, parent):
@@ -235,14 +235,14 @@ def addParent(name, parent):
 
     static bool
     classof(const GoASTNode *n)
-    {
-        return n->GetKind() >= e%s && n->GetKind() <= e%s;
-    }
+    {{
+        return n->GetKind() >= e{0!s} && n->GetKind() <= e{1!s};
+    }}
 
   protected:
-    explicit GoAST%s(NodeKind kind) : GoASTNode(kind) { }
+    explicit GoAST{2!s}(NodeKind kind) : GoASTNode(kind) {{ }}
   private:
-""" % (minName, maxName, name))
+""".format(minName, maxName, name))
     endClass(name, parentClasses)
     
 addNodes()
@@ -285,7 +285,7 @@ class GoASTNode
     {"""
 for l in kinds.itervalues():
     for x in l:
-        print "        e%s," % x
+        print "        e{0!s},".format(x)
 print """    };
 
     virtual ~GoASTNode() = default;
@@ -320,13 +320,13 @@ for k, l in kinds.iteritems():
         continue
     print """
 template <typename R, typename V>
-R GoAST%s::Visit(V* v) const
-{
+R GoAST{0!s}::Visit(V* v) const
+{{
     switch(GetKind())
-    {""" % k
+    {{""".format(k)
     for subtype in l:
-        print """    case e%(n)s:
-        return v->Visit%(n)s(llvm::cast<const GoAST%(n)s>(this));""" % {'n':subtype}
+        print """    case e{n!s}:
+        return v->Visit{n!s}(llvm::cast<const GoAST{n!s}>(this));""".format(**{'n':subtype})
 
     print """    default:
         assert(false && "Invalid kind");

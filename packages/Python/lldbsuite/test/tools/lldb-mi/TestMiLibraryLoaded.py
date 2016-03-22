@@ -21,7 +21,7 @@ class MiLibraryLoadedTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Test =library-loaded
@@ -29,5 +29,5 @@ class MiLibraryLoadedTestCase(lldbmi_testcase.MiTestCaseBase):
         path = os.path.join(os.getcwd(), self.myexe)
         symbols_path = os.path.join(path + ".dSYM", "Contents", "Resources", "DWARF", self.myexe)
         def add_slashes(x): return x.replace("\\", "\\\\").replace("\"", "\\\"").replace("\'", "\\\'").replace("\0", "\\\0")
-        self.expect([ "=library-loaded,id=\"%s\",target-name=\"%s\",host-name=\"%s\",symbols-loaded=\"1\",symbols-path=\"%s\",loaded_addr=\"-\",size=\"[0-9]+\"" % (add_slashes(path), add_slashes(path), add_slashes(path), add_slashes(symbols_path)),
-                      "=library-loaded,id=\"%s\",target-name=\"%s\",host-name=\"%s\",symbols-loaded=\"0\",loaded_addr=\"-\",size=\"[0-9]+\"" % (add_slashes(path), add_slashes(path), add_slashes(path)) ])
+        self.expect([ "=library-loaded,id=\"{0!s}\",target-name=\"{1!s}\",host-name=\"{2!s}\",symbols-loaded=\"1\",symbols-path=\"{3!s}\",loaded_addr=\"-\",size=\"[0-9]+\"".format(add_slashes(path), add_slashes(path), add_slashes(path), add_slashes(symbols_path)),
+                      "=library-loaded,id=\"{0!s}\",target-name=\"{1!s}\",host-name=\"{2!s}\",symbols-loaded=\"0\",loaded_addr=\"-\",size=\"[0-9]+\"".format(add_slashes(path), add_slashes(path), add_slashes(path)) ])

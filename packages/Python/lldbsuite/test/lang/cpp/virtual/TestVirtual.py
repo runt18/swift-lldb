@@ -11,7 +11,7 @@ from lldbsuite.test.lldbtest import *
 import lldbsuite.test.lldbutil as lldbutil
 
 def Msg(expr, val):
-    return "'expression %s' matches the output (from compiled code): %s" % (expr, val)
+    return "'expression {0!s}' matches the output (from compiled code): {1!s}".format(expr, val)
 
 class CppVirtualMadness(TestBase):
 
@@ -82,7 +82,7 @@ class CppVirtualMadness(TestBase):
         # 'expression var'.
         for my_expr, val in gl:
 
-            self.runCmd("expression %s" % my_expr)
+            self.runCmd("expression {0!s}".format(my_expr))
             output = self.res.GetOutput()
             
             # The expression output must match the oracle.

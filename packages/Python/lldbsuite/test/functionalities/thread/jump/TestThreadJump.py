@@ -43,18 +43,18 @@ class ThreadJumpTestCase(TestBase):
         self.do_min_test(self.mark4, self.mark2, "j", "8"); # Try the double path, force it to return 'b'
 
         # Try jumping to another function in a different file.
-        self.runCmd("thread jump --file other.cpp --line %i --force" % self.mark5)
+        self.runCmd("thread jump --file other.cpp --line {0:d} --force".format(self.mark5))
         self.expect("process status",
-            substrs = ["at other.cpp:%i" % self.mark5])
+            substrs = ["at other.cpp:{0:d}".format(self.mark5)])
 
         # Try jumping to another function (without forcing)
-        self.expect("j main.cpp:%i" % self.mark1, COMMAND_FAILED_AS_EXPECTED, error = True,
+        self.expect("j main.cpp:{0:d}".format(self.mark1), COMMAND_FAILED_AS_EXPECTED, error = True,
             substrs = ["error"])
     
     def do_min_test(self, start, jump, var, value):
-        self.runCmd("j %i" % start)                     # jump to the start marker
+        self.runCmd("j {0:d}".format(start))                     # jump to the start marker
         self.runCmd("thread step-in")                   # step into the min fn
-        self.runCmd("j %i" % jump)                      # jump to the branch we're interested in
+        self.runCmd("j {0:d}".format(jump))                      # jump to the branch we're interested in
         self.runCmd("thread step-out")                  # return out
         self.runCmd("thread step-over")                 # assign to the global
-        self.expect("expr %s" % var, substrs = [value]) # check it
+        self.expect("expr {0!s}".format(var), substrs = [value]) # check it

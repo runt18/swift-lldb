@@ -18,10 +18,10 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
     def test_lldbmi_executable_option_file(self):
         """Test that 'lldb-mi --interpreter %s' loads executable file."""
 
-        self.spawnLldbMi(args = "%s" % self.myexe)
+        self.spawnLldbMi(args = "{0!s}".format(self.myexe))
 
         # Test that the executable is loaded when file was specified
-        self.expect("-file-exec-and-symbols \"%s\"" % self.myexe)
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(self.myexe))
         self.expect("\^done")
 
         # Test that lldb-mi is ready when executable was loaded
@@ -47,11 +47,11 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         # Prepare path to executable
         path = "unknown_file"
 
-        self.spawnLldbMi(args = "%s" % path)
+        self.spawnLldbMi(args = "{0!s}".format(path))
 
         # Test that the executable isn't loaded when unknown file was specified
-        self.expect("-file-exec-and-symbols \"%s\"" % path)
-        self.expect("\^error,msg=\"Command 'file-exec-and-symbols'. Target binary '%s' is invalid. error: unable to find executable for '%s'\"" % (path, path))
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(path))
+        self.expect("\^error,msg=\"Command 'file-exec-and-symbols'. Target binary '{0!s}' is invalid. error: unable to find executable for '{1!s}'\"".format(path, path))
 
         # Test that lldb-mi is ready when executable was loaded
         self.expect(self.child_prompt, exactly = True)
@@ -65,10 +65,10 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         import os
         path = os.path.join(os.getcwd(), self.myexe)
 
-        self.spawnLldbMi(args = "%s" % path)
+        self.spawnLldbMi(args = "{0!s}".format(path))
 
         # Test that the executable is loaded when file was specified using absolute path
-        self.expect("-file-exec-and-symbols \"%s\"" % path)
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(path))
         self.expect("\^done")
 
         # Test that lldb-mi is ready when executable was loaded
@@ -85,12 +85,12 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         """Test that 'lldb-mi --interpreter %s' loads executable which is specified via relative path."""
 
         # Prepare path to executable
-        path = "./%s" % self.myexe
+        path = "./{0!s}".format(self.myexe)
 
-        self.spawnLldbMi(args = "%s" % path)
+        self.spawnLldbMi(args = "{0!s}".format(path))
 
         # Test that the executable is loaded when file was specified using relative path
-        self.expect("-file-exec-and-symbols \"%s\"" % path)
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(path))
         self.expect("\^done")
 
         # Test that lldb-mi is ready when executable was loaded
@@ -107,13 +107,13 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         """Test that 'lldb-mi --interpreter %s' fails on executable file which is specified via unknown path."""
 
         # Prepare path to executable
-        path = "unknown_dir/%s" % self.myexe
+        path = "unknown_dir/{0!s}".format(self.myexe)
 
-        self.spawnLldbMi(args = "%s" % path)
+        self.spawnLldbMi(args = "{0!s}".format(path))
 
         # Test that the executable isn't loaded when file was specified using unknown path
-        self.expect("-file-exec-and-symbols \"%s\"" % path)
-        self.expect("\^error,msg=\"Command 'file-exec-and-symbols'. Target binary '%s' is invalid. error: unable to find executable for '%s'\"" % (path, path))
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(path))
+        self.expect("\^error,msg=\"Command 'file-exec-and-symbols'. Target binary '{0!s}' is invalid. error: unable to find executable for '{1!s}'\"".format(path, path))
 
         # Test that lldb-mi is ready when executable was loaded
         self.expect(self.child_prompt, exactly = True)
@@ -127,10 +127,10 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         # Prepared source file
         sourceFile = "start_script"
 
-        self.spawnLldbMi(args = "--source %s" % sourceFile)
+        self.spawnLldbMi(args = "--source {0!s}".format(sourceFile))
 
         # After '-file-exec-and-symbols a.out'
-        self.expect("-file-exec-and-symbols %s" % self.myexe)
+        self.expect("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # After '-break-insert -f main'
@@ -144,7 +144,7 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # After '-break-insert main.cpp:BP_return'
         line = line_number('main.cpp', '//BP_return')
-        self.expect("-break-insert main.cpp:%d" % line)
+        self.expect("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"2\"")
 
         # After '-exec-continue'
@@ -169,10 +169,10 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         # Prepared source file
         sourceFile = "start_script_exit"
 
-        self.spawnLldbMi(args = "--source %s" % sourceFile)
+        self.spawnLldbMi(args = "--source {0!s}".format(sourceFile))
 
         # After '-file-exec-and-symbols a.out'
-        self.expect("-file-exec-and-symbols %s" % self.myexe)
+        self.expect("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # After '-break-insert -f main'
@@ -186,7 +186,7 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
 
         # After '-break-insert main.cpp:BP_return'
         line = line_number('main.cpp', '//BP_return')
-        self.expect("-break-insert main.cpp:%d" % line)
+        self.expect("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"2\"")
 
         # After '-exec-continue'
@@ -211,10 +211,10 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         # Prepared source file
         sourceFile = "start_script_error"
 
-        self.spawnLldbMi(args = "--source %s" % sourceFile)
+        self.spawnLldbMi(args = "--source {0!s}".format(sourceFile))
 
         # After '-file-exec-and-symbols a.out'
-        self.expect("-file-exec-and-symbols %s" % self.myexe)
+        self.expect("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # After '-break-ins -f main'
@@ -230,10 +230,10 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         """Test that 'lldb-mi --log' creates a log file in the current directory."""
     
         logDirectory = "."
-        self.spawnLldbMi(args = "%s --log" % self.myexe)
+        self.spawnLldbMi(args = "{0!s} --log".format(self.myexe))
 
         # Test that the executable is loaded when file was specified
-        self.expect("-file-exec-and-symbols \"%s\"" % self.myexe)
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(self.myexe))
         self.expect("\^done")
 
         # Test that lldb-mi is ready when executable was loaded
@@ -264,10 +264,10 @@ class MiStartupOptionsTestCase(lldbmi_testcase.MiTestCaseBase):
         import tempfile
         logDirectory = tempfile.gettempdir()
 
-        self.spawnLldbMi(args = "%s --log --log-dir=%s" % (self.myexe,logDirectory))
+        self.spawnLldbMi(args = "{0!s} --log --log-dir={1!s}".format(self.myexe, logDirectory))
 
         # Test that the executable is loaded when file was specified
-        self.expect("-file-exec-and-symbols \"%s\"" % self.myexe)
+        self.expect("-file-exec-and-symbols \"{0!s}\"".format(self.myexe))
         self.expect("\^done")
 
         # Test that lldb-mi is ready when executable was loaded

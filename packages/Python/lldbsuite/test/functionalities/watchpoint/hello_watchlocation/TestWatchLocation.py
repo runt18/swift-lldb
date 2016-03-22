@@ -82,7 +82,7 @@ class HelloWatchLocationTestCase(TestBase):
         # only once.  The stop reason of the thread should be watchpoint.
         self.expect("thread list", STOPPED_DUE_TO_WATCHPOINT,
             substrs = ['stopped',
-                       'stop reason = watchpoint %d' % expected_wp_id])
+                       'stop reason = watchpoint {0:d}'.format(expected_wp_id)])
 
         # Switch to the thread stopped due to watchpoint and issue some commands.
         self.switch_to_thread_with_stop_reason(lldb.eStopReasonWatchpoint)

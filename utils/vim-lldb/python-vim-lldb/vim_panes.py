@@ -94,14 +94,14 @@ def get_selected_frame(target):
   return (frame, "")
 
 def _cmd(cmd):
-  vim.command("call confirm('%s')" % cmd)
+  vim.command("call confirm('{0!s}')".format(cmd))
   vim.command(cmd)
 
 def move_cursor(line, col=0):
   """ moves cursor to specified line and col """
   cw = vim.current.window
   if cw.cursor[0] != line:
-    vim.command("execute \"normal %dgg\"" % line)
+    vim.command("execute \"normal {0:d}gg\"".format(line))
 
 def winnr():
   """ Returns currently selected window number """
@@ -109,7 +109,7 @@ def winnr():
 
 def bufwinnr(name):
   """ Returns window number corresponding with buffer name """
-  return int(vim.eval("bufwinnr('%s')" % name))
+  return int(vim.eval("bufwinnr('{0!s}')".format(name)))
 
 def goto_window(nr):
   """ go to window number nr"""
@@ -258,9 +258,9 @@ class VimPane(object):
 
     if method != 'edit':
       belowcmd = "below" if self.openBelow else ""
-      vim.command('silent %s %s %s' % (belowcmd, method, self.name))
+      vim.command('silent {0!s} {1!s} {2!s}'.format(belowcmd, method, self.name))
     else:
-      vim.command('silent %s %s' % (method, self.name))
+      vim.command('silent {0!s} {1!s}'.format(method, self.name))
 
     self.window = vim.current.window
   
@@ -325,8 +325,8 @@ class VimPane(object):
       if len(lines) == 0:
         continue
 
-      cmd = 'match %s /' % highlightType
-      lines = ['\%' + '%d' % line + 'l' for line in lines]
+      cmd = 'match {0!s} /'.format(highlightType)
+      lines = ['\%' + '{0:d}'.format(line) + 'l' for line in lines]
       cmd += '\\|'.join(lines)
       cmd += '/'
       vim.command(cmd)
@@ -337,7 +337,7 @@ class VimPane(object):
       # highlight already defined
       return
 
-    vim.command("highlight %s ctermbg=%s guibg=%s" % (name, colour, colour))
+    vim.command("highlight {0!s} ctermbg={1!s} guibg={2!s}".format(name, colour, colour))
     VimPane.highlightTypes.append(name)
 
   def write(self, msg):
@@ -395,7 +395,7 @@ class FrameKeyValuePane(VimPane):
   def format_pair(self, key, value, changed = False):
     """ Formats a key/value pair. Appends a '*' if changed == True """
     marker = '*' if changed else ' '
-    return "%s %s = %s\n" % (marker, key, value)
+    return "{0!s} {1!s} = {2!s}\n".format(marker, key, value)
 
   def get_content(self, target, controller):
     """ Get content for a frame-aware pane. Also builds the list of lines that
@@ -461,7 +461,7 @@ class LocalsPane(FrameKeyValuePane):
       # If the value is too big, SBValue.GetValue() returns None; replace with ...
       val = "..."
 
-    return ("(%s) %s" % (var.GetTypeName(), var.GetName()), "%s" % val)
+    return ("({0!s}) {1!s}".format(var.GetTypeName(), var.GetName()), "{0!s}".format(val))
 
   def get_frame_content(self, frame):
     """ Returns list of key-value pairs of local variables in frame """
@@ -490,7 +490,7 @@ class RegistersPane(FrameKeyValuePane):
     result = []
     for register_sets in frame.GetRegisters():
       # hack the register group name into the list of registers...
-      result.append((" = = %s =" % register_sets.GetName(), ""))
+      result.append((" = = {0!s} =".format(register_sets.GetName()), ""))
 
       for reg in register_sets:
         result.append(self.format_register(reg))
@@ -569,7 +569,7 @@ class DisassemblyPane(CommandPane):
     CommandPane.__init__(self, owner, name, open_below=True)
 
     # FIXME: let users customize the number of instructions to disassemble
-    self.setCommand("disassemble", "-c %d -p" % self.maxHeight)
+    self.setCommand("disassemble", "-c {0:d} -p".format(self.maxHeight))
 
 class ThreadPane(StoppedCommandPane):
   """ Pane that displays threads list """

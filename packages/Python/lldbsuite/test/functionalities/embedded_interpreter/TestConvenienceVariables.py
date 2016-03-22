@@ -30,7 +30,7 @@ class ConvenienceVariablesCase(TestBase):
         python_prompt = ">>> "
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s %s %s' % (lldbtest_config.lldbExec, self.lldbOption, exe))
+        self.child = pexpect.spawn('{0!s} {1!s} {2!s}'.format(lldbtest_config.lldbExec, self.lldbOption, exe))
         child = self.child
         # Turn on logging for what the child sends back.
         if self.TraceOn():
@@ -39,7 +39,7 @@ class ConvenienceVariablesCase(TestBase):
         # Set the breakpoint, run the inferior, when it breaks, issue print on
         # the various convenience variables.
         child.expect_exact(prompt)
-        child.sendline('breakpoint set -f main.c -l %d' % self.line)
+        child.sendline('breakpoint set -f main.c -l {0:d}'.format(self.line))
         child.expect_exact(prompt)
         child.sendline('run')
         child.expect_exact("stop reason = breakpoint 1.1")
@@ -70,9 +70,9 @@ class ConvenienceVariablesCase(TestBase):
         child.expect_exact(python_prompt)
         # Linux outputs decimal tid and 'name' instead of 'queue'
         self.expect(child.before, exe=False,
-            patterns = ['thread #1: tid = (0x[0-9a-f]+|[0-9]+), 0x[0-9a-f]+ a\.out`main\(argc=1, argv=0x[0-9a-f]+\) \+ \d+ at main\.c:%d, (name|queue) = \'.+\', stop reason = breakpoint 1\.1' % self.line])
+            patterns = ['thread #1: tid = (0x[0-9a-f]+|[0-9]+), 0x[0-9a-f]+ a\.out`main\(argc=1, argv=0x[0-9a-f]+\) \+ \d+ at main\.c:{0:d}, (name|queue) = \'.+\', stop reason = breakpoint 1\.1'.format(self.line)])
 
         child.sendline('print(lldb.frame)')
         child.expect_exact(python_prompt)
         self.expect(child.before, exe=False,
-            patterns = ['frame #0: 0x[0-9a-f]+ a\.out`main\(argc=1, argv=0x[0-9a-f]+\) \+ \d+ at main\.c:%d' % self.line])
+            patterns = ['frame #0: 0x[0-9a-f]+ a\.out`main\(argc=1, argv=0x[0-9a-f]+\) \+ \d+ at main\.c:{0:d}'.format(self.line)])

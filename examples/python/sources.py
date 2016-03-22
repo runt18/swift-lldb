@@ -5,10 +5,10 @@ import shlex
 
 def dump_module_sources(module, result):
     if module:
-        print >> result, "Module: %s" % (module.file)
+        print >> result, "Module: {0!s}".format((module.file))
         for compile_unit in module.compile_units:
             if compile_unit.file:
-                print >> result, "  %s" % (compile_unit.file)
+                print >> result, "  {0!s}".format((compile_unit.file))
     
 def info_sources(debugger, command, result, dict):
     description='''This command will dump all compile units in any modules that are listed as arguments, or for all modules if no arguments are supplied.'''

@@ -67,7 +67,7 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
     if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
-        raise AttributeError("You cannot add attributes to %s" % self)
+        raise AttributeError("You cannot add attributes to {0!s}".format(self))
 
 def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
@@ -81,7 +81,7 @@ def _swig_getattr(self,class_type,name):
 def _swig_repr(self):
     try: strthis = "proxy of " + self.this.__repr__()
     except: strthis = ""
-    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
+    return "<{0!s}.{1!s}; {2!s} >".format(self.__class__.__module__, self.__class__.__name__, strthis)
 
 try:
     _object = object
@@ -954,11 +954,11 @@ class SBAddress(_object):
 
     def __oct__(self):
         '''Convert the address to an octal string'''
-        return '%o' % int(self)
+        return '{0:o}'.format(int(self))
 
     def __hex__(self):
         '''Convert the address to an hex string'''
-        return '0x%x' % int(self)
+        return '0x{0:x}'.format(int(self))
 
     __swig_getmethods__["module"] = GetModule
     if _newclass: module = property(GetModule, None, doc='''A read only property that returns an lldb object that represents the module (lldb.SBModule) that this address resides within.''')
@@ -1290,7 +1290,7 @@ class SBBlock(_object):
                 if range_idx < len(self):
                     return [self.sbblock.GetRangeStartAddress(range_idx), self.sbblock.GetRangeEndAddress(range_idx)]
             else:
-                print("error: unsupported item type: %s" % type(key))
+                print("error: unsupported item type: {0!s}".format(type(key)))
             return None
 
     def get_ranges_access_object(self):
@@ -4246,7 +4246,7 @@ class SBFileSpec(_object):
         spec_dir = self.GetDirectory()
         spec_file = self.GetFilename()
         if spec_dir and spec_file:
-            return '%s/%s' % (spec_dir, spec_file)
+            return '{0!s}/{1!s}'.format(spec_dir, spec_file)
         elif spec_dir:
             return spec_dir
         elif spec_file:
@@ -6061,7 +6061,7 @@ class SBModule(_object):
                                 matches.append(symbol)
                 return matches
             else:
-                print("error: unsupported item type: %s" % type(key))
+                print("error: unsupported item type: {0!s}".format(type(key)))
             return None
 
     def get_symbols_access_object(self):
@@ -6111,7 +6111,7 @@ class SBModule(_object):
                             matches.append(section)
                 return matches
             else:
-                print("error: unsupported item type: %s" % type(key))
+                print("error: unsupported item type: {0!s}".format(type(key)))
             return None
 
     class compile_units_access(object):
@@ -6151,7 +6151,7 @@ class SBModule(_object):
                             matches.append(comp_unit)
                 return matches
             else:
-                print("error: unsupported item type: %s" % type(key))
+                print("error: unsupported item type: {0!s}".format(type(key)))
             return None
 
     def get_sections_access_object(self):
@@ -9004,7 +9004,7 @@ class SBTarget(_object):
                         matching_modules.append(module)
                 return matching_modules
             else:
-                print("error: unsupported item type: %s" % type(key))
+                print("error: unsupported item type: {0!s}".format(type(key)))
             return None
 
     def get_modules_access_object(self):
@@ -10460,7 +10460,7 @@ class SBTypeCategory(_object):
             elif isinstance(key,self.regex_type):
                 return self.get_by_name_function(self.sbcategory,SBTypeNameSpecifier(key.pattern,True))
             else:
-                print("error: unsupported item type: %s" % type(key))
+                print("error: unsupported item type: {0!s}".format(type(key)))
             return None
 
     def get_formats_access_object(self):
@@ -12329,7 +12329,7 @@ def command(*args, **kwargs):
         def __init__(self, function, command_name, doc = None):
             if doc:
                 function.__doc__ = doc
-            command = "command script add -f %s.%s %s" % (function.__module__, function.__name__, command_name)
+            command = "command script add -f {0!s}.{1!s} {2!s}".format(function.__module__, function.__name__, command_name)
             lldb.debugger.HandleCommand(command)
             self.function = function
         def __call__(self, *args, **kwargs):
@@ -12392,11 +12392,11 @@ class value(object):
         if type(key) is value:
             key = int(key)
         if type(key) is int:
-            child_sbvalue = (self.sbvalue.GetValueForExpressionPath("[%i]" % key))
+            child_sbvalue = (self.sbvalue.GetValueForExpressionPath("[{0:d}]".format(key)))
             if child_sbvalue and child_sbvalue.IsValid():
                 return value(child_sbvalue)
-            raise IndexError("Index '%d' is out of range" % key)
-        raise TypeError("No array item of type %s" % str(type(key)))
+            raise IndexError("Index '{0:d}' is out of range".format(key))
+        raise TypeError("No array item of type {0!s}".format(str(type(key))))
 
     def __iter__(self):
         return value_iter(self.sbvalue)
@@ -12405,7 +12405,7 @@ class value(object):
         child_sbvalue = self.sbvalue.GetChildMemberWithName (name)
         if child_sbvalue and child_sbvalue.IsValid():
             return value(child_sbvalue)
-        raise AttributeError("Attribute '%s' is not defined" % name)
+        raise AttributeError("Attribute '{0!s}' is not defined".format(name))
 
     def __add__(self, other):
         return int(self) + int(other)
@@ -12544,10 +12544,10 @@ class value(object):
         return float (self.sbvalue.GetValueAsSigned())
         
     def __oct__(self):
-        return '0%o' % self.sbvalue.GetValueAsUnsigned()
+        return '0{0:o}'.format(self.sbvalue.GetValueAsUnsigned())
         
     def __hex__(self):
-        return '0x%x' % self.sbvalue.GetValueAsUnsigned()
+        return '0x{0:x}'.format(self.sbvalue.GetValueAsUnsigned())
 
     def __len__(self):
         return self.sbvalue.GetNumChildren()
@@ -12567,7 +12567,7 @@ class value(object):
                 if other_err.fail:
                         raise ValueError("unable to extract value of other")
                 return self_val == other_val
-        raise TypeError("Unknown type %s, No equality operation defined." % str(type(other)))
+        raise TypeError("Unknown type {0!s}, No equality operation defined.".format(str(type(other))))
 
     def __ne__(self, other):
         return not self.__eq__(other)

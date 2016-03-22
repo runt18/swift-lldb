@@ -115,8 +115,8 @@ def report_test_failure(name, command, output):
         if not (RESULTS_FORMATTER and RESULTS_FORMATTER.is_using_terminal()):
             print(file=sys.stderr)
             print(output, file=sys.stderr)
-            print("[%s FAILED]" % name, file=sys.stderr)
-            print("Command invoked: %s" % ' '.join(command), file=sys.stderr)
+            print("[{0!s} FAILED]".format(name), file=sys.stderr)
+            print("Command invoked: {0!s}".format(' '.join(command)), file=sys.stderr)
         update_progress(name)
 
 
@@ -427,7 +427,7 @@ def process_dir(root, files, dotest_argv, inferior_pid_events):
 
         timeout_name = os.path.basename(os.path.splitext(base_name)[0]).upper()
 
-        timeout = (os.getenv("LLDB_%s_TIMEOUT" % timeout_name) or
+        timeout = (os.getenv("LLDB_{0!s}_TIMEOUT".format(timeout_name)) or
                    getDefaultTimeout(dotest_options.lldb_platform_name))
 
         results.append(call_with_timeout(
@@ -631,7 +631,7 @@ def initialize_global_vars_common(num_threads, test_work_items):
     test_counter = multiprocessing.Value('i', 0)
     test_name_len = multiprocessing.Value('i', 0)
     if not (RESULTS_FORMATTER and RESULTS_FORMATTER.is_using_terminal()):
-        print("Testing: %d test suites, %d thread%s" % (
+        print("Testing: {0:d} test suites, {1:d} thread{2!s}".format(
             total_tests, num_threads, (num_threads > 1) * "s"), file=sys.stderr)
     update_progress()
 
@@ -1638,32 +1638,32 @@ def main(num_threads, test_subdir, test_runner_name, results_formatter):
     else:
         # Print the legacy test results summary.
         print()
-        sys.stdout.write("Ran %d test suites" % num_test_files)
+        sys.stdout.write("Ran {0:d} test suites".format(num_test_files))
         if num_test_files > 0:
-            sys.stdout.write(" (%d failed) (%f%%)" % (
+            sys.stdout.write(" ({0:d} failed) ({1:f}%)".format(
                 len(failed), 100.0 * len(failed) / num_test_files))
         print()
-        sys.stdout.write("Ran %d test cases" % num_test_cases)
+        sys.stdout.write("Ran {0:d} test cases".format(num_test_cases))
         if num_test_cases > 0:
-            sys.stdout.write(" (%d failed) (%f%%)" % (
+            sys.stdout.write(" ({0:d} failed) ({1:f}%)".format(
                 fail_count, 100.0 * fail_count / num_test_cases))
         print()
         exit_code = 0
 
         if len(failed) > 0:
             failed.sort()
-            print("Failing Tests (%d)" % len(failed))
+            print("Failing Tests ({0:d})".format(len(failed)))
             for f in failed:
-                print("%s: LLDB (suite) :: %s (%s)" % (
+                print("{0!s}: LLDB (suite) :: {1!s} ({2!s})".format(
                     "TIMEOUT" if f in timed_out else "FAIL", f, system_info
                 ))
             exit_code = 1
 
         if len(unexpected_successes) > 0:
             unexpected_successes.sort()
-            print("\nUnexpected Successes (%d)" % len(unexpected_successes))
+            print("\nUnexpected Successes ({0:d})".format(len(unexpected_successes)))
             for u in unexpected_successes:
-                print("UNEXPECTED SUCCESS: LLDB (suite) :: %s (%s)" % (u, system_info))
+                print("UNEXPECTED SUCCESS: LLDB (suite) :: {0!s} ({1!s})".format(u, system_info))
 
     sys.exit(exit_code)
 

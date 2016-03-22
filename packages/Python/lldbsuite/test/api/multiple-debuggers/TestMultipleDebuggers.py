@@ -37,7 +37,7 @@ class TestMultipleSimultaneousDebuggers(TestBase):
 # will recognize it as a test failure.
 
         if self.TraceOn():
-            print("Running test %s" % self.driver_exe)
+            print("Running test {0!s}".format(self.driver_exe))
             check_call([self.driver_exe, self.inferior_exe], env=env)
         else:
             with open(os.devnull, 'w') as fnull:

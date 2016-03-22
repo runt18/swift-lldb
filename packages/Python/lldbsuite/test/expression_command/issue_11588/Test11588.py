@@ -65,7 +65,7 @@ class Issue11581TestCase(TestBase):
                 addr = pointer.GetValueAsUnsigned(0)
                 self.assertTrue(addr != 0, "could not read pointer to StgClosure")
                 addr = addr - 1
-                self.runCmd("register write r14 %d" % addr)
+                self.runCmd("register write r14 {0:d}".format(addr))
                 self.expect("register read r14",
                     substrs = ["0x",hex(addr)[2:].rstrip("L")])  # Remove trailing 'L' if it exists
                 self.expect("expr --show-types -- *(StgClosure*)$r14",

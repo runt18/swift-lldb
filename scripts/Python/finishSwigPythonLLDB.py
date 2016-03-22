@@ -162,11 +162,11 @@ def create_py_pkg(vDictArgs, vstrFrameworkPythonDir, vstrPkgDir, vListPkgFiles):
             nPos = strBaseName.find(".")
             if nPos != -1:
                 strBaseName = strBaseName[0 : nPos]
-            strPyScript += "%s\"%s\"" % (strDelimiter, strBaseName)
+            strPyScript += "{0!s}\"{1!s}\"".format(strDelimiter, strBaseName)
             strDelimiter = ","
     strPyScript += "]\n"
     strPyScript += "for x in __all__:\n"
-    strPyScript += "\t__import__('%s.' + x)" % strPkgName
+    strPyScript += "\t__import__('{0!s}.' + x)".format(strPkgName)
 
     if bDbg:
         print((strMsgCreatePyPkgInitFile % strPkgIniFile))
@@ -207,9 +207,9 @@ def copy_lldbpy_file_to_lldb_pkg_dir(vDictArgs, vstrFrameworkPythonDir, vstrCfgB
         shutil.copyfile(strSrc, strDst)
     except IOError as e:
         bOk = False
-        strMsg = "I/O error(%d): %s %s" % (e.errno, e.strerror, strErrMsgCpLldbpy)
+        strMsg = "I/O error({0:d}): {1!s} {2!s}".format(e.errno, e.strerror, strErrMsgCpLldbpy)
         if e.errno == 2:
-            strMsg += " Src:'%s' Dst:'%s'" % (strSrc, strDst)
+            strMsg += " Src:'{0!s}' Dst:'{1!s}'".format(strSrc, strDst)
     except:
         bOk = False
         strMsg = strErrMsgUnexpected % sys.exec_info()[0]
@@ -225,7 +225,7 @@ def copy_lldbpy_file_to_lldb_pkg_dir(vDictArgs, vstrFrameworkPythonDir, vstrCfgB
 # Throws:   None.
 #--
 def make_symlink_windows(vstrSrcPath, vstrTargetPath):
-    print(("Making symlink from %s to %s" % (vstrSrcPath, vstrTargetPath)))
+    print(("Making symlink from {0!s} to {1!s}".format(vstrSrcPath, vstrTargetPath)))
     dbg = utilsDebug.CDebugFnVerbose("Python script make_symlink_windows()")
     bOk = True
     strErrMsg = ""
@@ -239,8 +239,8 @@ def make_symlink_windows(vstrSrcPath, vstrTargetPath):
     except Exception as e:
         if e.errno != 17:
             bOk = False
-            strErrMsg = "WinError(%d): %s %s" % (e.errno, e.strerror, strErrMsgMakeSymlink)
-            strErrMsg += " Src:'%s' Target:'%s'" % (vstrSrcPath, vstrTargetPath)
+            strErrMsg = "WinError({0:d}): {1!s} {2!s}".format(e.errno, e.strerror, strErrMsgMakeSymlink)
+            strErrMsg += " Src:'{0!s}' Target:'{1!s}'".format(vstrSrcPath, vstrTargetPath)
 
     return (bOk, strErrMsg)
 
@@ -261,8 +261,8 @@ def make_symlink_other_platforms(vstrSrcPath, vstrTargetPath):
         os.symlink(vstrSrcPath, vstrTargetPath)
     except OSError as e:
         bOk = False
-        strErrMsg = "OSError(%d): %s %s" % (e.errno, e.strerror, strErrMsgMakeSymlink)
-        strErrMsg += " Src:'%s' Target:'%s'" % (vstrSrcPath, vstrTargetPath)
+        strErrMsg = "OSError({0:d}): {1!s} {2!s}".format(e.errno, e.strerror, strErrMsgMakeSymlink)
+        strErrMsg += " Src:'{0!s}' Target:'{1!s}'".format(vstrSrcPath, vstrTargetPath)
     except:
         bOk = False
         strErrMsg = strErrMsgUnexpected % sys.exec_info()[0]

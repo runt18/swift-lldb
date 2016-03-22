@@ -28,7 +28,7 @@ class Chess:
             while 1:
                 k = self.child.read(1, 10)
                 self.term.process (k)
-                fout.write ('(r,c):(%d,%d)\n' %(self.term.cur_r, self.term.cur_c))
+                fout.write ('(r,c):({0:d},{1:d})\n'.format(self.term.cur_r, self.term.cur_c))
                 fout.flush()
                 if self.term.cur_r == r and self.term.cur_c == c:
                     fout.close()
@@ -41,7 +41,7 @@ class Chess:
             while 1:
                 c = self.child.read(1,10)
                 self.term.process (c)
-                fout.write ('(r,c):(%d,%d)\n' %(self.term.cur_r, self.term.cur_c))
+                fout.write ('(r,c):({0:d},{1:d})\n'.format(self.term.cur_r, self.term.cur_c))
                 fout.flush()
                 sys.stdout.write (c)
                 sys.stdout.flush()
@@ -72,7 +72,7 @@ class Chess:
 	def set_depth (self, depth):
 		self.child.sendline ('depth')
 		self.child.expect ('depth=')
-		self.child.sendline ('%d' % depth)
+		self.child.sendline ('{0:d}'.format(depth))
 
 	def quit(self):
 		self.child.sendline ('quit')
@@ -86,7 +86,7 @@ c2 = white.term.get_abs(17,59)
 c3 = white.term.get_abs(17,60)
 c4 = white.term.get_abs(17,61)
 fout = open ('log','a')
-fout.write ('Computer:%s%s%s%s\n' %(c1,c2,c3,c4))
+fout.write ('Computer:{0!s}{1!s}{2!s}{3!s}\n'.format(c1, c2, c3, c4))
 fout.close()
 white.do_move('c2c4')
 white.read_until_cursor (19,60)
@@ -95,7 +95,7 @@ c2 = white.term.get_abs(17,59)
 c3 = white.term.get_abs(17,60)
 c4 = white.term.get_abs(17,61)
 fout = open ('log','a')
-fout.write ('Computer:%s%s%s%s\n' %(c1,c2,c3,c4))
+fout.write ('Computer:{0!s}{1!s}{2!s}{3!s}\n'.format(c1, c2, c3, c4))
 fout.close()
 white.do_scan ()
 

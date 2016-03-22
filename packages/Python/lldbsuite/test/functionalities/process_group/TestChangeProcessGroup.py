@@ -29,15 +29,15 @@ class ChangeProcessGroupTestCase(TestBase):
 
         # Use a file as a synchronization point between test and inferior.
         pid_file_path = lldbutil.append_to_process_working_directory(
-                "pid_file_%d" % (int(time.time())))
-        self.addTearDownHook(lambda: self.run_platform_command("rm %s" % (pid_file_path)))
+                "pid_file_{0:d}".format((int(time.time()))))
+        self.addTearDownHook(lambda: self.run_platform_command("rm {0!s}".format((pid_file_path))))
 
         popen = self.spawnSubprocess(exe, [pid_file_path])
         self.addTearDownHook(self.cleanupSubprocesses)
 
         max_attempts = 5
         for i in range(max_attempts):
-            err, retcode, msg = self.run_platform_command("ls %s" % pid_file_path)
+            err, retcode, msg = self.run_platform_command("ls {0!s}".format(pid_file_path))
             if err.Success() and retcode == 0:
                 break
             else:
@@ -46,12 +46,12 @@ class ChangeProcessGroupTestCase(TestBase):
                 # Exponential backoff!
                 time.sleep(pow(2, i) * 0.25)
         else:
-            self.fail("Child PID file %s not found even after %d attempts." % (pid_file_path, max_attempts))
+            self.fail("Child PID file {0!s} not found even after {1:d} attempts.".format(pid_file_path, max_attempts))
 
-        err, retcode, pid = self.run_platform_command("cat %s" % (pid_file_path))
+        err, retcode, pid = self.run_platform_command("cat {0!s}".format((pid_file_path)))
 
         self.assertTrue(err.Success() and retcode == 0,
-                "Failed to read file %s: %s, retcode: %d" % (pid_file_path, err.GetCString(), retcode))
+                "Failed to read file {0!s}: {1!s}, retcode: {2:d}".format(pid_file_path, err.GetCString(), retcode))
 
         # make sure we cleanup the forked child also
         def cleanupChild():

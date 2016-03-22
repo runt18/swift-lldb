@@ -68,7 +68,7 @@ class PythonBreakpointCommandSettingTestCase(TestBase):
 import TestBreakpointCommandsFromPython\n\
 TestBreakpointCommandsFromPython.PythonBreakpointCommandSettingTestCase.my_var = 20\n\
 print('Hit breakpoint')")
-        self.assertTrue (error.Success(), "Failed to set the script callback body: %s."%(error.GetCString()))
+        self.assertTrue (error.Success(), "Failed to set the script callback body: {0!s}.".format((error.GetCString())))
 
         self.dbg.HandleCommand("command script import --allow-reload ./bktptcmd.py")
         func_bkpt.SetScriptCallbackFunction("bktptcmd.function")

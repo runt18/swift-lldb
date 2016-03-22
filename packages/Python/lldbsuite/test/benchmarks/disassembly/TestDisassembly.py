@@ -44,15 +44,15 @@ class DisassembleDriverMainLoop(BenchBase):
     def test_run_lldb_then_gdb(self):
         """Test disassembly on a large function with lldb vs. gdb."""
         print()
-        print("lldb path: %s" % lldbtest_config.lldbExec)
-        print("gdb path: %s" % self.gdbExec)
+        print("lldb path: {0!s}".format(lldbtest_config.lldbExec))
+        print("gdb path: {0!s}".format(self.gdbExec))
 
         print()
         self.run_lldb_disassembly(self.exe, self.function, self.count)
         print("lldb benchmark:", self.stopwatch)
         self.run_gdb_disassembly(self.exe, self.function, self.count)
         print("gdb benchmark:", self.stopwatch)
-        print("lldb_avg/gdb_avg: %f" % (self.lldb_avg/self.gdb_avg))
+        print("lldb_avg/gdb_avg: {0:f}".format((self.lldb_avg/self.gdb_avg)))
 
     @benchmarks_test
     @no_debug_info_test
@@ -60,15 +60,15 @@ class DisassembleDriverMainLoop(BenchBase):
     def test_run_gdb_then_lldb(self):
         """Test disassembly on a large function with lldb vs. gdb."""
         print()
-        print("lldb path: %s" % lldbtest_config.lldbExec)
-        print("gdb path: %s" % self.gdbExec)
+        print("lldb path: {0!s}".format(lldbtest_config.lldbExec))
+        print("gdb path: {0!s}".format(self.gdbExec))
 
         print()
         self.run_gdb_disassembly(self.exe, self.function, self.count)
         print("gdb benchmark:", self.stopwatch)
         self.run_lldb_disassembly(self.exe, self.function, self.count)
         print("lldb benchmark:", self.stopwatch)
-        print("lldb_avg/gdb_avg: %f" % (self.lldb_avg/self.gdb_avg))
+        print("lldb_avg/gdb_avg: {0:f}".format((self.lldb_avg/self.gdb_avg)))
 
     def run_lldb_disassembly(self, exe, function, count):
         import pexpect
@@ -77,7 +77,7 @@ class DisassembleDriverMainLoop(BenchBase):
         prompt = self.child_prompt
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s %s %s' % (lldbtest_config.lldbExec, self.lldbOption, exe))
+        self.child = pexpect.spawn('{0!s} {1!s} {2!s}'.format(lldbtest_config.lldbExec, self.lldbOption, exe))
         child = self.child
 
         # Turn on logging for what the child sends back.
@@ -85,7 +85,7 @@ class DisassembleDriverMainLoop(BenchBase):
             child.logfile_read = sys.stdout
 
         child.expect_exact(prompt)
-        child.sendline('breakpoint set -F %s' % function)
+        child.sendline('breakpoint set -F {0!s}'.format(function))
         child.expect_exact(prompt)
         child.sendline('run')
         child.expect_exact(prompt)
@@ -118,7 +118,7 @@ class DisassembleDriverMainLoop(BenchBase):
         prompt = self.child_prompt
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s --nx %s' % (self.gdbExec, exe))
+        self.child = pexpect.spawn('{0!s} --nx {1!s}'.format(self.gdbExec, exe))
         child = self.child
 
         # Turn on logging for what the child sends back.
@@ -126,7 +126,7 @@ class DisassembleDriverMainLoop(BenchBase):
             child.logfile_read = sys.stdout
 
         child.expect_exact(prompt)
-        child.sendline('break %s' % function)
+        child.sendline('break {0!s}'.format(function))
         child.expect_exact(prompt)
         child.sendline('run')
         child.expect_exact(prompt)

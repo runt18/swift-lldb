@@ -203,7 +203,7 @@ def start_gdb_log(debugger, command, result, dict):
         return
 
     if g_log_file:
-        result.PutCString ('error: logging is already in progress with file "%s"' % g_log_file)
+        result.PutCString ('error: logging is already in progress with file "{0!s}"'.format(g_log_file))
     else:
         args_len = len(args)
         if args_len == 0:
@@ -212,8 +212,8 @@ def start_gdb_log(debugger, command, result, dict):
             g_log_file = args[0]
 
         if g_log_file:
-            debugger.HandleCommand('log enable --threadsafe --timestamp --file "%s" gdb-remote packets' % g_log_file);
-            result.PutCString ("GDB packet logging enable with log file '%s'\nUse the 'stop_gdb_log' command to stop logging and show packet statistics." % g_log_file)
+            debugger.HandleCommand('log enable --threadsafe --timestamp --file "{0!s}" gdb-remote packets'.format(g_log_file));
+            result.PutCString ("GDB packet logging enable with log file '{0!s}'\nUse the 'stop_gdb_log' command to stop logging and show packet statistics.".format(g_log_file))
             return
 
         result.PutCString ('error: invalid log file path')
@@ -255,12 +255,12 @@ def stop_gdb_log(debugger, command, result, dict):
     elif os.path.exists (g_log_file):
         if len(args) == 0:
             debugger.HandleCommand('log disable gdb-remote packets');
-            result.PutCString ("GDB packet logging disabled. Logged packets are in '%s'" % g_log_file)
+            result.PutCString ("GDB packet logging disabled. Logged packets are in '{0!s}'".format(g_log_file))
             parse_gdb_log_file (g_log_file, options)
         else:
             result.PutCString (usage)
     else:
-        print 'error: the GDB packet log file "%s" does not exist' % g_log_file
+        print 'error: the GDB packet log file "{0!s}" does not exist'.format(g_log_file)
 
 def is_hex_byte(str):
     if len(str) == 2:
@@ -303,13 +303,13 @@ class RegisterInfo:
         if encoding == 'uint':
             uval = packet.get_hex_uint(g_byte_order)
             if bit_size == 8:
-                return '0x%2.2x' % (uval)
+                return '0x{0:2.2x}'.format((uval))
             elif bit_size == 16:
-                return '0x%4.4x' % (uval)
+                return '0x{0:4.4x}'.format((uval))
             elif bit_size == 32:
-                return '0x%8.8x' % (uval)
+                return '0x{0:8.8x}'.format((uval))
             elif bit_size == 64:
-                return '0x%16.16x' % (uval)
+                return '0x{0:16.16x}'.format((uval))
         bytes = list();
         uval = packet.get_hex_uint8()
         while uval != None:
@@ -319,8 +319,8 @@ class RegisterInfo:
         if g_byte_order == 'little':
             bytes.reverse()
         for byte in bytes:
-            value_str += '%2.2x' % byte
-        return '%s' % (value_str)
+            value_str += '{0:2.2x}'.format(byte)
+        return '{0!s}'.format((value_str))
     
     def __str__(self):
         '''Dump the register info key/value pairs'''
@@ -328,7 +328,7 @@ class RegisterInfo:
         for key in self.info.keys():
             if s:
                 s += ', '
-            s += "%s=%s " % (key, self.info[key])
+            s += "{0!s}={1!s} ".format(key, self.info[key])
         return s
     
 class Packet:
@@ -512,7 +512,7 @@ def get_thread_from_thread_suffix(str):
 def cmd_qThreadStopInfo(options, cmd, args):
     packet = Packet(args)
     tid = packet.get_hex_uint('big')
-    print "get_thread_stop_info  (tid = 0x%x)" % (tid)
+    print "get_thread_stop_info  (tid = 0x{0:x})".format((tid))
     
 def cmd_stop_reply(options, cmd, args):
     print "get_last_stop_info()"
@@ -540,9 +540,9 @@ def rsp_stop_reply(options, cmd, cmd_args, rsp):
         dump_key_value_pairs (key_value_pairs)
     elif stop_type == 'W':
         exit_status = packet.get_hex_uint8()
-        print 'stop_reply(): exit (status=%i)' % exit_status
+        print 'stop_reply(): exit (status={0:d})'.format(exit_status)
     elif stop_type == 'O':
-        print 'stop_reply(): stdout = "%s"' % packet.str
+        print 'stop_reply(): stdout = "{0!s}"'.format(packet.str)
         
 
 def cmd_unknown_packet(options, cmd, args):
@@ -561,13 +561,13 @@ def cmd_qSymbol(options, cmd, args):
         if symbol_addr is None:
             if packet.skip_exact_string(':'):
                 symbol_name = packet.get_hex_ascii_str()
-                print 'lookup_symbol("%s") -> symbol not available yet' % (symbol_name)
+                print 'lookup_symbol("{0!s}") -> symbol not available yet'.format((symbol_name))
             else:
                 print 'error: bad command format'
         else:
             if packet.skip_exact_string(':'):
                 symbol_name = packet.get_hex_ascii_str()
-                print 'lookup_symbol("%s") -> 0x%x' % (symbol_name, symbol_addr)
+                print 'lookup_symbol("{0!s}") -> 0x{1:x}'.format(symbol_name, symbol_addr)
             else:
                 print 'error: bad command format'
 
@@ -581,13 +581,13 @@ def rsp_qSymbol(options, cmd, cmd_args, rsp):
             packet = Packet(rsp)
             if packet.skip_exact_string("qSymbol:"):
                 symbol_name = packet.get_hex_ascii_str()
-                print 'lookup_symbol("%s")' % (symbol_name)
+                print 'lookup_symbol("{0!s}")'.format((symbol_name))
             else:
-                print 'error: response string should start with "qSymbol:": respnse is "%s"' % (rsp)
+                print 'error: response string should start with "qSymbol:": respnse is "{0!s}"'.format((rsp))
 
 def cmd_qXfer(options, cmd, args):
     # $qXfer:features:read:target.xml:0,1ffff#14
-    print "read target special data %s" % (args)
+    print "read target special data {0!s}".format((args))
     return True
 
 def rsp_qXfer(options, cmd, cmd_args, rsp):
@@ -618,7 +618,7 @@ def rsp_qXfer(options, cmd, cmd_args, rsp):
                             if 'bitsize' in reg_element.attrib:
                                 reg_info.info['bitsize'] = reg_element.attrib['bitsize']
                             g_register_infos.append(reg_info)
-                    print 'XML for "%s":' % (data[2])
+                    print 'XML for "{0!s}":'.format((data[2]))
                     ET.dump(xml_root)
 
 def cmd_A(options, cmd, args):
@@ -636,7 +636,7 @@ def cmd_A(options, cmd, args):
         if not packet.skip_exact_string(','):
             break;
         arg_value = packet.get_hex_ascii_str(arg_len)
-        print 'argv[%u] = "%s"' % (arg_idx, arg_value)
+        print 'argv[{0:d}] = "{1!s}"'.format(arg_idx, arg_value)
         
 def cmd_qC(options, cmd, args):
     print "query_current_thread_id()"
@@ -645,15 +645,15 @@ def rsp_qC(options, cmd, cmd_args, rsp):
     packet = Packet(rsp)
     if packet.skip_exact_string("QC"):
         tid = packet.get_thread_id()
-        print "current_thread_id = %#x" % (tid)
+        print "current_thread_id = {0:#x}".format((tid))
     else:
         print "current_thread_id = old thread ID"
 
 def cmd_query_packet(options, cmd, args):
     if args:
-        print "%s%s" % (cmd, args)
+        print "{0!s}{1!s}".format(cmd, args)
     else:
-        print "%s" % (cmd)
+        print "{0!s}".format((cmd))
     return False
     
 def rsp_ok_error(rsp):
@@ -661,19 +661,19 @@ def rsp_ok_error(rsp):
 
 def rsp_ok_means_supported(options, cmd, cmd_args, rsp):
     if rsp == 'OK':
-        print "%s%s is supported" % (cmd, cmd_args)
+        print "{0!s}{1!s} is supported".format(cmd, cmd_args)
     elif rsp == '':
-        print "%s%s is not supported" % (cmd, cmd_args)
+        print "{0!s}{1!s} is not supported".format(cmd, cmd_args)
     else:
-        print "%s%s -> %s" % (cmd, cmd_args, rsp)
+        print "{0!s}{1!s} -> {2!s}".format(cmd, cmd_args, rsp)
 
 def rsp_ok_means_success(options, cmd, cmd_args, rsp):
     if rsp == 'OK':
         print "success"
     elif rsp == '':
-        print "%s%s is not supported" % (cmd, cmd_args)
+        print "{0!s}{1!s} is not supported".format(cmd, cmd_args)
     else:
-        print "%s%s -> %s" % (cmd, cmd_args, rsp)
+        print "{0!s}{1!s} -> {2!s}".format(cmd, cmd_args, rsp)
 
 def dump_key_value_pairs(key_value_pairs):
     max_key_len = 0
@@ -688,7 +688,7 @@ def dump_key_value_pairs(key_value_pairs):
 
 def rsp_dump_key_value_pairs(options, cmd, cmd_args, rsp):
     if rsp:
-        print '%s response:' % (cmd)
+        print '{0!s} response:'.format((cmd))
         packet = Packet(rsp)
         key_value_pairs = packet.get_key_value_pairs()
         dump_key_value_pairs(key_value_pairs)
@@ -705,7 +705,7 @@ def cmd_s(options, cmd, args):
     
 def cmd_vCont(options, cmd, args):
     if args == '?':
-        print "%s: get supported extended continue modes" % (cmd)
+        print "{0!s}: get supported extended continue modes".format((cmd))
     else:
         got_other_threads = 0
         s = ''
@@ -717,9 +717,9 @@ def cmd_vCont(options, cmd, args):
             elif short_action == 's':
                 action = 'step'
             elif short_action[0] == 'C':
-                action = 'continue with signal 0x%s' % (short_action[1:])
+                action = 'continue with signal 0x{0!s}'.format((short_action[1:]))
             elif short_action == 'S':
-                action = 'step with signal 0x%s' % (short_action[1:])
+                action = 'step with signal 0x{0!s}'.format((short_action[1:]))
             else:
                 action = short_action
             if s:
@@ -728,11 +728,11 @@ def cmd_vCont(options, cmd, args):
                 got_other_threads = 1
                 s += 'other-threads:'
             else:
-                s += 'thread 0x%4.4x: %s' % (tid, action)
+                s += 'thread 0x{0:4.4x}: {1!s}'.format(tid, action)
         if got_other_threads:
-            print "extended_continue (%s)" % (s)
+            print "extended_continue ({0!s})".format((s))
         else:
-            print "extended_continue (%s, other-threads: suspend)" % (s)
+            print "extended_continue ({0!s}, other-threads: suspend)".format((s))
     return False
 
 def rsp_vCont(options, cmd, cmd_args, rsp):
@@ -740,7 +740,7 @@ def rsp_vCont(options, cmd, cmd_args, rsp):
         # Skip the leading 'vCont;'
         rsp = rsp[6:]
         modes = string.split(rsp, ';')
-        s = "%s: supported extended continue modes include: " % (cmd)
+        s = "{0!s}: supported extended continue modes include: ".format((cmd))
         
         for i, mode in enumerate(modes):
             if i: 
@@ -761,27 +761,27 @@ def rsp_vCont(options, cmd, cmd_args, rsp):
             rsp_stop_reply (options, cmd, cmd_args, rsp)
             return
         if rsp[0] == 'O':
-            print "stdout: %s" % (rsp)
+            print "stdout: {0!s}".format((rsp))
             return
     else:
-        print "not supported (cmd = '%s', args = '%s', rsp = '%s')" % (cmd, cmd_args, rsp)
+        print "not supported (cmd = '{0!s}', args = '{1!s}', rsp = '{2!s}')".format(cmd, cmd_args, rsp)
 
 def cmd_vAttach(options, cmd, args):
     (extra_command, args) = string.split(args, ';')
     if extra_command:
-        print "%s%s(%s)" % (cmd, extra_command, args)
+        print "{0!s}{1!s}({2!s})".format(cmd, extra_command, args)
     else:
-        print "attach(pid = %u)" % int(args, 16)
+        print "attach(pid = {0:d})".format(int(args, 16))
     return False
     
 
 def cmd_qRegisterInfo(options, cmd, args):
-    print 'query_register_info(reg_num=%i)' % (int(args, 16))
+    print 'query_register_info(reg_num={0:d})'.format((int(args, 16)))
     return False
 
 def rsp_qRegisterInfo(options, cmd, cmd_args, rsp):
     global g_max_register_info_name_len
-    print 'query_register_info(reg_num=%i):' % (int(cmd_args, 16)),
+    print 'query_register_info(reg_num={0:d}):'.format((int(cmd_args, 16))),
     if len(rsp) == 3 and rsp[0] == 'E':
         g_max_register_info_name_len = 0
         for reg_info in g_register_infos:
@@ -801,7 +801,7 @@ def cmd_qThreadInfo(options, cmd, args):
         query_type = 'first'
     else: 
         query_type = 'subsequent'
-    print 'get_current_thread_list(type=%s)' % (query_type)
+    print 'get_current_thread_list(type={0!s})'.format((query_type))
     return False
 
 def rsp_qThreadInfo(options, cmd, cmd_args, rsp):
@@ -812,7 +812,7 @@ def rsp_qThreadInfo(options, cmd, cmd_args, rsp):
         for i, tid in enumerate(tids):
             if i:
                 print ',',
-            print '0x%x' % (tid),
+            print '0x{0:x}'.format((tid)),
         print
     elif response_type == 'l':
         print 'END'
@@ -820,7 +820,7 @@ def rsp_qThreadInfo(options, cmd, cmd_args, rsp):
 def rsp_hex_big_endian(options, cmd, cmd_args, rsp):
     packet = Packet(rsp)
     uval = packet.get_hex_uint('big')
-    print '%s: 0x%x' % (cmd, uval)
+    print '{0!s}: 0x{1:x}'.format(cmd, uval)
 
 def cmd_read_mem_bin(options, cmd, args):
     # x0x7fff5fc39200,0x200
@@ -828,7 +828,7 @@ def cmd_read_mem_bin(options, cmd, args):
     addr = packet.get_number()
     comma = packet.get_char()
     size = packet.get_number()
-    print 'binary_read_memory (addr = 0x%16.16x, size = %u)' % (addr, size)
+    print 'binary_read_memory (addr = 0x{0:16.16x}, size = {1:d})'.format(addr, size)
     return False
 
 def rsp_mem_bin_bytes(options, cmd, cmd_args, rsp):
@@ -845,7 +845,7 @@ def cmd_read_memory(options, cmd, args):
     addr = packet.get_hex_uint('big')
     comma = packet.get_char()
     size = packet.get_hex_uint('big')
-    print 'read_memory (addr = 0x%16.16x, size = %u)' % (addr, size)
+    print 'read_memory (addr = 0x{0:16.16x}, size = {1:d})'.format(addr, size)
     return False
 
 def dump_hex_memory_buffer(addr, hex_byte_str):
@@ -858,8 +858,8 @@ def dump_hex_memory_buffer(addr, hex_byte_str):
             if ascii:
                 print '  ', ascii
                 ascii = ''
-            print '0x%x:' % (addr + idx),
-        print '%2.2x' % (uval),
+            print '0x{0:x}:'.format((addr + idx)),
+        print '{0:2.2x}'.format((uval)),
         if 0x20 <= uval and uval < 0x7f:
             ascii += '%c' % uval
         else:
@@ -880,7 +880,7 @@ def cmd_write_memory(options, cmd, args):
     if packet.get_char() != ':':
         print 'error: invalid write memory command (missing colon after size)'
         return
-    print 'write_memory (addr = 0x%16.16x, size = %u, data:' % (addr, size)
+    print 'write_memory (addr = 0x{0:16.16x}, size = {1:d}, data:'.format(addr, size)
     dump_hex_memory_buffer (addr, packet.str) 
     return False
 
@@ -890,13 +890,13 @@ def cmd_alloc_memory(options, cmd, args):
     if packet.get_char() != ',':
         print 'error: invalid allocate memory command (missing comma after address)'
         return
-    print 'allocate_memory (byte-size = %u (0x%x), permissions = %s)' % (byte_size, byte_size, packet.str)
+    print 'allocate_memory (byte-size = {0:d} (0x{1:x}), permissions = {2!s})'.format(byte_size, byte_size, packet.str)
     return False
 
 def rsp_alloc_memory(options, cmd, cmd_args, rsp):
     packet = Packet(rsp)
     addr = packet.get_hex_uint('big')
-    print 'addr = 0x%x' % addr
+    print 'addr = 0x{0:x}'.format(addr)
 
 def cmd_dealloc_memory(options, cmd, args):
     packet = Packet(args)
@@ -904,7 +904,7 @@ def cmd_dealloc_memory(options, cmd, args):
     if packet.get_char() != ',':
         print 'error: invalid allocate memory command (missing comma after address)'
     else:
-        print 'deallocate_memory (addr = 0x%x, permissions = %s)' % (addr, packet.str)
+        print 'deallocate_memory (addr = 0x{0:x}, permissions = {1!s})'.format(addr, packet.str)
     return False
 def rsp_memory_bytes(options, cmd, cmd_args, rsp):
     addr = Packet(cmd_args).get_hex_uint('big')
@@ -919,14 +919,14 @@ def get_register_name_equal_value(options, reg_num, hex_value_str):
             symbolicated_addresses = options.symbolicator.symbolicate (int(value_str, 0))
             if symbolicated_addresses:
                 s += options.colors.magenta()
-                s += '%s' % symbolicated_addresses[0]
+                s += '{0!s}'.format(symbolicated_addresses[0])
                 s += options.colors.reset()
                 return s
         s += value_str
         return s
     else:
         reg_value = Packet(hex_value_str).get_hex_uint(g_byte_order)
-        return 'reg(%u) = 0x%x' % (reg_num, reg_value)
+        return 'reg({0:d}) = 0x{1:x}'.format(reg_num, reg_value)
 
 def cmd_read_one_reg(options, cmd, args):
     packet = Packet(args)
@@ -939,11 +939,11 @@ def cmd_read_one_reg(options, cmd, args):
         packet.get_char() # skip ;
         thread_info = packet.get_key_value_pairs()
         tid = int(thread_info[0][1], 16)
-    s = 'read_register (reg_num=%u' % reg_num
+    s = 'read_register (reg_num={0:d}'.format(reg_num)
     if name:
-        s += ' (%s)' % (name)
+        s += ' ({0!s})'.format((name))
     if tid != None:
-        s += ', tid = 0x%4.4x' % (tid)
+        s += ', tid = 0x{0:4.4x}'.format((tid))
     s += ')'
     print s
     return False
@@ -962,13 +962,13 @@ def cmd_write_one_reg(options, cmd, args):
         name = None
         hex_value_str = packet.get_hex_chars()
         tid = get_thread_from_thread_suffix (packet.str)
-        s = 'write_register (reg_num=%u' % reg_num
+        s = 'write_register (reg_num={0:d}'.format(reg_num)
         if name:
-            s += ' (%s)' % (name)
+            s += ' ({0!s})'.format((name))
         s += ', value = '
         s += get_register_name_equal_value(options, reg_num, hex_value_str)
         if tid != None:
-            s += ', tid = 0x%4.4x' % (tid)
+            s += ', tid = 0x{0:4.4x}'.format((tid))
         s += ')'
         print s
     return False
@@ -988,7 +988,7 @@ def cmd_read_all_regs(cmd, cmd_args):
     packet.get_char() # toss the 'g' command character
     tid = get_thread_from_thread_suffix (packet.str)
     if tid != None:
-        print 'read_all_register(thread = 0x%4.4x)' % tid
+        print 'read_all_register(thread = 0x{0:4.4x})'.format(tid)
     else:
         print 'read_all_register()'
     return False
@@ -1017,7 +1017,7 @@ def cmd_bp(options, cmd, args):
     packet.get_char() # Skip ,
     bp_size = packet.get_hex_uint('big')
     s += g_bp_types[bp_type]
-    s += " (addr = 0x%x, size = %u)" % (bp_addr, bp_size)
+    s += " (addr = 0x{0:x}, size = {1:d})".format(bp_addr, bp_size)
     print s
     return False
 
@@ -1025,7 +1025,7 @@ def cmd_mem_rgn_info(options, cmd, args):
     packet = Packet(args)
     packet.get_char() # skip ':' character
     addr = packet.get_hex_uint('big')
-    print 'get_memory_region_info (addr=0x%x)' % (addr)
+    print 'get_memory_region_info (addr=0x{0:x})'.format((addr))
     return False
 
 def cmd_kill(options, cmd, args):
@@ -1057,7 +1057,7 @@ def decode_packet(s, start_index = 0):
         return normal_s
 
 def rsp_json(options, cmd, cmd_args, rsp):
-    print '%s() reply:' % (cmd)
+    print '{0!s}() reply:'.format((cmd))
     json_tree = json.loads(rsp)
     print json.dumps(json_tree, indent=4, separators=(',', ': '))
     
@@ -1275,13 +1275,13 @@ def parse_gdb_log(file, options):
                 packet_name = None
 
             if not options or not options.quiet:
-                print '%s%.6f %+.6f%s' % (match.group(1), curr_time - base_time, delta, match.group(3))
+                print '{0!s}{1:.6f} {2:+.6f}{3!s}'.format(match.group(1), curr_time - base_time, delta, match.group(3))
             last_time = curr_time
         # else:
         #     print line
     (average, std_dev) = calculate_mean_and_standard_deviation(packet_times)
     if average and std_dev:
-        print '%u packets with average packet time of %f and standard deviation of %f' % (len(packet_times), average, std_dev)
+        print '{0:d} packets with average packet time of {1:f} and standard deviation of {2:f}'.format(len(packet_times), average, std_dev)
     if packet_total_times:
         total_packet_time = 0.0
         total_packet_count = 0
@@ -1295,7 +1295,7 @@ def parse_gdb_log(file, options):
 
         print '#---------------------------------------------------'
         print '# Packet timing summary:'
-        print '# Totals: time = %6f, count = %6d' % (total_packet_time, total_packet_count)
+        print '# Totals: time = {0:6f}, count = {1:6d}'.format(total_packet_time, total_packet_count)
         print '#---------------------------------------------------'
         print '# Packet                   Time (sec) Percent Count '
         print '#------------------------- ---------- ------- ------'
@@ -1309,9 +1309,9 @@ def parse_gdb_log(file, options):
                 packet_total_time = packet_total_times[item]
                 packet_percent = (packet_total_time / total_packet_time)*100.0
                 if packet_percent >= 10.0:
-                    print "  %24s %.6f   %.2f%% %6d" % (item, packet_total_time, packet_percent, packet_count[item])
+                    print "  {0:24!s} {1:.6f}   {2:.2f}% {3:6d}".format(item, packet_total_time, packet_percent, packet_count[item])
                 else:
-                    print "  %24s %.6f   %.2f%%  %6d" % (item, packet_total_time, packet_percent, packet_count[item])
+                    print "  {0:24!s} {1:.6f}   {2:.2f}%  {3:6d}".format(item, packet_total_time, packet_percent, packet_count[item])
                     
     
     
@@ -1337,18 +1337,18 @@ if __name__ == '__main__':
         lldb.debugger = lldb.SBDebugger.Create()
         import lldb.macosx.crashlog
         options.symbolicator = lldb.macosx.crashlog.CrashLog(options.crashlog)
-        print '%s' % (options.symbolicator)
+        print '{0!s}'.format((options.symbolicator))
 
     # This script is being run from the command line, create a debugger in case we are
     # going to use any debugger functions in our function.
     if len(args):
         for file in args:
             print '#----------------------------------------------------------------------'
-            print "# GDB remote log file: '%s'" % file
+            print "# GDB remote log file: '{0!s}'".format(file)
             print '#----------------------------------------------------------------------'
             parse_gdb_log_file (file, options)
         if options.symbolicator:
-            print '%s' % (options.symbolicator)
+            print '{0!s}'.format((options.symbolicator))
     else:
         parse_gdb_log(sys.stdin, options)
         

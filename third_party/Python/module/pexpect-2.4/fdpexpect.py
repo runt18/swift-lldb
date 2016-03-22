@@ -41,7 +41,7 @@ class fdspawn (spawn):
         self.child_fd = fd
         self.own_fd = False
         self.closed = False
-        self.name = '<file descriptor %d>' % fd
+        self.name = '<file descriptor {0:d}>'.format(fd)
 
     def __del__ (self):
 

@@ -106,21 +106,20 @@ class HashingMixin(object):
         for obj_1, obj_2 in self.eq_pairs:
             try:
                 if not hash(obj_1) == hash(obj_2):
-                    self.fail("%r and %r do not hash equal" % (obj_1, obj_2))
+                    self.fail("{0!r} and {1!r} do not hash equal".format(obj_1, obj_2))
             except KeyboardInterrupt:
                 raise
             except Exception as e:
-                self.fail("Problem hashing %r and %r: %s" % (obj_1, obj_2, e))
+                self.fail("Problem hashing {0!r} and {1!r}: {2!s}".format(obj_1, obj_2, e))
 
         for obj_1, obj_2 in self.ne_pairs:
             try:
                 if hash(obj_1) == hash(obj_2):
-                    self.fail("%s and %s hash equal, but shouldn't" %
-                              (obj_1, obj_2))
+                    self.fail("{0!s} and {1!s} hash equal, but shouldn't".format(obj_1, obj_2))
             except KeyboardInterrupt:
                 raise
             except Exception as e:
-                self.fail("Problem hashing %s and %s: %s" % (obj_1, obj_2, e))
+                self.fail("Problem hashing {0!s} and {1!s}: {2!s}".format(obj_1, obj_2, e))
 
 
 
@@ -139,11 +138,11 @@ except ImportError:
             if self._record:
                 args.append("record=True")
             name = type(self).__name__
-            return "%s(%s)" % (name, ", ".join(args))
+            return "{0!s}({1!s})".format(name, ", ".join(args))
     
         def __enter__(self):
             if self._entered:
-                raise RuntimeError("Cannot enter %r twice" % self)
+                raise RuntimeError("Cannot enter {0!r} twice".format(self))
             self._entered = True
             self._filters = self._module.filters
             self._module.filters = self._filters[:]
@@ -159,7 +158,7 @@ except ImportError:
     
         def __exit__(self, *exc_info):
             if not self._entered:
-                raise RuntimeError("Cannot exit %r without entering first" % self)
+                raise RuntimeError("Cannot exit {0!r} without entering first".format(self))
             self._module.filters = self._filters
             self._module.showwarning = self._showwarning
 

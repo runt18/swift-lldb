@@ -33,7 +33,7 @@ class BreakpointAfterJoinTestCase(TestBase):
 
         # The breakpoint list should show 1 location.
         self.expect("breakpoint list -f", "Breakpoint location shown correctly",
-            substrs = ["1: file = 'ParallelTask.cpp', line = %d, exact_match = 0" % self.breakpoint])
+            substrs = ["1: file = 'ParallelTask.cpp', line = {0:d}, exact_match = 0".format(self.breakpoint)])
 
         # Run the program.
         self.runCmd("run", RUN_SUCCEEDED)

@@ -61,7 +61,7 @@ def walk_and_invoke(sdk_root, path_regexp, suffix, num_symbols):
                 continue
 
             command = template % (scriptPath, path, num_symbols if num_symbols > 0 else 1000)
-            print "Running %s" % (command)
+            print "Running {0!s}".format((command))
             os.system(command)
 
 def main():

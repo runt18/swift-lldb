@@ -163,7 +163,7 @@ class TestProgram(object):
 
     def _do_discovery(self, argv, Loader=loader.TestLoader):
         # handle command line args for test discovery
-        self.progName = '%s discover' % self.progName
+        self.progName = '{0!s} discover'.format(self.progName)
         import optparse
         parser = optparse.OptionParser()
         parser.prog = self.progName

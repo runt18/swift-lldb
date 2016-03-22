@@ -17,11 +17,11 @@ class BuildError(Exception):
         self.m_inferior_error = inferior_error
     def __str__(self):
         if self.m_path and self.m_string:
-            return "Build error: %s (referring to %s)" % (self.m_string, self.m_path)
+            return "Build error: {0!s} (referring to {1!s})".format(self.m_string, self.m_path)
         if self.m_path:
-            return "Build error (referring to %s)" % (self.m_path)
+            return "Build error (referring to {0!s})".format((self.m_path))
         if self.m_string:
-            return "Build error: %s" % (self.m_string)
+            return "Build error: {0!s}".format((self.m_string))
         return "Build error"
 
 class LLDBBuildBot:
@@ -52,7 +52,7 @@ class LLDBBuildBot:
         cmdline_prefix = []
         
         if self.m_revision != None:
-            cmdline_prefix = ["svn", "-r %s" % (self.m_revision), "co"]
+            cmdline_prefix = ["svn", "-r {0!s}".format((self.m_revision)), "co"]
         else:
             cmdline_prefix = ["svn", "co"]
 

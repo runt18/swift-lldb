@@ -38,7 +38,7 @@ class StopHookCmdTestCase(TestBase):
 
         lldbutil.run_break_set_by_file_and_line (self, "main.cpp", self.line, num_expected_locations=1, loc_exact=True)
 
-        self.runCmd("target stop-hook add -f main.cpp -l %d -e %d -o 'expr ptr'" % (self.begl, self.endl))
+        self.runCmd("target stop-hook add -f main.cpp -l {0:d} -e {1:d} -o 'expr ptr'".format(self.begl, self.endl))
 
         self.expect('target stop-hook list', 'Stop Hook added successfully',
             substrs = ['State: enabled',

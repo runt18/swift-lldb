@@ -24,7 +24,7 @@ class NonOverlappingIndexVariableCase(TestBase):
         self.build()
         self.exe_name = 'a.out'
         exe = os.path.join(os.getcwd(), self.exe_name)
-        self.runCmd("file %s" % exe, CURRENT_EXECUTABLE_SET)
+        self.runCmd("file {0!s}".format(exe), CURRENT_EXECUTABLE_SET)
 
         lldbutil.run_break_set_by_file_and_line (self, self.source, self.line_to_break, num_expected_locations=1, loc_exact=True)
 

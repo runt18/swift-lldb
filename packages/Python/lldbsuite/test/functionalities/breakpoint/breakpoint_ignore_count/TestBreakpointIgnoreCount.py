@@ -61,8 +61,8 @@ class BreakpointIgnoreCountTestCase(TestBase):
         # in function name 'c'.  And frame #2 should point to main.c:45.
         self.expect("thread backtrace", STOPPED_DUE_TO_BREAKPOINT_IGNORE_COUNT,
             #substrs = ["stop reason = breakpoint"],
-            patterns = ["frame #0.*main.c:%d" % self.line1,
-                        "frame #2.*main.c:%d" % self.line2])
+            patterns = ["frame #0.*main.c:{0:d}".format(self.line1),
+                        "frame #2.*main.c:{0:d}".format(self.line2)])
 
         # continue -i 1 is the same as setting the ignore count to 1 again, try that:
         # Now run the program.
@@ -81,8 +81,8 @@ class BreakpointIgnoreCountTestCase(TestBase):
         # in function name 'c'.  And frame #2 should point to main.c:45.
         self.expect("thread backtrace", STOPPED_DUE_TO_BREAKPOINT_IGNORE_COUNT,
             #substrs = ["stop reason = breakpoint"],
-            patterns = ["frame #0.*main.c:%d" % self.line1,
-                        "frame #1.*main.c:%d" % self.line5])
+            patterns = ["frame #0.*main.c:{0:d}".format(self.line1),
+                        "frame #1.*main.c:{0:d}".format(self.line5)])
 
         
 

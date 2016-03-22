@@ -204,8 +204,7 @@ class FSM:
         elif self.default_transition is not None:
             return self.default_transition
         else:
-            raise ExceptionFSM ('Transition is undefined: (%s, %s).' %
-                (str(input_symbol), str(state)) )
+            raise ExceptionFSM ('Transition is undefined: ({0!s}, {1!s}).'.format(str(input_symbol), str(state)) )
 
     def process (self, input_symbol):
 

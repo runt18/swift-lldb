@@ -62,7 +62,7 @@ def the_framestats_command(debugger, command, result, dict):
         variable_type = variable.GetType()
         total_size = total_size + variable_type.GetByteSize()
     average_size = float(total_size) / variables_count
-    print >>result, "Your frame has %d variables. Their total size is %d bytes. The average size is %f bytes" % (variables_count,total_size,average_size)
+    print >>result, "Your frame has {0:d} variables. Their total size is {1:d} bytes. The average size is {2:f} bytes".format(variables_count, total_size, average_size)
     # not returning anything is akin to returning success
 
 def __lldb_init_module (debugger, dict):

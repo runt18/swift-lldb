@@ -75,18 +75,16 @@ class ssh_session:
 
     def ssh(self, command):
 
-        return self.__exec("ssh -l %s %s \"%s\"" \
-                                             % (self.user,self.host,command))
+        return self.__exec("ssh -l {0!s} {1!s} \"{2!s}\"".format(self.user, self.host, command))
 
     def scp(self, src, dst):
 
-        return self.__exec("scp %s %s@%s:%s" \
-                                             % (src, session.user, session.host, dst))
+        return self.__exec("scp {0!s} {1!s}@{2!s}:{3!s}".format(src, session.user, session.host, dst))
 
     def exists(self, file):
 
         "Retrieve file permissions of specified remote file."
-        seen = self.ssh("/bin/ls -ld %s" % file)
+        seen = self.ssh("/bin/ls -ld {0!s}".format(file))
         if string.find(seen, "No such file") > -1:
             return None # File doesn't exist
         else:

@@ -84,12 +84,12 @@ def utob(debugger, command_line, result, dict):
 
     bits = binary(n, width)
     if not bits:
-        print "insufficient width value: %d" % width
+        print "insufficient width value: {0:d}".format(width)
         return
     if verbose and width > 0:
         pos = positions(width)
         print ' '+' '.join(pos)
-    print ' %s' % str(bits)
+    print ' {0!s}'.format(str(bits))
 
 def itob(debugger, command_line, result, dict):
     """Convert the integer to print its two's complement representation.
@@ -113,10 +113,10 @@ def itob(debugger, command_line, result, dict):
 
     bits = twos_complement(n, width)
     if not bits:
-        print "insufficient width value: %d" % width
+        print "insufficient width value: {0:d}".format(width)
         return
     if verbose and width > 0:
         pos = positions(width)
         print ' '+' '.join(pos)
-    print ' %s' % str(bits)
+    print ' {0!s}'.format(str(bits))
 

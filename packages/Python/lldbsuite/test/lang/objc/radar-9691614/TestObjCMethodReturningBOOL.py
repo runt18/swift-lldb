@@ -38,7 +38,7 @@ class MethodReturningBOOLTestCase(TestBase):
 
         self.runCmd("run", RUN_SUCCEEDED)
         self.expect("process status", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = [" at %s:%d" % (self.main_source, self.line),
+            substrs = [" at {0!s}:{1:d}".format(self.main_source, self.line),
                        "stop reason = breakpoint"])
 
         # rdar://problem/9691614

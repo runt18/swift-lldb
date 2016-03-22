@@ -67,7 +67,7 @@ class TestSwiftStepping(lldbtest.TestBase):
         name = thread.frames[0].GetFunctionName()
         self.assertTrue(
             pattern in name,
-            "Got to '%s' not the expected function '%s'." % (name, pattern))
+            "Got to '{0!s}' not the expected function '{1!s}'.".format(name, pattern))
 
     def do_test(self):
         """Tests that we can step reliably in swift code."""

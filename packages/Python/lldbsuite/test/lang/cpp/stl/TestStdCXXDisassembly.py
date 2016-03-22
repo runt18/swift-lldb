@@ -57,7 +57,7 @@ class StdCXXDisassembleTestCase(TestBase):
             frame = thread.GetFrameAtIndex(i)
             function = frame.GetFunction()
             if function.GetName():
-                self.runCmd("disassemble -n '%s'" % function.GetName())
+                self.runCmd("disassemble -n '{0!s}'".format(function.GetName()))
 
         lib_stdcxx = "FAILHORRIBLYHERE"
         # Iterate through the available modules, looking for stdc++ library...
@@ -74,7 +74,7 @@ class StdCXXDisassembleTestCase(TestBase):
         self.expect(lib_stdcxx, "Libraray StdC++ is located", exe=False,
             substrs = ["lib"])
 
-        self.runCmd("image dump symtab '%s'" % lib_stdcxx)
+        self.runCmd("image dump symtab '{0!s}'".format(lib_stdcxx))
         raw_output = self.res.GetOutput()
         # Now, look for every 'Code' symbol and feed its load address into the
         # command: 'disassemble -s load_address -e end_address', where the
@@ -104,7 +104,7 @@ class StdCXXDisassembleTestCase(TestBase):
                     print("SA:", SA)
                 if SA and LA:
                     if int(LA, 16) > int(SA, 16):
-                        self.runCmd("disassemble -s %s -e %s" % (SA, LA))
+                        self.runCmd("disassemble -s {0!s} -e {1!s}".format(SA, LA))
                 SA = LA
             else:
                 # This entry is not a Code entry.  Reset SA = None.

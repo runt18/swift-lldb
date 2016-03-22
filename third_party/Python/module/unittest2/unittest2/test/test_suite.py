@@ -189,7 +189,7 @@ class Test_TestSuite(unittest2.TestCase, EqualityMixin):
 
         class LoggingCase(unittest2.TestCase):
             def run(self, result):
-                events.append('run %s' % self._testMethodName)
+                events.append('run {0!s}'.format(self._testMethodName))
 
             def test1(self): pass
             def test2(self): pass

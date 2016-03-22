@@ -36,7 +36,7 @@ class AttachThenDisassemblyBench(BenchBase):
         popen = subprocess.Popen([exe, self.lldbOption],
                                  stdout = open(os.devnull, 'w') if not self.TraceOn() else None)
         if self.TraceOn():
-            print("pid of spawned process: %d" % popen.pid)
+            print("pid of spawned process: {0:d}".format(popen.pid))
 
         # Attach to the launched lldb process.
         listener = lldb.SBListener("my.attach.listener")
@@ -55,7 +55,7 @@ class AttachThenDisassemblyBench(BenchBase):
                 found = True
                 thread0.SetSelectedFrame(i)
                 if self.TraceOn():
-                    print("Found frame#%d for function 'MainLoop'" % i)
+                    print("Found frame#{0:d} for function 'MainLoop'".format(i))
                 break
             i += 1
             

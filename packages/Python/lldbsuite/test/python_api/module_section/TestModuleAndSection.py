@@ -32,31 +32,31 @@ class ModuleAndSectionAPIsTestCase(TestBase):
         if not self.TraceOn():
             self.HideStdout()
 
-        print("Number of modules for the target: %d" % target.GetNumModules())
+        print("Number of modules for the target: {0:d}".format(target.GetNumModules()))
         for module in target.module_iter():
             print(module)
 
         # Get the executable module at index 0.
         exe_module = target.GetModuleAtIndex(0)
 
-        print("Exe module: %s" % str(exe_module))
-        print("Number of sections: %d" % exe_module.GetNumSections())
+        print("Exe module: {0!s}".format(str(exe_module)))
+        print("Number of sections: {0:d}".format(exe_module.GetNumSections()))
         INDENT = ' ' * 4
         INDENT2 = INDENT * 2
         for sec in exe_module.section_iter():
             print(sec)
-            print(INDENT + "Number of subsections: %d" % sec.GetNumSubSections())
+            print(INDENT + "Number of subsections: {0:d}".format(sec.GetNumSubSections()))
             if sec.GetNumSubSections() == 0:
                 for sym in exe_module.symbol_in_section_iter(sec):
                     print(INDENT + str(sym))
-                    print(INDENT + "symbol type: %s" % symbol_type_to_str(sym.GetType()))
+                    print(INDENT + "symbol type: {0!s}".format(symbol_type_to_str(sym.GetType())))
             else:
                 for subsec in sec:
                     print(INDENT + str(subsec))
                     # Now print the symbols belonging to the subsection....
                     for sym in exe_module.symbol_in_section_iter(subsec):
                         print(INDENT2 + str(sym))
-                        print(INDENT2 + "symbol type: %s" % symbol_type_to_str(sym.GetType()))
+                        print(INDENT2 + "symbol type: {0!s}".format(symbol_type_to_str(sym.GetType())))
 
     @add_test_categories(['pyapi'])
     def test_module_and_section_boundary_condition(self):
@@ -72,15 +72,15 @@ class ModuleAndSectionAPIsTestCase(TestBase):
         if not self.TraceOn():
             self.HideStdout()
 
-        print("Number of modules for the target: %d" % target.GetNumModules())
+        print("Number of modules for the target: {0:d}".format(target.GetNumModules()))
         for module in target.module_iter():
             print(module)
 
         # Get the executable module at index 0.
         exe_module = target.GetModuleAtIndex(0)
 
-        print("Exe module: %s" % str(exe_module))
-        print("Number of sections: %d" % exe_module.GetNumSections())
+        print("Exe module: {0!s}".format(str(exe_module)))
+        print("Number of sections: {0:d}".format(exe_module.GetNumSections()))
 
         # Boundary condition testings.  Should not crash lldb!
         exe_module.FindFirstType(None)
@@ -113,15 +113,15 @@ class ModuleAndSectionAPIsTestCase(TestBase):
         if not self.TraceOn():
             self.HideStdout()
 
-        print("Number of modules for the target: %d" % target.GetNumModules())
+        print("Number of modules for the target: {0:d}".format(target.GetNumModules()))
         for module in target.module_iter():
             print(module)
 
         # Get the executable module at index 0.
         exe_module = target.GetModuleAtIndex(0)
 
-        print("Exe module: %s" % str(exe_module))
-        print("Number of compile units: %d" % exe_module.GetNumCompileUnits())
+        print("Exe module: {0!s}".format(str(exe_module)))
+        print("Number of compile units: {0:d}".format(exe_module.GetNumCompileUnits()))
         INDENT = ' ' * 4
         INDENT2 = INDENT * 2
         for cu in exe_module.compile_unit_iter():

@@ -45,18 +45,18 @@ def handle_args(driver, argv):
       pid = int(options.pid)
       driver.attachProcess(ui, pid)
     except ValueError:
-      print "Error: expecting integer PID, got '%s'" % options.pid
+      print "Error: expecting integer PID, got '{0!s}'".format(options.pid)
   elif options.core is not None:
     if not os.path.exists(options.core):
-      raise Exception("Specified core file '%s' does not exist." % options.core)
+      raise Exception("Specified core file '{0!s}' does not exist.".format(options.core))
     driver.loadCore(options.core)
   elif len(args) == 2:
     if not os.path.isfile(args[1]):
-      raise Exception("Specified target '%s' does not exist" % args[1])
+      raise Exception("Specified target '{0!s}' does not exist".format(args[1]))
     driver.createTarget(args[1])
   elif len(args) > 2:
     if not os.path.isfile(args[1]):
-      raise Exception("Specified target '%s' does not exist" % args[1])
+      raise Exception("Specified target '{0!s}' does not exist".format(args[1]))
     driver.createTarget(args[1], args[2:])
 
 def sigint_handler(signal, frame):

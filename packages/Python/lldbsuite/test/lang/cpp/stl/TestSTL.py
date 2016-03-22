@@ -45,7 +45,7 @@ class STLTestCase(TestBase):
 
         # Stop at 'std::string hello_world ("Hello World!");'.
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = ['main.cpp:%d' % self.line,
+            substrs = ['main.cpp:{0:d}'.format(self.line),
                        'stop reason = breakpoint'])
 
         # The breakpoint should have a hit count of 1.

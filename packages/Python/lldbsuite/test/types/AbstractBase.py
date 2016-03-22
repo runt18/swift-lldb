@@ -11,8 +11,8 @@ from lldbsuite.test.lldbtest import *
 import lldbsuite.test.lldbutil as lldbutil
 
 def Msg(var, val, using_frame_variable):
-    return "'%s %s' matches the output (from compiled code): %s" % (
-        'frame variable --show-types' if using_frame_variable else 'expression' ,var, val)
+    return "'{0!s} {1!s}' matches the output (from compiled code): {2!s}".format(
+        'frame variable --show-types' if using_frame_variable else 'expression' , var, val)
 
 class GenericTester(TestBase):
 
@@ -93,7 +93,7 @@ class GenericTester(TestBase):
     def generic_type_tester(self, exe_name, atoms, quotedDisplay=False, blockCaptured=False):
         """Test that variables with basic types are displayed correctly."""
 
-        self.runCmd("file %s" % exe_name, CURRENT_EXECUTABLE_SET)
+        self.runCmd("file {0!s}".format(exe_name), CURRENT_EXECUTABLE_SET)
 
         # First, capture the golden output emitted by the oracle, i.e., the
         # series of printf statements.
@@ -138,7 +138,7 @@ class GenericTester(TestBase):
 
         self.runCmd("run", RUN_SUCCEEDED)
         self.expect("process status", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = [" at basic_type.cpp:%d" % break_line,
+            substrs = [" at basic_type.cpp:{0:d}".format(break_line),
                        "stop reason = breakpoint"])
 
         #self.runCmd("frame variable --show-types")
@@ -146,7 +146,7 @@ class GenericTester(TestBase):
         # Now iterate through the golden list, comparing against the output from
         # 'frame variable --show-types var'.
         for var, val in gl:
-            self.runCmd("frame variable --show-types %s" % var)
+            self.runCmd("frame variable --show-types {0!s}".format(var))
             output = self.res.GetOutput()
 
             # The input type is in a canonical form as a set of named atoms.
@@ -163,8 +163,7 @@ class GenericTester(TestBase):
 
             # Expect the display type string to contain each and every atoms.
             self.expect(dt,
-                        "Display type: '%s' must contain the type atoms: '%s'" %
-                        (dt, atoms),
+                        "Display type: '{0!s}' must contain the type atoms: '{1!s}'".format(dt, atoms),
                         exe=False,
                 substrs = list(atoms))
 
@@ -177,7 +176,7 @@ class GenericTester(TestBase):
     def generic_type_expr_tester(self, exe_name, atoms, quotedDisplay=False, blockCaptured=False):
         """Test that variable expressions with basic types are evaluated correctly."""
 
-        self.runCmd("file %s" % exe_name, CURRENT_EXECUTABLE_SET)
+        self.runCmd("file {0!s}".format(exe_name), CURRENT_EXECUTABLE_SET)
 
         # First, capture the golden output emitted by the oracle, i.e., the
         # series of printf statements.
@@ -222,7 +221,7 @@ class GenericTester(TestBase):
 
         self.runCmd("run", RUN_SUCCEEDED)
         self.expect("process status", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = [" at basic_type.cpp:%d" % break_line,
+            substrs = [" at basic_type.cpp:{0:d}".format(break_line),
                        "stop reason = breakpoint"])
 
         #self.runCmd("frame variable --show-types")
@@ -230,7 +229,7 @@ class GenericTester(TestBase):
         # Now iterate through the golden list, comparing against the output from
         # 'expr var'.
         for var, val in gl:
-            self.runCmd("expression %s" % var)
+            self.runCmd("expression {0!s}".format(var))
             output = self.res.GetOutput()
 
             # The input type is in a canonical form as a set of named atoms.
@@ -247,8 +246,7 @@ class GenericTester(TestBase):
 
             # Expect the display type string to contain each and every atoms.
             self.expect(dt,
-                        "Display type: '%s' must contain the type atoms: '%s'" %
-                        (dt, atoms),
+                        "Display type: '{0!s}' must contain the type atoms: '{1!s}'".format(dt, atoms),
                         exe=False,
                 substrs = list(atoms))
 

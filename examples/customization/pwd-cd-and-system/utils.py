@@ -31,7 +31,7 @@ def chdir(debugger, args, result, dict):
 
     Holder.swap(os.getcwd())
     os.chdir(new_dir)
-    print "Current working directory: %s" % os.getcwd()
+    print "Current working directory: {0!s}".format(os.getcwd())
 
 def system(debugger, command_line, result, dict):
     """Execute the command (a string) in a subshell."""

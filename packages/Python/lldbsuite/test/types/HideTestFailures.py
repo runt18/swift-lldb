@@ -25,11 +25,11 @@ class DebugIntegerTypesFailures(TestBase):
         try:
             if "test_long_type_with_dsym" in self.id():
                 self.runCmd(
-                    "log enable -n -f %s lldb commands event process state" %
-                    os.environ["DEBUG_LLDB_LOG"])
+                    "log enable -n -f {0!s} lldb commands event process state".format(
+                    os.environ["DEBUG_LLDB_LOG"]))
                 self.runCmd(
-                    "log enable -n -f %s gdb-remote packets process" %
-                    os.environ["DEBUG_GDB_REMOTE_LOG"])
+                    "log enable -n -f {0!s} gdb-remote packets process".format(
+                    os.environ["DEBUG_GDB_REMOTE_LOG"]))
         except:
             pass
 

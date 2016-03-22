@@ -103,7 +103,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
         remote_file_spec = lldb.SBFileSpec(remote_path, False)
         err = lldb.remote_platform.Install(lldb.SBFileSpec(exe_path, True), remote_file_spec)
         if err.Fail():
-            raise Exception("remote_platform.Install('%s', '%s') failed: %s" % (exe_path, remote_path, err))
+            raise Exception("remote_platform.Install('{0!s}', '{1!s}') failed: {2!s}".format(exe_path, remote_path, err))
         return [remote_path]
 
     def start_inferior(self):
@@ -114,7 +114,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
 
         self.add_no_ack_remote_stream()
         self.test_sequence.add_log_lines(
-            ["read packet: %s" % lldbgdbserverutils.build_gdbremote_A_packet(launch_args),
+            ["read packet: {0!s}".format(lldbgdbserverutils.build_gdbremote_A_packet(launch_args)),
              "send packet: $OK#9a"],
             True)
         self.expect_gdbremote_sequence()
@@ -167,7 +167,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
         RETVAL = 42
 
         # build launch args
-        launch_args += ["retval:%d" % RETVAL]
+        launch_args += ["retval:{0:d}".format(RETVAL)]
 
         self.add_no_ack_remote_stream()
         self.add_verified_launch_packets(launch_args)
@@ -857,7 +857,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
 
         # Start up the inferior.
         procs = self.prep_debug_monitor_and_inferior(
-            inferior_args=["set-message:%s" % MEMORY_CONTENTS, "get-data-address-hex:g_message", "sleep:5"])
+            inferior_args=["set-message:{0!s}".format(MEMORY_CONTENTS), "get-data-address-hex:g_message", "sleep:5"])
 
         # Run the process
         self.test_sequence.add_log_lines(

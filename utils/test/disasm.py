@@ -32,7 +32,7 @@ def do_llvm_mc_disassembly(gdb_commands, gdb_options, exe, func, mc, mc_options)
     import pexpect
 
     gdb_prompt = "\r\n\(gdb\) "
-    gdb = pexpect.spawn(('gdb %s' % gdb_options) if gdb_options else 'gdb')
+    gdb = pexpect.spawn(('gdb {0!s}'.format(gdb_options)) if gdb_options else 'gdb')
     # Turn on logging for what gdb sends back.
     gdb.logfile_read = sys.stdout
     gdb.expect(gdb_prompt)
@@ -43,11 +43,11 @@ def do_llvm_mc_disassembly(gdb_commands, gdb_options, exe, func, mc, mc_options)
         gdb.expect(gdb_prompt)
 
     # Now issue the file command.
-    gdb.sendline('file %s' % exe)
+    gdb.sendline('file {0!s}'.format(exe))
     gdb.expect(gdb_prompt)
 
     # Send the disassemble command.
-    gdb.sendline('disassemble %s' % func)
+    gdb.sendline('disassemble {0!s}'.format(func))
     gdb.expect(gdb_prompt)
 
     # Get the output from gdb.
@@ -87,7 +87,7 @@ def do_llvm_mc_disassembly(gdb_commands, gdb_options, exe, func, mc, mc_options)
 
         if prev_addr and addr_diff > 0:
             # Feed the examining memory command to gdb.
-            gdb.sendline('x /%db %s' % (addr_diff, prev_addr))
+            gdb.sendline('x /{0:d}b {1!s}'.format(addr_diff, prev_addr))
             gdb.expect(gdb_prompt)
             x_output = gdb.before
             # Get the last output line from the gdb examine memory command,
@@ -96,7 +96,7 @@ def do_llvm_mc_disassembly(gdb_commands, gdb_options, exe, func, mc, mc_options)
             memory_dump = x_output.split(os.linesep)[-1].partition('>:')[2].strip()
             #print "\nbytes:", memory_dump
             disasm_str = prev_line.partition('>:')[2]
-            print >> mc_input, '%s # %s' % (memory_dump, disasm_str)
+            print >> mc_input, '{0!s} # {1!s}'.format(memory_dump, disasm_str)
 
         # We're done with the processing.  Assign the current line to be prev_line.
         prev_line = line
@@ -110,7 +110,7 @@ def do_llvm_mc_disassembly(gdb_commands, gdb_options, exe, func, mc, mc_options)
     with open('disasm-input.txt', 'w') as f:
         f.write(mc_input.getvalue())
 
-    mc_cmd = '%s -disassemble %s disasm-input.txt' % (mc, mc_options)
+    mc_cmd = '{0!s} -disassemble {1!s} disasm-input.txt'.format(mc, mc_options)
     print "\nExecuting command:", mc_cmd
     os.system(mc_cmd)
 

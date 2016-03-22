@@ -96,7 +96,7 @@ class Stopwatch(object):
     #    return numpy.std(self.__nums__)
 
     def __str__(self):
-        return "Avg: %f (Laps: %d, Total Elapsed Time: %f, min=%f, max=%f)" % (self.avg(),
+        return "Avg: {0:f} (Laps: {1:d}, Total Elapsed Time: {2:f}, min={3:f}, max={4:f})".format(self.avg(),
                                                                                self.__laps__,
                                                                                self.__total_elapsed__,
                                                                                min(self.__nums__),

@@ -33,7 +33,7 @@ class RepeatedExprsCase(BenchBase):
         print("lldb benchmark:", self.stopwatch)
         self.run_gdb_repeated_exprs(self.exe_name, self.count)
         print("gdb benchmark:", self.stopwatch)
-        print("lldb_avg/gdb_avg: %f" % (self.lldb_avg/self.gdb_avg))
+        print("lldb_avg/gdb_avg: {0:f}".format((self.lldb_avg/self.gdb_avg)))
 
     def run_lldb_repeated_exprs(self, exe_name, count):
         import pexpect
@@ -44,7 +44,7 @@ class RepeatedExprsCase(BenchBase):
         prompt = self.child_prompt
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s %s %s' % (lldbtest_config.lldbExec, self.lldbOption, exe))
+        self.child = pexpect.spawn('{0!s} {1!s} {2!s}'.format(lldbtest_config.lldbExec, self.lldbOption, exe))
         child = self.child
 
         # Turn on logging for what the child sends back.
@@ -52,7 +52,7 @@ class RepeatedExprsCase(BenchBase):
             child.logfile_read = sys.stdout
 
         child.expect_exact(prompt)
-        child.sendline('breakpoint set -f %s -l %d' % (self.source, self.line_to_break))
+        child.sendline('breakpoint set -f {0!s} -l {1:d}'.format(self.source, self.line_to_break))
         child.expect_exact(prompt)
         child.sendline('run')
         child.expect_exact(prompt)
@@ -90,7 +90,7 @@ class RepeatedExprsCase(BenchBase):
         prompt = self.child_prompt
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('gdb --nx %s' % exe)
+        self.child = pexpect.spawn('gdb --nx {0!s}'.format(exe))
         child = self.child
 
         # Turn on logging for what the child sends back.
@@ -98,7 +98,7 @@ class RepeatedExprsCase(BenchBase):
             child.logfile_read = sys.stdout
 
         child.expect_exact(prompt)
-        child.sendline('break %s:%d' % (self.source, self.line_to_break))
+        child.sendline('break {0!s}:{1:d}'.format(self.source, self.line_to_break))
         child.expect_exact(prompt)
         child.sendline('run')
         child.expect_exact(prompt)

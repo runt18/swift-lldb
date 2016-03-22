@@ -11,10 +11,10 @@ def read_memory(process,location,size):
 	for x in range(0,size-1):
 		byte = process.ReadUnsignedFromMemory(x+location,1,error)
 		if error.fail:
-			data = data + "err%s" % "" if x == size-2 else ":"
+			data = data + "err{0!s}".format("") if x == size-2 else ":"
 		else:
 			try:
-				data = data + "0x%x" % byte
+				data = data + "0x{0:x}".format(byte)
 				if byte == 0:
 					data = data + "(\\0)"
 				elif byte == 0xa:
@@ -26,7 +26,7 @@ def read_memory(process,location,size):
 				elif byte == '\n':
 					data = data + "(\\n)"
 				else:
-					data = data + "(%s)" % chr(byte)
+					data = data + "({0!s})".format(chr(byte))
 				if x < size-2:
 					data = data + ":"
 			except Exception as e:
@@ -97,7 +97,7 @@ struct $__lldb__CFString {\
 };\
 "
 
-	expression = expression + "*(($__lldb__CFString*) %d)" % nsstring_address
+	expression = expression + "*(($__lldb__CFString*) {0:d})".format(nsstring_address)
 	# print expression
 	dumped = target.EvaluateExpression(expression,options)
 	print >>result, str(dumped)
@@ -113,8 +113,7 @@ struct $__lldb__CFString {\
 	is_special = (nsstring.GetDynamicValue(lldb.eDynamicCanRunTarget).GetTypeName() == "NSPathStore2")
 	has_null = (info_bits & 8) == 8
     
-	print >>result,"\nInfo=%d\nMutable=%s\nInline=%s\nExplicit=%s\nUnicode=%s\nSpecial=%s\nNull=%s\n" % \
-		(info_bits, "yes" if is_mutable else "no","yes" if is_inline else "no","yes" if has_explicit_length else "no","yes" if is_unicode else "no","yes" if is_special else "no","yes" if has_null else "no")
+	print >>result,"\nInfo={0:d}\nMutable={1!s}\nInline={2!s}\nExplicit={3!s}\nUnicode={4!s}\nSpecial={5!s}\nNull={6!s}\n".format(info_bits, "yes" if is_mutable else "no", "yes" if is_inline else "no", "yes" if has_explicit_length else "no", "yes" if is_unicode else "no", "yes" if is_special else "no", "yes" if has_null else "no")
 
 
 	explicit_length_offset = 0
@@ -134,7 +133,7 @@ struct $__lldb__CFString {\
 	else:
 		explicit_length_offset = nsstring_address + explicit_length_offset
 		explicit_length = process.ReadUnsignedFromMemory(explicit_length_offset, 4, error)
-		print >>result,"Explicit length location is at 0x%x - read value is %d\n" % (explicit_length_offset,explicit_length)
+		print >>result,"Explicit length location is at 0x{0:x} - read value is {1:d}\n".format(explicit_length_offset, explicit_length)
 
 	if is_mutable:
 		location = 2 * ptr_size + nsstring_address
@@ -159,12 +158,12 @@ struct $__lldb__CFString {\
 	else:
 		location = 2 * ptr_size + nsstring_address
 		location = process.ReadPointerFromMemory(location,error)
-	print >>result,"Expected data location: 0x%x\n" % (location)
-	print >>result,"1K of data around location: %s\n" % read_memory(process,location,1024)
-	print >>result,"5K of data around string pointer: %s\n" % read_memory(process,nsstring_address,1024*5)
+	print >>result,"Expected data location: 0x{0:x}\n".format((location))
+	print >>result,"1K of data around location: {0!s}\n".format(read_memory(process,location,1024))
+	print >>result,"5K of data around string pointer: {0!s}\n".format(read_memory(process,nsstring_address,1024*5))
 
 def __lldb_init_module(debugger, internal_dict):
-	debugger.HandleCommand("command script add -f %s.diagnose_nsstring_Command_Impl diagnose-nsstring" % __name__)
+	debugger.HandleCommand("command script add -f {0!s}.diagnose_nsstring_Command_Impl diagnose-nsstring".format(__name__))
 	print 'The "diagnose-nsstring" command has been installed, type "help diagnose-nsstring" for detailed help.'
 
 __lldb_init_module(lldb.debugger,None)

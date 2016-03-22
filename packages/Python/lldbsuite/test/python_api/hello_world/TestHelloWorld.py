@@ -100,7 +100,7 @@ class HelloWorldTestCase(TestBase):
         import lldbsuite.test.lldbutil as lldbutil
         stacktraces = lldbutil.print_stacktraces(process, string_buffer=True)
         self.expect(stacktraces, exe=False,
-            substrs = ['main.c:%d' % self.line2,
+            substrs = ['main.c:{0:d}'.format(self.line2),
                        '(int)argc=3'])
 
     @add_test_categories(['pyapi'])
@@ -143,5 +143,5 @@ class HelloWorldTestCase(TestBase):
         import lldbsuite.test.lldbutil as lldbutil
         stacktraces = lldbutil.print_stacktraces(process, string_buffer=True)
         self.expect(stacktraces, exe=False,
-            substrs = ['main.c:%d' % self.line2,
+            substrs = ['main.c:{0:d}'.format(self.line2),
                        '(int)argc=3'])

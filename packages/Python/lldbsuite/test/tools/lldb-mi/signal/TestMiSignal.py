@@ -21,7 +21,7 @@ class MiSignalTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -58,7 +58,7 @@ class MiSignalTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run with stop-at-entry flag
@@ -93,7 +93,7 @@ class MiSignalTestCase(lldbmi_testcase.MiTestCaseBase):
         import random
         port = 12000 + random.randint(0,3999) # the same as GdbRemoteTestCaseBase.get_next_port
         import pexpect
-        debugserver_child = pexpect.spawn("%s %s:%d" % (debugserver_exe, hostname, port))
+        debugserver_child = pexpect.spawn("{0!s} {1!s}:{2:d}".format(debugserver_exe, hostname, port))
         self.addTearDownHook(lambda: debugserver_child.terminate(force = True))
 
         self.spawnLldbMi(args = None)
@@ -101,9 +101,9 @@ class MiSignalTestCase(lldbmi_testcase.MiTestCaseBase):
         # Connect to debugserver
         self.runCmd("-interpreter-exec command \"platform select remote-macosx --sysroot /\"")
         self.expect("\^done")
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
-        self.runCmd("-interpreter-exec command \"process connect connect://%s:%d\"" % (hostname, port))
+        self.runCmd("-interpreter-exec command \"process connect connect://{0!s}:{1:d}\"".format(hostname, port))
         self.expect("\^done")
 
         # Run with stop-at-entry flag
@@ -126,7 +126,7 @@ class MiSignalTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to main
@@ -162,7 +162,7 @@ class MiSignalTestCase(lldbmi_testcase.MiTestCaseBase):
         import random
         port = 12000 + random.randint(0,3999) # the same as GdbRemoteTestCaseBase.get_next_port
         import pexpect
-        debugserver_child = pexpect.spawn("%s %s:%d" % (debugserver_exe, hostname, port))
+        debugserver_child = pexpect.spawn("{0!s} {1!s}:{2:d}".format(debugserver_exe, hostname, port))
         self.addTearDownHook(lambda: debugserver_child.terminate(force = True))
 
         self.spawnLldbMi(args = None)
@@ -170,9 +170,9 @@ class MiSignalTestCase(lldbmi_testcase.MiTestCaseBase):
         # Connect to debugserver
         self.runCmd("-interpreter-exec command \"platform select remote-macosx --sysroot /\"")
         self.expect("\^done")
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
-        self.runCmd("-interpreter-exec command \"process connect connect://%s:%d\"" % (hostname, port))
+        self.runCmd("-interpreter-exec command \"process connect connect://{0!s}:{1:d}\"".format(hostname, port))
         self.expect("\^done")
 
         # Run to main

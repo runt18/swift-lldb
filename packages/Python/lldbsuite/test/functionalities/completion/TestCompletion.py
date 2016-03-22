@@ -291,7 +291,7 @@ class CommandLineCompletionTestCase(TestBase):
                 child.expect_exact(prompt)
                 child.setecho(True)
                 # Sends str_input and a Tab to invoke the completion machinery.
-                child.send("%s\t" % str_input)
+                child.send("{0!s}\t".format(str_input))
                 child.sendline('')
                 child.expect_exact(prompt)
                 child.sendline('')

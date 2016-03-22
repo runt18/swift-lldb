@@ -68,7 +68,7 @@ class SourceWin(cui.TitledWin):
     target = lldbutil.get_description(process.GetTarget())
     pid = process.GetProcessID()
     ec = process.GetExitStatus()
-    self.win.addstr("\nProcess %s [%d] has exited with exit-code %d" % (target, pid, ec))
+    self.win.addstr("\nProcess {0!s} [{1:d}] has exited with exit-code {2:d}".format(target, pid, ec))
 
   def pageUp(self):
     if self.viewline > 0:
@@ -95,7 +95,7 @@ class SourceWin(cui.TitledWin):
       self.viewline = self.pc_line - half + 1
 
     if self.viewline < 0:
-      raise Exception("negative viewline: pc=%d viewline=%d" % (self.pc_line, self.viewline))
+      raise Exception("negative viewline: pc={0:d} viewline={1:d}".format(self.pc_line, self.viewline))
 
   def refreshSource(self, process = None):
     (self.height, self.width) = self.win.getmaxyx()
@@ -151,7 +151,7 @@ class SourceWin(cui.TitledWin):
         attr = curses.A_REVERSE
       if line_num in breakpoints:
         marker = self.markerBP
-      line = "%s%3d %s" % (marker, line_num, self.highlight(content[i]))
+      line = "{0!s}{1:3d} {2!s}".format(marker, line_num, self.highlight(content[i]))
       if len(line) >= self.width:
         line = line[0:self.width-1] + "\n"
       self.win.addstr(line, attr)

@@ -180,15 +180,15 @@ def main():
     filters = " -f ".join(redo_specs)
     compilers = ''
     for comp in comp_specs:
-        compilers += " -C %s" % (comp)
+        compilers += " -C {0!s}".format((comp))
     archs = ''
     for arch in arch_specs:
-        archs += "--arch %s " % (arch)
+        archs += "--arch {0!s} ".format((arch))
 
-    command = "./dotest.py %s %s -v %s %s -f " % (compilers, archs, "" if no_trace else "-t", "-d" if do_delay else "")
+    command = "./dotest.py {0!s} {1!s} -v {2!s} {3!s} -f ".format(compilers, archs, "" if no_trace else "-t", "-d" if do_delay else "")
 
 
-    print("Running %s" % (command + filters))
+    print("Running {0!s}".format((command + filters)))
     os.system(command + filters)
 
 if __name__ == '__main__':

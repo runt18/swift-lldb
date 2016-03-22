@@ -86,7 +86,7 @@ class TestGoASTContext(TestBase):
 
     def var(self, name):
         var = self.frame().FindVariable(name)
-        self.assertTrue(var.IsValid(), "%s %s" % (VALID_VARIABLE, name))
+        self.assertTrue(var.IsValid(), "{0!s} {1!s}".format(VALID_VARIABLE, name))
         return var
 
     def check_main_vars(self):

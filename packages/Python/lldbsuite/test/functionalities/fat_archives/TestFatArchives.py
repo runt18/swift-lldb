@@ -28,7 +28,7 @@ class FatArchiveTestCase(TestBase):
     @expectedFailureDarwin("rdar://23589961")
     def test (self):
         if self.getArchitecture() == 'x86_64':
-            execute_command ("make CC='%s'" % (os.environ["CC"]))
+            execute_command ("make CC='{0!s}'".format((os.environ["CC"])))
             self.main ()
         else:
             self.skipTest("This test requires x86_64 as the architecture for the inferior")

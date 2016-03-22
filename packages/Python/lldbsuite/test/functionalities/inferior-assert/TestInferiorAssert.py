@@ -94,7 +94,7 @@ class AssertingInferiorTestCase(TestBase):
         # And it should report the correct line number.
         self.expect("thread backtrace all",
             substrs = [stop_reason,
-                       'main.c:%d' % self.line])
+                       'main.c:{0:d}'.format(self.line)])
 
     def inferior_asserting_python(self):
         """Inferior asserts upon launching; lldb should catch the event and stop."""
@@ -171,7 +171,7 @@ class AssertingInferiorTestCase(TestBase):
             if isi386Arch == True:
                 if lastframeID == frame.GetFrameID():
                     pc_backup_offset = 0
-            self.expect("disassemble -a %s" % (frame.GetPC() - pc_backup_offset),
+            self.expect("disassemble -a {0!s}".format((frame.GetPC() - pc_backup_offset)),
                     substrs = ['<+0>: '])
 
     def check_expr_in_main(self, thread):
@@ -180,7 +180,7 @@ class AssertingInferiorTestCase(TestBase):
             frame = thread.GetFrameAtIndex(i)
             self.assertTrue(frame.IsValid(), "current frame is valid")
             if self.TraceOn():
-                print("Checking if function %s is main" % frame.GetFunctionName())
+                print("Checking if function {0!s} is main".format(frame.GetFunctionName()))
 
             if 'main' == frame.GetFunctionName():
                 frame_id = frame.GetFrameID()
@@ -226,7 +226,7 @@ class AssertingInferiorTestCase(TestBase):
         target.LaunchSimple (None, None, self.get_process_working_directory())
 
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = ['main.c:%d' % self.line,
+            substrs = ['main.c:{0:d}'.format(self.line),
                        'stop reason = breakpoint'])
 
         self.runCmd("next")
@@ -250,4 +250,4 @@ class AssertingInferiorTestCase(TestBase):
         # And it should report the correct line number.
         self.expect("thread backtrace all",
             substrs = [stop_reason,
-                       'main.c:%d' % self.line])
+                       'main.c:{0:d}'.format(self.line)])

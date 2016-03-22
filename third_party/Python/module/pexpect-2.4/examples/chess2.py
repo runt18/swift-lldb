@@ -32,10 +32,10 @@ class Chess:
                 try:
                     k = self.child.read(1, 10)
                 except Exception, e:
-                    print 'EXCEPTION, (r,c):(%d,%d)\n' %(self.term.cur_r, self.term.cur_c)
+                    print 'EXCEPTION, (r,c):({0:d},{1:d})\n'.format(self.term.cur_r, self.term.cur_c)
                     sys.stdout.flush()
                 self.term.process (k)
-                fout.write ('(r,c):(%d,%d)\n' %(self.term.cur_r, self.term.cur_c))
+                fout.write ('(r,c):({0:d},{1:d})\n'.format(self.term.cur_r, self.term.cur_c))
                 fout.flush()
                 if e:
                     sys.stdout.write (k)
@@ -57,7 +57,7 @@ class Chess:
             while 1:
                 c = self.child.read(1,10)
                 self.term.process (c)
-                fout.write ('(r,c):(%d,%d)\n' %(self.term.cur_r, self.term.cur_c))
+                fout.write ('(r,c):({0:d},{1:d})\n'.format(self.term.cur_r, self.term.cur_c))
                 fout.flush()
                 sys.stdout.write (c)
                 sys.stdout.flush()
@@ -94,7 +94,7 @@ class Chess:
         def set_depth (self, depth):
                 self.child.sendline ('depth')
                 self.child.expect ('depth=')
-                self.child.sendline ('%d' % depth)
+                self.child.sendline ('{0:d}'.format(depth))
 
         def quit(self):
                 self.child.sendline ('quit')

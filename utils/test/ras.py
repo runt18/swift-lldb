@@ -37,7 +37,7 @@ def runTestsuite(testDir, sessDir, envs = None):
 
     import shlex, subprocess
 
-    command_line = "./dotest.py -w -s %s" % sessDir
+    command_line = "./dotest.py -w -s {0!s}".format(sessDir)
     # Apply correct tokenization for subprocess.Popen().
     args = shlex.split(command_line)
 
@@ -48,7 +48,7 @@ def runTestsuite(testDir, sessDir, envs = None):
     stdout, stderr = process.communicate()
     
     # This will be used as the subject line of our email about this test.
-    cmd = "%s %s" % (' '.join(envs) if envs else "", command_line)
+    cmd = "{0!s} {1!s}".format(' '.join(envs) if envs else "", command_line)
 
     return (cmd, stderr)
 
@@ -119,7 +119,7 @@ SMTP server, which then does the normal delivery process.
     if not os.path.exists(sessDir):
         outer.attach(MIMEText(output, 'plain'))
     else:
-        outer.attach(MIMEText("%s\n%s\n\n" % (output,
+        outer.attach(MIMEText("{0!s}\n{1!s}\n\n".format(output,
                                               "Session logs of test failures/errors:"),
                               'plain'))
 

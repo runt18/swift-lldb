@@ -63,4 +63,4 @@ class TestBenchmarkContinue(BenchBase):
             lldbutil.continue_to_breakpoint(self.process(), bkpt)
             lldbutil_sw.stop()
             
-        print("runCmd: %s\nlldbutil: %s" % (runCmd_sw,lldbutil_sw))
+        print("runCmd: {0!s}\nlldbutil: {1!s}".format(runCmd_sw, lldbutil_sw))

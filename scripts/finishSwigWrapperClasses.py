@@ -96,7 +96,7 @@ def program_exit_success(vnResult, vMsg):
     strMsg = ""
 
     if vMsg.__len__() != 0:
-        strMsg = "%s: %s (%d)" % (strExitMsgSuccess, vMsg, vnResult)
+        strMsg = "{0!s}: {1!s} ({2:d})".format(strExitMsgSuccess, vMsg, vnResult)
         print(strMsg)
 
     sys.exit(vnResult)
@@ -110,7 +110,7 @@ def program_exit_success(vnResult, vMsg):
 # Throws:   None.
 #--
 def program_exit_on_failure(vnResult, vMsg):
-    print(("%s%s (%d)" % (strExitMsgError, vMsg, vnResult)))
+    print(("{0!s}{1!s} ({2:d})".format(strExitMsgError, vMsg, vnResult)))
     sys.exit(vnResult)
 
 #++---------------------------------------------------------------------------
@@ -141,7 +141,7 @@ def print_out_input_parameters(vDictArgs):
         if val.__len__() != 0:
             strEqs = " ="
             strQ = "\""
-        print(("%s%s%s %s%s%s\n" % (strParameter, arg, strEqs, strQ, val, strQ)))
+        print(("{0!s}{1!s}{2!s} {3!s}{4!s}{5!s}\n".format(strParameter, arg, strEqs, strQ, val, strQ)))
 
 #++---------------------------------------------------------------------------
 # Details:  Validate the arguments passed to the program. This function exits
@@ -259,7 +259,7 @@ def run_post_process_for_each_script_supported(vDictArgs):
     for scriptLang in listDirs:
         # __pycache__ is a magic directory in Python 3 that holds .pyc files
         if scriptLang != "__pycache__" and scriptLang != "swig_bot_lib":
-            dbg.dump_text("Executing language script for \'%s\'" % scriptLang)
+            dbg.dump_text("Executing language script for \'{0!s}\'".format(scriptLang))
             nResult, strStatusMsg = run_post_process(scriptLang, strFinishFileName,
                                                      vDictArgs)
         if nResult < 0:

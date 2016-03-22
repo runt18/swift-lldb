@@ -31,13 +31,13 @@ class SingleQuoteInCommandLineTestCase(TestBase):
         """Test that 'lldb my_file_name' works where my_file_name is a string with a single quote char in it."""
         import pexpect
         self.buildDefault()
-        system([["cp", "a.out", "\"%s\"" % self.myexe]])
+        system([["cp", "a.out", "\"{0!s}\"".format(self.myexe)]])
 
         # The default lldb prompt.
         prompt = "(lldb) "
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s %s "%s"' % (lldbtest_config.lldbExec, self.lldbOption, self.myexe))
+        self.child = pexpect.spawn('{0!s} {1!s} "{2!s}"'.format(lldbtest_config.lldbExec, self.lldbOption, self.myexe))
         child = self.child
         child.setecho(True)
         # Turn on logging for input/output to/from the child.

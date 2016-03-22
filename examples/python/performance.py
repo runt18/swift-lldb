@@ -45,7 +45,7 @@ except ImportError:
                 except ImportError:
                     pass
                 else:
-                    print 'imported lldb from: "%s"' % (lldb_python_dir)
+                    print 'imported lldb from: "{0!s}"'.format((lldb_python_dir))
                     success = True
                     break
     if not success:
@@ -149,7 +149,7 @@ class TestCase:
             error = lldb.SBError()
             self.process = self.target.Launch (self.launch_info, error)
             if not error.Success():
-                print "error: %s" % error.GetCString()
+                print "error: {0!s}".format(error.GetCString())
             if self.process:
                 self.process.GetBroadcaster().AddListener(self.listener, lldb.SBProcess.eBroadcastBitStateChanged | lldb.SBProcess.eBroadcastBitInterrupt)
                 return True
@@ -163,7 +163,7 @@ class TestCase:
                 if self.listener.WaitForEvent (lldb.UINT32_MAX, process_event):
                     state = lldb.SBProcess.GetStateFromEvent (process_event)
                     if self.verbose:
-                        print "event = %s" % (lldb.SBDebugger.StateAsCString(state))
+                        print "event = {0!s}".format((lldb.SBDebugger.StateAsCString(state)))
                     if lldb.SBProcess.GetRestartedFromEvent(process_event):
                         continue
                     if state == lldb.eStateInvalid or state == lldb.eStateDetached or state == lldb.eStateCrashed or  state == lldb.eStateUnloaded or state == lldb.eStateExited:
@@ -182,7 +182,7 @@ class TestCase:
                             
                             stop_reason = thread.GetStopReason()
                             if self.verbose:
-                                print "tid = %#x pc = %#x " % (thread.GetThreadID(),frame.GetPC()),
+                                print "tid = {0:#x} pc = {1:#x} ".format(thread.GetThreadID(), frame.GetPC()),
                             if stop_reason == lldb.eStopReasonNone:
                                 if self.verbose:
                                     print "none"
@@ -213,15 +213,15 @@ class TestCase:
                                 bp_id = thread.GetStopReasonDataAtIndex(0)
                                 bp_loc_id = thread.GetStopReasonDataAtIndex(1)
                                 if self.verbose:
-                                    print "breakpoint id = %d.%d" % (bp_id, bp_loc_id)
+                                    print "breakpoint id = {0:d}.{1:d}".format(bp_id, bp_loc_id)
                             elif stop_reason == lldb.eStopReasonWatchpoint:
                                 select_thread = True
                                 if self.verbose:
-                                    print "watchpoint id = %d" % (thread.GetStopReasonDataAtIndex(0))
+                                    print "watchpoint id = {0:d}".format((thread.GetStopReasonDataAtIndex(0)))
                             elif stop_reason == lldb.eStopReasonSignal:
                                 select_thread = True
                                 if self.verbose:
-                                    print "signal %d" % (thread.GetStopReasonDataAtIndex(0))
+                                    print "signal {0:d}".format((thread.GetStopReasonDataAtIndex(0)))
                             
                             if select_thread and not selected_thread:
                                 self.thread = thread
@@ -250,7 +250,7 @@ class MemoryMeasurement(Measurement):
         Measurement.__init__(self)
         self.pid = pid
         self.stats = ["rprvt","rshrd","rsize","vsize","vprvt","kprvt","kshrd","faults","cow","pageins"]
-        self.command = "top -l 1 -pid %u -stats %s" % (self.pid, ",".join(self.stats))
+        self.command = "top -l 1 -pid {0:d} -stats {1!s}".format(self.pid, ",".join(self.stats))
         self.value = dict()
     
     def Measure(self):
@@ -278,7 +278,7 @@ class MemoryMeasurement(Measurement):
         for key in self.value.keys():
             if s:
                 s += "\n"
-            s += "%8s = %s" % (key, self.value[key])
+            s += "{0:8!s} = {1!s}".format(key, self.value[key])
         return s
 
 
@@ -291,7 +291,7 @@ class TesterTestCase(TestCase):
     def BreakpointHit (self, thread):
         bp_id = thread.GetStopReasonDataAtIndex(0)
         loc_id = thread.GetStopReasonDataAtIndex(1)
-        print "Breakpoint %i.%i hit: %s" % (bp_id, loc_id, thread.process.target.FindBreakpointByID(bp_id))
+        print "Breakpoint {0:d}.{1:d} hit: {2!s}".format(bp_id, loc_id, thread.process.target.FindBreakpointByID(bp_id))
         thread.StepOver()
     
     def PlanComplete (self, thread):
@@ -308,7 +308,7 @@ class TesterTestCase(TestCase):
             if self.target:
                 with Timer() as breakpoint_timer:
                     bp = self.target.BreakpointCreateByName("main")
-                print('Breakpoint time = %.03f sec.' % breakpoint_timer.interval)
+                print('Breakpoint time = {0:.03f} sec.'.format(breakpoint_timer.interval))
                 
                 self.user_actions.append (BreakpointAction(breakpoint=bp, callback=TesterTestCase.BreakpointHit, callback_owner=self))
                 self.user_actions.append (PlanCompleteAction(callback=TesterTestCase.PlanComplete, callback_owner=self))
@@ -319,8 +319,8 @@ class TesterTestCase(TestCase):
                 else:
                     print "error: failed to launch process"
             else:
-                print "error: failed to create target with '%s'" % (args[0])
-        print('Total time = %.03f sec.' % total_time.interval)
+                print "error: failed to create target with '{0!s}'".format((args[0]))
+        print('Total time = {0:.03f} sec.'.format(total_time.interval))
         
 
 if __name__ == '__main__':

@@ -31,14 +31,14 @@ class CompDirSymLinkTestCase(TestBase):
     def test_symlink_paths_set(self):
         pwd_symlink = self.create_src_symlink()
         self.doBuild(pwd_symlink)
-        self.runCmd("settings set %s %s" % (_COMP_DIR_SYM_LINK_PROP, pwd_symlink))
+        self.runCmd("settings set {0!s} {1!s}".format(_COMP_DIR_SYM_LINK_PROP, pwd_symlink))
         lldbutil.run_break_set_by_file_and_line(self, self.src_path, self.line)
 
     @skipUnlessHostLinux
     def test_symlink_paths_set_procselfcwd(self):
         pwd_symlink = '/proc/self/cwd'
         self.doBuild(pwd_symlink)
-        self.runCmd("settings set %s %s" % (_COMP_DIR_SYM_LINK_PROP, pwd_symlink))
+        self.runCmd("settings set {0!s} {1!s}".format(_COMP_DIR_SYM_LINK_PROP, pwd_symlink))
         lldbutil.run_break_set_by_file_and_line(self, self.src_path, self.line)
 
     @skipIfHostWindows

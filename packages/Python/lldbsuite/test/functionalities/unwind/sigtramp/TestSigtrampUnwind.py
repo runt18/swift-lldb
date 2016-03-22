@@ -67,7 +67,7 @@ class SigtrampUnwind(TestBase):
         if self.TraceOn():
             print("Backtrace once we're stopped:")
             for f in thread.frames:
-                print("  %d %s" % (f.GetFrameID(), f.GetFunctionName()))
+                print("  {0:d} {1!s}".format(f.GetFrameID(), f.GetFunctionName()))
 
         if found_handler == False:
             self.fail("Unable to find handler() in backtrace.")

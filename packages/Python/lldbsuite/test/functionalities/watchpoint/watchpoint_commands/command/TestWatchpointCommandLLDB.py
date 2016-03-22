@@ -25,7 +25,7 @@ class WatchpointLLDBCommandTestCase(TestBase):
         # And the watchpoint variable declaration line number.
         self.decl = line_number(self.source, '// Watchpoint variable declaration.')
         # Build dictionary to have unique executable names for each test method.
-        self.exe_name = 'a%d.out' % self.test_number
+        self.exe_name = 'a{0:d}.out'.format(self.test_number)
         self.d = {'CXX_SOURCES': self.source, 'EXE': self.exe_name}
 
     @expectedFailureAndroid(archs=['arm', 'aarch64']) # Watchpoints not supported
@@ -53,7 +53,7 @@ class WatchpointLLDBCommandTestCase(TestBase):
         # Now let's set a write-type watchpoint for 'global'.
         self.expect("watchpoint set variable -w write global", WATCHPOINT_CREATED,
             substrs = ['Watchpoint created', 'size = 4', 'type = w',
-                       '%s:%d' % (self.source, self.decl)])
+                       '{0!s}:{1:d}'.format(self.source, self.decl)])
 
         self.runCmd('watchpoint command add 1 -o "expr -- cookie = 777"')
 
@@ -107,7 +107,7 @@ class WatchpointLLDBCommandTestCase(TestBase):
         # Now let's set a write-type watchpoint for 'global'.
         self.expect("watchpoint set variable -w write global", WATCHPOINT_CREATED,
             substrs = ['Watchpoint created', 'size = 4', 'type = w',
-                       '%s:%d' % (self.source, self.decl)])
+                       '{0!s}:{1:d}'.format(self.source, self.decl)])
 
         self.runCmd('watchpoint command add 1 -o "watchpoint disable 1"')
 

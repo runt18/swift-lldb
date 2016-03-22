@@ -40,7 +40,7 @@ class StopHookForMultipleThreadsTestCase(TestBase):
         prompt = "(lldb) "
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s %s' % (lldbtest_config.lldbExec, self.lldbOption))
+        self.child = pexpect.spawn('{0!s} {1!s}'.format(lldbtest_config.lldbExec, self.lldbOption))
         child = self.child
         # Turn on logging for what the child sends back.
         if self.TraceOn():
@@ -48,20 +48,20 @@ class StopHookForMultipleThreadsTestCase(TestBase):
 
         if lldb.remote_platform:
             child.expect_exact(prompt)
-            child.sendline('platform select %s' % lldb.remote_platform.GetName())
+            child.sendline('platform select {0!s}'.format(lldb.remote_platform.GetName()))
             child.expect_exact(prompt)
-            child.sendline('platform connect %s' % configuration.lldb_platform_url)
+            child.sendline('platform connect {0!s}'.format(configuration.lldb_platform_url))
             child.expect_exact(prompt)
-            child.sendline('platform settings -w %s' % configuration.lldb_platform_working_dir)
+            child.sendline('platform settings -w {0!s}'.format(configuration.lldb_platform_working_dir))
 
         child.expect_exact(prompt)
-        child.sendline('target create %s' % exe)
+        child.sendline('target create {0!s}'.format(exe))
 
         # Set the breakpoint, followed by the target stop-hook commands.
         child.expect_exact(prompt)
-        child.sendline('breakpoint set -f main.cpp -l %d' % self.first_stop)
+        child.sendline('breakpoint set -f main.cpp -l {0:d}'.format(self.first_stop))
         child.expect_exact(prompt)
-        child.sendline('breakpoint set -f main.cpp -l %d' % self.thread_function)
+        child.sendline('breakpoint set -f main.cpp -l {0:d}'.format(self.thread_function))
         child.expect_exact(prompt)
 
         # Now run the program, expect to stop at the first breakpoint which is within the stop-hook range.

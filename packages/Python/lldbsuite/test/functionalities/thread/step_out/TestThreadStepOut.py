@@ -55,35 +55,35 @@ class ThreadStepOutTestCase(TestBase):
     def step_out_single_thread_with_cmd(self):
         self.step_out_with_cmd("this-thread")
         self.expect("thread backtrace all", "Thread location after step out is correct",
-            substrs = ["main.cpp:%d" % self.step_out_destination,
-                       "main.cpp:%d" % self.breakpoint])
+            substrs = ["main.cpp:{0:d}".format(self.step_out_destination),
+                       "main.cpp:{0:d}".format(self.breakpoint)])
 
     def step_out_all_threads_with_cmd(self):
         self.step_out_with_cmd("all-threads")
         self.expect("thread backtrace all", "Thread location after step out is correct",
-            substrs = ["main.cpp:%d" % self.step_out_destination])
+            substrs = ["main.cpp:{0:d}".format(self.step_out_destination)])
 
     def step_out_with_cmd(self, run_mode):
-        self.runCmd("thread select %d" % self.step_out_thread.GetIndexID())
-        self.runCmd("thread step-out -m %s" % run_mode)
+        self.runCmd("thread select {0:d}".format(self.step_out_thread.GetIndexID()))
+        self.runCmd("thread step-out -m {0!s}".format(run_mode))
         self.expect("process status", "Expected stop reason to be step-out",
             substrs = ["stop reason = step out"])
 
         self.expect("thread list", "Selected thread did not change during step-out",
-            substrs = ["* thread #%d" % self.step_out_thread.GetIndexID()])
+            substrs = ["* thread #{0:d}".format(self.step_out_thread.GetIndexID())])
 
     def step_out_with_python(self):
         self.step_out_thread.StepOut()
 
         reason = self.step_out_thread.GetStopReason()
         self.assertEqual(lldb.eStopReasonPlanComplete, reason,
-            "Expected thread stop reason 'plancomplete', but got '%s'" % lldbutil.stop_reason_to_str(reason))
+            "Expected thread stop reason 'plancomplete', but got '{0!s}'".format(lldbutil.stop_reason_to_str(reason)))
 
         # Verify location after stepping out
         frame = self.step_out_thread.GetFrameAtIndex(0)
         desc = lldbutil.get_description(frame.GetLineEntry())
-        expect = "main.cpp:%d" % self.step_out_destination
-        self.assertTrue(expect in desc, "Expected %s but thread stopped at %s" % (expect, desc))
+        expect = "main.cpp:{0:d}".format(self.step_out_destination)
+        self.assertTrue(expect in desc, "Expected {0!s} but thread stopped at {1!s}".format(expect, desc))
 
     def step_out_test(self, step_out_func):
         """Test single thread step out of a function."""
@@ -95,7 +95,7 @@ class ThreadStepOutTestCase(TestBase):
 
         # The breakpoint list should show 1 location.
         self.expect("breakpoint list -f", "Breakpoint location shown correctly",
-            substrs = ["1: file = 'main.cpp', line = %d, exact_match = 0, locations = 1" % self.breakpoint])
+            substrs = ["1: file = 'main.cpp', line = {0:d}, exact_match = 0, locations = 1".format(self.breakpoint)])
 
         # Run the program.
         self.runCmd("run", RUN_SUCCEEDED)
@@ -114,7 +114,7 @@ class ThreadStepOutTestCase(TestBase):
                                       other_threads=other_threads)
 
         while len(breakpoint_threads) < 2:
-            self.runCmd("thread continue %s" % " ".join([str(x.GetIndexID()) for x in other_threads]))
+            self.runCmd("thread continue {0!s}".format(" ".join([str(x.GetIndexID()) for x in other_threads])))
             lldbutil.sort_stopped_threads(self.inferior_process,
                                           breakpoint_threads=breakpoint_threads,
                                           other_threads=other_threads)

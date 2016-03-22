@@ -38,7 +38,7 @@ def do_lldb_launch_loop(lldb_command, exe, exe_options):
 
     # Now issue the file command.
     #print "sending 'file %s' command..." % exe
-    lldb.sendline('file %s' % exe)
+    lldb.sendline('file {0!s}'.format(exe))
     lldb.expect(prompt)
 
     # Loop until it faults....
@@ -48,7 +48,7 @@ def do_lldb_launch_loop(lldb_command, exe, exe_options):
     for i in range(100):
         count = i
         #print "sending 'process launch -- %s' command... (iteration: %d)" % (exe_options, count)
-        lldb.sendline('process launch -- %s' % exe_options)
+        lldb.sendline('process launch -- {0!s}'.format(exe_options))
         index = lldb.expect(['Process .* exited with status',
                              'Process .* stopped',
                              pexpect.TIMEOUT])

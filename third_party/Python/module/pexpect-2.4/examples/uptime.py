@@ -53,5 +53,5 @@ if 'min' in duration:
 
 # Print the parsed fields in CSV format.
 print 'days, hours, minutes, users, cpu avg 1 min, cpu avg 5 min, cpu avg 15 min'
-print '%s, %s, %s, %s, %s, %s, %s' % (days, hours, mins, users, av1, av5, av15)
+print '{0!s}, {1!s}, {2!s}, {3!s}, {4!s}, {5!s}, {6!s}'.format(days, hours, mins, users, av1, av5, av15)
 

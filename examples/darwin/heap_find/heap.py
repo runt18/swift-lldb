@@ -174,7 +174,7 @@ for (uint32_t i=0; i<NUM_SEGMENTS; ++i)
 #endif'''
 
     if user_return_code:
-        expr += "\n%s" % (user_return_code,)
+        expr += "\n{0!s}".format(user_return_code)
     
     return expr
 
@@ -218,7 +218,7 @@ def append_regex_callback(option, opt, value, parser):
         ivar_regex = re.compile(value)
         parser.values.ivar_regex_blacklist.append(ivar_regex)
     except:
-        print 'error: an exception was thrown when compiling the ivar regular expression for "%s"' % value
+        print 'error: an exception was thrown when compiling the ivar regular expression for "{0!s}"'.format(value)
     
 def add_common_options(parser):
     parser.add_option('-v', '--verbose', action='store_true', dest='verbose', help='display verbose debug info', default=False)
@@ -269,7 +269,7 @@ def find_variable_containing_address(verbose, frame, match_addr):
         if var_addr != lldb.LLDB_INVALID_ADDRESS:
             byte_size = var.GetType().GetByteSize()
             if verbose:
-                print 'frame #%u: [%#x - %#x) %s' % (frame.GetFrameID(), var.load_addr, var.load_addr + byte_size, var.name)
+                print 'frame #{0:d}: [{1:#x} - {2:#x}) {3!s}'.format(frame.GetFrameID(), var.load_addr, var.load_addr + byte_size, var.name)
             if var_addr == match_addr:
                 if verbose:
                     print 'match'
@@ -304,15 +304,15 @@ def find_frame_for_stack_address(process, addr):
 def type_flags_to_description(process, type_flags, ptr_addr, ptr_size, offset, match_addr):
     show_offset = False
     if type_flags == 0 or type_flags & 4:
-        type_str = 'free(%#x)' % (ptr_addr,)
+        type_str = 'free({0:#x})'.format(ptr_addr)
     elif type_flags & 2 or type_flags & 1:
-        type_str = 'malloc(%6u) -> %#x' % (ptr_size, ptr_addr)
+        type_str = 'malloc({0:6d}) -> {1:#x}'.format(ptr_size, ptr_addr)
         show_offset = True
     elif type_flags & 8:
         type_str = 'stack'
         frame = find_frame_for_stack_address(process, match_addr)
         if frame:
-            type_str += ' in frame #%u of thread #%u: tid %#x' % (frame.GetFrameID(), frame.GetThread().GetIndexID(), frame.GetThread().GetThreadID())
+            type_str += ' in frame #{0:d} of thread #{1:d}: tid {2:#x}'.format(frame.GetFrameID(), frame.GetThread().GetIndexID(), frame.GetThread().GetThreadID())
         variables = frame.GetVariables(True,True,True,True)
         matching_var = None
         for var in variables:
@@ -328,20 +328,20 @@ def type_flags_to_description(process, type_flags, ptr_addr, ptr_size, offset, m
                         matching_var = var
                         break
         if matching_var:
-            type_str += ' in variable at %#x:\n    %s' % (matching_var.GetLoadAddress(), matching_var)
+            type_str += ' in variable at {0:#x}:\n    {1!s}'.format(matching_var.GetLoadAddress(), matching_var)
     elif type_flags & 16:
         type_str = 'stack (red zone)'
     elif type_flags & 32:
         sb_addr = process.GetTarget().ResolveLoadAddress(ptr_addr + offset)
-        type_str = 'segment [%#x - %#x), %s + %u, %s' % (ptr_addr, ptr_addr + ptr_size, sb_addr.section.name, sb_addr.offset, sb_addr)
+        type_str = 'segment [{0:#x} - {1:#x}), {2!s} + {3:d}, {4!s}'.format(ptr_addr, ptr_addr + ptr_size, sb_addr.section.name, sb_addr.offset, sb_addr)
     elif type_flags & 64:
         sb_addr = process.GetTarget().ResolveLoadAddress(ptr_addr + offset)
-        type_str = 'vm_region [%#x - %#x), %s + %u, %s' % (ptr_addr, ptr_addr + ptr_size, sb_addr.section.name, sb_addr.offset, sb_addr)
+        type_str = 'vm_region [{0:#x} - {1:#x}), {2!s} + {3:d}, {4!s}'.format(ptr_addr, ptr_addr + ptr_size, sb_addr.section.name, sb_addr.offset, sb_addr)
     else:
-        type_str = '%#x' % (ptr_addr,)
+        type_str = '{0:#x}'.format(ptr_addr)
         show_offset = True
     if show_offset and offset != 0:
-        type_str += ' + %-6u' % (offset,)
+        type_str += ' + {0:<6d}'.format(offset)
     return type_str
     
 def dump_stack_history_entry(options, result, stack_history_entry, idx):
@@ -351,7 +351,7 @@ def dump_stack_history_entry(options, result, stack_history_entry, idx):
         symbolicator = lldb.utils.symbolication.Symbolicator()
         symbolicator.target = lldb.debugger.GetSelectedTarget()
         type_str = type_flags_to_string(type_flags)
-        result.AppendMessage('stack[%u]: addr = 0x%x, type=%s, frames:' % (idx, address, type_str))
+        result.AppendMessage('stack[{0:d}]: addr = 0x{1:x}, type={2!s}, frames:'.format(idx, address, type_str))
         frame_idx = 0
         idx = 0
         pc = int(stack_history_entry.frames[idx])
@@ -360,17 +360,17 @@ def dump_stack_history_entry(options, result, stack_history_entry, idx):
                 frames = symbolicator.symbolicate(pc)
                 if frames:
                     for frame in frames:
-                        result.AppendMessage('     [%u] %s' % (frame_idx, frame))
+                        result.AppendMessage('     [{0:d}] {1!s}'.format(frame_idx, frame))
                         frame_idx += 1
                 else:
-                    result.AppendMessage('     [%u] 0x%x' % (frame_idx, pc))
+                    result.AppendMessage('     [{0:d}] 0x{1:x}'.format(frame_idx, pc))
                     frame_idx += 1
                 idx = idx + 1
                 pc = int(stack_history_entry.frames[idx])
             else:
                 pc = 0
         if idx >= options.max_frames:
-            result.AppendMessage('warning: the max number of stack frames (%u) was reached, use the "--max-frames=<COUNT>" option to see more frames' % (options.max_frames))
+            result.AppendMessage('warning: the max number of stack frames ({0:d}) was reached, use the "--max-frames=<COUNT>" option to see more frames'.format((options.max_frames)))
             
         result.AppendMessage('')
             
@@ -388,10 +388,10 @@ typedef struct $malloc_stack_entry {
 } $malloc_stack_entry;
 '''
     single_expr = '''
-#define MAX_FRAMES %u
+#define MAX_FRAMES {0:d}
 typedef unsigned task_t;
 $malloc_stack_entry stack;
-stack.address = 0x%x;
+stack.address = 0x{1:x};
 stack.type_flags = 2;
 stack.num_frames = 0;
 stack.frames[0] = 0;
@@ -406,38 +406,38 @@ if (stack.num_frames < MAX_FRAMES)
     stack.frames[stack.num_frames] = 0;
 else
     stack.frames[MAX_FRAMES-1] = 0;
-stack''' % (options.max_frames, addr);
+stack'''.format(options.max_frames, addr);
 
     history_expr = '''
 typedef int kern_return_t;
 typedef unsigned task_t;
-#define MAX_FRAMES %u
-#define MAX_HISTORY %u
-typedef struct mach_stack_logging_record_t {
+#define MAX_FRAMES {0:d}
+#define MAX_HISTORY {1:d}
+typedef struct mach_stack_logging_record_t {{
 	uint32_t type_flags;
 	uint64_t stack_identifier;
 	uint64_t argument;
 	uint64_t address;
-} mach_stack_logging_record_t;
+}} mach_stack_logging_record_t;
 typedef void (*enumerate_callback_t)(mach_stack_logging_record_t, void *);
-typedef struct malloc_stack_entry {
+typedef struct malloc_stack_entry {{
     uint64_t address;
     uint64_t argument;
     uint32_t type_flags;
     uint32_t num_frames;
     uint64_t frames[MAX_FRAMES];
     kern_return_t frames_err;    
-} malloc_stack_entry;
-typedef struct $malloc_stack_history {
+}} malloc_stack_entry;
+typedef struct $malloc_stack_history {{
     task_t task;
     unsigned idx;
     malloc_stack_entry entries[MAX_HISTORY];
-} $malloc_stack_history;
-$malloc_stack_history info = { (task_t)mach_task_self(), 0 };
+}} $malloc_stack_history;
+$malloc_stack_history info = {{ (task_t)mach_task_self(), 0 }};
 uint32_t max_stack_frames = MAX_FRAMES;
-enumerate_callback_t callback = [] (mach_stack_logging_record_t stack_record, void *baton) -> void {
+enumerate_callback_t callback = [] (mach_stack_logging_record_t stack_record, void *baton) -> void {{
     $malloc_stack_history *info = ($malloc_stack_history *)baton;
-    if (info->idx < MAX_HISTORY) {
+    if (info->idx < MAX_HISTORY) {{
         malloc_stack_entry *stack_entry = &(info->entries[info->idx]);
         stack_entry->address = stack_record.address;
         stack_entry->type_flags = stack_record.type_flags;
@@ -453,11 +453,11 @@ enumerate_callback_t callback = [] (mach_stack_logging_record_t stack_record, vo
         // Terminate the frames with zero if there is room
         if (stack_entry->num_frames < MAX_FRAMES)
             stack_entry->frames[stack_entry->num_frames] = 0; 
-    }
+    }}
     ++info->idx;
-};
-(kern_return_t)__mach_stack_logging_enumerate_records (info.task, (uint64_t)0x%x, callback, &info);
-info''' % (options.max_frames, options.max_history, addr);
+}};
+(kern_return_t)__mach_stack_logging_enumerate_records (info.task, (uint64_t)0x{2:x}, callback, &info);
+info'''.format(options.max_frames, options.max_history, addr);
 
     frame = lldb.debugger.GetSelectedTarget().GetProcess().GetSelectedThread().GetSelectedFrame()
     if history:
@@ -488,13 +488,13 @@ info''' % (options.max_frames, options.max_history, addr);
                 stack_history_entry = malloc_stack_history.entries[i]
                 dump_stack_history_entry(options, result, stack_history_entry, i)
             if num_stacks > options.max_history:
-                result.AppendMessage('warning: the max number of stacks (%u) was reached, use the "--max-history=%u" option to see all of the stacks' % (options.max_history, num_stacks))
+                result.AppendMessage('warning: the max number of stacks ({0:d}) was reached, use the "--max-history={1:d}" option to see all of the stacks'.format(options.max_history, num_stacks))
         else:
             stack_history_entry = lldb.value(expr_sbvalue)
             dump_stack_history_entry(options, result, stack_history_entry, 0)
             
     else:
-        result.AppendMessage('error: expression failed "%s" => %s' % (expr, expr_sbvalue.error))
+        result.AppendMessage('error: expression failed "{0!s}" => {1!s}'.format(expr, expr_sbvalue.error))
 
 
 def display_match_results (process, result, options, arg_str_description, expr, print_no_matches, expr_prefix = None):
@@ -524,7 +524,7 @@ def display_match_results (process, result, options, arg_str_description, expr, 
             print_entry = True
             match_entry = match_value[i]; i += 1
             if i > options.max_matches:
-                result.AppendMessage('warning: the max number of matches (%u) was reached, use the --max-matches option to get more results' % (options.max_matches))
+                result.AppendMessage('warning: the max number of matches ({0:d}) was reached, use the --max-matches option to get more results'.format((options.max_matches)))
                 break
             malloc_addr = match_entry.addr.sbvalue.unsigned
             if malloc_addr == 0:
@@ -554,11 +554,11 @@ def display_match_results (process, result, options, arg_str_description, expr, 
                     options.search_heap = search_heap_old
                     options.search_vm_regions = search_vm_regions
                 if print_entry:
-                    description = '%#16.16x: %s' % (match_addr, type_flags_to_description(process, type_flags, malloc_addr, malloc_size, offset, match_addr))
+                    description = '{0:#16.16x}: {1!s}'.format(match_addr, type_flags_to_description(process, type_flags, malloc_addr, malloc_size, offset, match_addr))
                     if options.show_size:
-                        description += ' <%5u>' % (malloc_size)
+                        description += ' <{0:5d}>'.format((malloc_size))
                     if options.show_range:
-                        description += ' [%#x - %#x)' % (malloc_addr, malloc_addr + malloc_size)
+                        description += ' [{0:#x} - {1:#x})'.format(malloc_addr, malloc_addr + malloc_size)
                     derefed_dynamic_value = None
                     dynamic_value = match_entry.addr.sbvalue.GetDynamicValue(lldb.eDynamicCanRunTarget)
                     if dynamic_value.type.name == 'void *':
@@ -578,7 +578,7 @@ def display_match_results (process, result, options, arg_str_description, expr, 
                                 # ptr bytes  next hotter page
                                 #   4 bytes  this page's depth in the list
                                 #   4 bytes  high-water mark
-                                description += ' AUTORELEASE! for pthread_t %#x' % (thread)
+                                description += ' AUTORELEASE! for pthread_t {0:#x}'.format((thread))
                         #     else:
                         #         description += 'malloc(%u)' % (malloc_size)
                         # else:
@@ -607,9 +607,9 @@ def display_match_results (process, result, options, arg_str_description, expr, 
                                             for ivar_regex in options.ivar_regex_blacklist:
                                                 if ivar_regex.match(member_path):
                                                     print_entry = False
-                                        description += '.%s' % (member_path)
+                                        description += '.{0!s}'.format((member_path))
                             else:
-                                description += '%u bytes after %s' % (offset - derefed_dynamic_type_size, derefed_dynamic_type_name)
+                                description += '{0:d} bytes after {1!s}'.format(offset - derefed_dynamic_type_size, derefed_dynamic_type_name)
                         else:
                             # strip the "*" from the end of the name since we were unable to dereference this
                             description += dynamic_value.type.name[0:-1]
@@ -619,19 +619,19 @@ def display_match_results (process, result, options, arg_str_description, expr, 
                 if description:
                     result_output += description
                     if options.print_type and derefed_dynamic_value:
-                        result_output += ' %s' % (derefed_dynamic_value)
+                        result_output += ' {0!s}'.format((derefed_dynamic_value))
                     if options.print_object_description and dynamic_value:
                         desc = dynamic_value.GetObjectDescription()
                         if desc:
-                            result_output += '\n%s' % (desc)
+                            result_output += '\n{0!s}'.format((desc))
                 if result_output:
                     result.AppendMessage(result_output)
                 if options.memory:
                     cmd_result = lldb.SBCommandReturnObject()
                     if options.format == None:
-                        memory_command = "memory read --force 0x%x 0x%x" % (malloc_addr, malloc_addr + malloc_size)
+                        memory_command = "memory read --force 0x{0:x} 0x{1:x}".format(malloc_addr, malloc_addr + malloc_size)
                     else:
-                        memory_command = "memory read --force -f %s 0x%x 0x%x" % (options.format, malloc_addr, malloc_addr + malloc_size)
+                        memory_command = "memory read --force -f {0!s} 0x{1:x} 0x{2:x}".format(options.format, malloc_addr, malloc_addr + malloc_size)
                     if options.verbose:
                         result.AppendMessage(memory_command)
                     lldb.debugger.GetCommandInterpreter().HandleCommand(memory_command, cmd_result)
@@ -674,7 +674,7 @@ def find_variable(debugger, command, result, dict):
     
     for arg in args:
         var_addr = int(arg, 16)
-        print >>result, "Finding a variable with address %#x..." % (var_addr)
+        print >>result, "Finding a variable with address {0:#x}...".format((var_addr))
         done = False
         for thread in process:
             for frame in thread:
@@ -763,7 +763,7 @@ baton.matches'''
         for ptr_expr in args:
             user_init_code = user_init_code_format % (options.max_matches, ptr_expr)
             expr = get_iterate_memory_expr(options, process, user_init_code, user_return_code)          
-            arg_str_description = 'malloc block containing pointer %s' % ptr_expr
+            arg_str_description = 'malloc block containing pointer {0!s}'.format(ptr_expr)
             display_match_results (process, result, options, arg_str_description, expr, True, expr_prefix)
     else:
         result.AppendMessage('error: no pointer arguments were given')
@@ -859,7 +859,7 @@ baton.matches'''
         for cstr in args:
             user_init_code = user_init_code_format % (options.max_matches, cstr)
             expr = get_iterate_memory_expr(options, process, user_init_code, user_return_code)          
-            arg_str_description = 'malloc block containing "%s"' % cstr            
+            arg_str_description = 'malloc block containing "{0!s}"'.format(cstr)            
             display_match_results (process, result, options, arg_str_description, expr, True, expr_prefix)
     else:
         result.AppendMessage('error: command takes one or more C string arguments')
@@ -936,7 +936,7 @@ baton.matches[1].addr = 0;'''
         for ptr_expr in args:
             user_init_code = user_init_code_format % (ptr_expr)
             expr = get_iterate_memory_expr(options, process, user_init_code, 'baton.matches')          
-            arg_str_description = 'malloc block that contains %s' % ptr_expr
+            arg_str_description = 'malloc block that contains {0!s}'.format(ptr_expr)
             total_matches += display_match_results (process, result, options, arg_str_description, expr, True, expr_prefix)
         return total_matches
     else:
@@ -963,15 +963,15 @@ def get_thread_stack_ranges_struct (process):
     stack_dicts_len = len(stack_dicts)
     if stack_dicts_len > 0:
         result = '''
-#define NUM_STACKS %u
-#define STACK_RED_ZONE_SIZE %u
-typedef struct thread_stack_t { uint64_t tid, base, size; } thread_stack_t;
-thread_stack_t stacks[NUM_STACKS];''' % (stack_dicts_len, process.target.GetStackRedZoneSize())
+#define NUM_STACKS {0:d}
+#define STACK_RED_ZONE_SIZE {1:d}
+typedef struct thread_stack_t {{ uint64_t tid, base, size; }} thread_stack_t;
+thread_stack_t stacks[NUM_STACKS];'''.format(stack_dicts_len, process.target.GetStackRedZoneSize())
         for stack_dict in stack_dicts:
             result += '''
-stacks[%(index)u].tid  = 0x%(tid)x;
-stacks[%(index)u].base = 0x%(base)x;
-stacks[%(index)u].size = 0x%(size)x;''' % stack_dict
+stacks[{index:d}].tid  = 0x{tid:x};
+stacks[{index:d}].base = 0x{base:x};
+stacks[{index:d}].size = 0x{size:x};'''.format(**stack_dict)
         return result
     else:
         return ''
@@ -996,14 +996,14 @@ def get_sections_ranges_struct (process):
     segment_dicts_len = len(segment_dicts)
     if segment_dicts_len > 0:
         result = '''
-#define NUM_SEGMENTS %u
-typedef struct segment_range_t { uint64_t base; uint32_t size; } segment_range_t;
-segment_range_t segments[NUM_SEGMENTS];''' % (segment_dicts_len,)
+#define NUM_SEGMENTS {0:d}
+typedef struct segment_range_t {{ uint64_t base; uint32_t size; }} segment_range_t;
+segment_range_t segments[NUM_SEGMENTS];'''.format(segment_dicts_len)
         for (idx, segment_dict) in enumerate(segment_dicts):
             segment_dict['index'] = idx
             result += '''
-segments[%(index)u].base = 0x%(base)x;
-segments[%(index)u].size = 0x%(size)x;''' % segment_dict
+segments[{index:d}].base = 0x{base:x};
+segments[{index:d}].size = 0x{size:x};'''.format(**segment_dict)
         return result
     else:
         return ''
@@ -1043,8 +1043,8 @@ def section_ptr_refs(debugger, command, result, dict):
         frame = target.GetProcess().GetSelectedThread().GetSelectedFrame()
         for expr_str in args:
             for (idx, section) in enumerate(sections):
-                expr = 'find_pointer_in_memory(0x%xllu, %ullu, (void *)%s)' % (section.addr.load_addr, section.size, expr_str)
-                arg_str_description = 'section %s.%s containing "%s"' % (section_modules[idx].file.fullpath, section.name, expr_str)
+                expr = 'find_pointer_in_memory(0x{0:x}llu, {1:d}llu, (void *){2!s})'.format(section.addr.load_addr, section.size, expr_str)
+                arg_str_description = 'section {0!s}.{1!s} containing "{2!s}"'.format(section_modules[idx].file.fullpath, section.name, expr_str)
                 num_matches = display_match_results (target.GetProcess(), result, options, arg_str_description, expr, False)
                 if num_matches:
                     if num_matches < options.max_matches:
@@ -1054,7 +1054,7 @@ def section_ptr_refs(debugger, command, result, dict):
                 if options.max_matches == 0:
                     return
     else:
-        result.AppendMessage('error: no sections were found that match any of %s' % (', '.join(options.section_names)))
+        result.AppendMessage('error: no sections were found that match any of {0!s}'.format((', '.join(options.section_names))))
 
 def get_objc_refs_options():
     usage = "usage: %prog [options] <CLASS> [CLASS ...]"
@@ -1096,7 +1096,7 @@ def objc_refs(debugger, command, result, dict):
     expr_options.SetLanguage(lldb.eLanguageTypeObjC_plus_plus)
     num_objc_classes_value = frame.EvaluateExpression("(int)objc_getClassList((void *)0, (int)0)", expr_options)
     if not num_objc_classes_value.error.Success():
-        result.AppendMessage('error: %s' % num_objc_classes_value.error.GetCString())
+        result.AppendMessage('error: {0!s}'.format(num_objc_classes_value.error.GetCString()))
         return
     
     num_objc_classes = num_objc_classes_value.GetValueAsUnsigned()
@@ -1195,7 +1195,7 @@ int nc = (int)objc_getClassList(baton.classes, sizeof(baton.classes)/sizeof(Clas
         baton.matches'''
         # Iterate through all of our ObjC class name arguments
         for class_name in args:
-            addr_expr_str = "(void *)[%s class]" % class_name
+            addr_expr_str = "(void *)[{0!s} class]".format(class_name)
             expr_options = lldb.SBExpressionOptions()
             expr_options.SetIgnoreBreakpoints(True);
             expr_options.SetTimeoutInMicroSeconds (1*1000*1000) # 1 second timeout
@@ -1206,15 +1206,15 @@ int nc = (int)objc_getClassList(baton.classes, sizeof(baton.classes)/sizeof(Clas
                 isa = expr_sbvalue.unsigned
                 if isa:
                     options.type = 'isa'
-                    result.AppendMessage('Searching for all instances of classes or subclasses of "%s" (isa=0x%x)' % (class_name, isa))
+                    result.AppendMessage('Searching for all instances of classes or subclasses of "{0!s}" (isa=0x{1:x})'.format(class_name, isa))
                     user_init_code = user_init_code_format % (options.max_matches, num_objc_classes, isa)
                     expr = get_iterate_memory_expr(options, process, user_init_code, user_return_code)          
-                    arg_str_description = 'objective C classes with isa 0x%x' % isa
+                    arg_str_description = 'objective C classes with isa 0x{0:x}'.format(isa)
                     display_match_results (process, result, options, arg_str_description, expr, True, expr_prefix)
                 else:
-                    result.AppendMessage('error: Can\'t find isa for an ObjC class named "%s"' % (class_name))
+                    result.AppendMessage('error: Can\'t find isa for an ObjC class named "{0!s}"'.format((class_name)))
             else:
-                result.AppendMessage('error: expression error for "%s": %s' % (addr_expr_str, expr_sbvalue.error))
+                result.AppendMessage('error: expression error for "{0!s}": {1!s}'.format(addr_expr_str, expr_sbvalue.error))
     else:
         result.AppendMessage('error: command takes one or more C string arguments');
 
@@ -1229,14 +1229,14 @@ ptr_refs.__doc__ = get_ptr_refs_options().format_help()
 cstr_refs.__doc__ = get_cstr_refs_options().format_help()
 malloc_info.__doc__ = get_malloc_info_options().format_help()
 objc_refs.__doc__ = get_objc_refs_options().format_help()
-lldb.debugger.HandleCommand('command script add -f %s.ptr_refs ptr_refs' % __name__)
-lldb.debugger.HandleCommand('command script add -f %s.cstr_refs cstr_refs' % __name__)
-lldb.debugger.HandleCommand('command script add -f %s.malloc_info malloc_info' % __name__)
-lldb.debugger.HandleCommand('command script add -f %s.find_variable find_variable' % __name__)
+lldb.debugger.HandleCommand('command script add -f {0!s}.ptr_refs ptr_refs'.format(__name__))
+lldb.debugger.HandleCommand('command script add -f {0!s}.cstr_refs cstr_refs'.format(__name__))
+lldb.debugger.HandleCommand('command script add -f {0!s}.malloc_info malloc_info'.format(__name__))
+lldb.debugger.HandleCommand('command script add -f {0!s}.find_variable find_variable'.format(__name__))
 # lldb.debugger.HandleCommand('command script add -f %s.heap heap' % package_name)
 # lldb.debugger.HandleCommand('command script add -f %s.section_ptr_refs section_ptr_refs' % package_name)
 # lldb.debugger.HandleCommand('command script add -f %s.stack_ptr_refs stack_ptr_refs' % package_name)
-lldb.debugger.HandleCommand('command script add -f %s.objc_refs objc_refs' % __name__)
+lldb.debugger.HandleCommand('command script add -f {0!s}.objc_refs objc_refs'.format(__name__))
 print '"malloc_info", "ptr_refs", "cstr_refs", "find_variable", and "objc_refs" commands have been installed, use the "--help" options on these commands for detailed help.'
 
 

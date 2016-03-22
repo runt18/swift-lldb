@@ -74,7 +74,7 @@ def char_to_str_xform(line):
 #
 TWO_SPACES = ' ' * 2
 EIGHT_SPACES = ' ' * 8
-one_liner_docstring_pattern = re.compile('^(%s|%s)""".*"""$' % (TWO_SPACES, EIGHT_SPACES))
+one_liner_docstring_pattern = re.compile('^({0!s}|{1!s})""".*"""$'.format(TWO_SPACES, EIGHT_SPACES))
 
 #
 # lldb_helpers and lldb_iter() should appear before our first SB* class definition.

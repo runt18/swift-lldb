@@ -28,7 +28,7 @@ def import_lldb():
   from subprocess import check_output, CalledProcessError
   try:
     with open(os.devnull, 'w') as fnull:
-      lldb_minus_p_path = check_output("%s -P" % lldb_executable, shell=True, stderr=fnull).strip()
+      lldb_minus_p_path = check_output("{0!s} -P".format(lldb_executable), shell=True, stderr=fnull).strip()
     if not os.path.exists(lldb_minus_p_path):
       #lldb -P returned invalid path, probably too old
       pass
@@ -58,4 +58,4 @@ def import_lldb():
 
 if not import_lldb():
   import vim
-  vim.command('redraw | echo "%s"' % " Error loading lldb module; vim-lldb will be disabled. Check LLDB installation or set LLDB environment variable.")
+  vim.command('redraw | echo "{0!s}"'.format(" Error loading lldb module; vim-lldb will be disabled. Check LLDB installation or set LLDB environment variable."))

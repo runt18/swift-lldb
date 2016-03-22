@@ -44,8 +44,8 @@ class FrameTreeItemDelegate(object):
 
     def get_item_dictionary(self):
         id = self.frame.GetFrameID()
-        name = 'frame #%u' % (id);
-        value = '0x%16.16x' % (self.frame.GetPC())
+        name = 'frame #{0:d}'.format((id));
+        value = '0x{0:16.16x}'.format((self.frame.GetPC()))
         stream = lldb.SBStream()
         self.frame.GetDescription(stream)
         summary = stream.GetData().split("`")[1]
@@ -70,9 +70,9 @@ class ThreadTreeItemDelegate(object):
 
    def get_item_dictionary(self):
        num_frames = self.thread.GetNumFrames()
-       name = 'thread #%u' % (self.thread.GetIndexID())
-       value = '0x%x' % (self.thread.GetThreadID())
-       summary = '%u frames' % (num_frames)
+       name = 'thread #{0:d}'.format((self.thread.GetIndexID()))
+       value = '0x{0:x}'.format((self.thread.GetThreadID()))
+       summary = '{0:d} frames'.format((num_frames))
        return { '#0' : name,
                 'value': value, 
                 'summary': summary,
@@ -137,7 +137,7 @@ class TargetImagesTreeItemDelegate(object):
         num_modules = self.target.GetNumModules()
         return { '#0' : 'images',
                  'value': '', 
-                 'summary': '%u images' % num_modules,
+                 'summary': '{0:d} images'.format(num_modules),
                  'children' : num_modules > 0,
                  'tree-item-delegate' : self }
 
@@ -156,7 +156,7 @@ class ModuleTreeItemDelegate(object):
         self.index = index
 
     def get_item_dictionary(self):
-        name = 'module %u' % (self.index)
+        name = 'module {0:d}'.format((self.index))
         value = self.module.file.basename
         summary = self.module.file.dirname
         return { '#0' : name,
@@ -185,7 +185,7 @@ class ModuleSectionsTreeItemDelegate(object):
     def get_item_dictionary(self):
         name = 'sections'
         value = ''
-        summary = '%u sections' % (self.module.GetNumSections())
+        summary = '{0:d} sections'.format((self.module.GetNumSections()))
         return { '#0' : name,
                  'value': value, 
                  'summary': summary,
@@ -210,9 +210,9 @@ class SectionTreeItemDelegate(object):
         name = self.section.name
         section_load_addr = self.section.GetLoadAddress(self.target)
         if section_load_addr != lldb.LLDB_INVALID_ADDRESS:
-            value = '0x%16.16x' % (section_load_addr)
+            value = '0x{0:16.16x}'.format((section_load_addr))
         else:
-            value = '0x%16.16x *' % (self.section.file_addr)
+            value = '0x{0:16.16x} *'.format((self.section.file_addr))
         summary = ''
         return { '#0' : name,
                  'value': value, 
@@ -237,7 +237,7 @@ class ModuleCompileUnitsTreeItemDelegate(object):
     def get_item_dictionary(self):
         name = 'compile units'
         value = ''
-        summary = '%u compile units' % (self.module.GetNumSections())
+        summary = '{0:d} compile units'.format((self.module.GetNumSections()))
         return { '#0' : name,
                  'value': value, 
                  'summary': summary,
@@ -284,7 +284,7 @@ class LineTableTreeItemDelegate(object):
         name = 'line table'
         value = ''
         num_lines = self.cu.GetNumLineEntries()
-        summary = '%u line entries' % (num_lines)
+        summary = '{0:d} line entries'.format((num_lines))
         return { '#0' : name,
                  'value': value, 
                  'summary': summary,
@@ -311,9 +311,9 @@ class LineEntryTreeItemDelegate(object):
         address = self.line_entry.GetStartAddress()
         load_addr = address.GetLoadAddress(self.target)
         if load_addr != lldb.LLDB_INVALID_ADDRESS:
-            value = '0x%16.16x' % (load_addr)
+            value = '0x{0:16.16x}'.format((load_addr))
         else:
-            value = '0x%16.16x *' % (address.file_addr)
+            value = '0x{0:16.16x} *'.format((address.file_addr))
         summary = self.line_entry.GetFileSpec().fullpath + ':' + str(self.line_entry.line)
         return { '#0' : name,
                  'value': value, 
@@ -334,9 +334,9 @@ class InstructionTreeItemDelegate(object):
         address = self.instr.GetAddress()
         load_addr = address.GetLoadAddress(self.target)
         if load_addr != lldb.LLDB_INVALID_ADDRESS:
-            name = '0x%16.16x' % (load_addr)
+            name = '0x{0:16.16x}'.format((load_addr))
         else:
-            name = '0x%16.16x *' % (address.file_addr)
+            name = '0x{0:16.16x} *'.format((address.file_addr))
         value = self.instr.GetMnemonic(self.target) + ' ' + self.instr.GetOperands(self.target)
         summary = self.instr.GetComment(self.target)
         return { '#0' : name,
@@ -353,7 +353,7 @@ class ModuleSymbolsTreeItemDelegate(object):
     def get_item_dictionary(self):
         name = 'symbols'
         value = ''
-        summary = '%u symbols' % (self.module.GetNumSymbols())
+        summary = '{0:d} symbols'.format((self.module.GetNumSymbols()))
         return { '#0' : name,
                  'value': value, 
                  'summary': summary,
@@ -377,12 +377,12 @@ class SymbolTreeItemDelegate(object):
 
     def get_item_dictionary(self):
         address = self.symbol.GetStartAddress()
-        name = '[%u]' % self.index
+        name = '[{0:d}]'.format(self.index)
         symbol_load_addr = address.GetLoadAddress(self.target)
         if symbol_load_addr != lldb.LLDB_INVALID_ADDRESS:
-            value = '0x%16.16x' % (symbol_load_addr)
+            value = '0x{0:16.16x}'.format((symbol_load_addr))
         else:
-            value = '0x%16.16x *' % (address.file_addr)
+            value = '0x{0:16.16x} *'.format((address.file_addr))
         summary = self.symbol.name
         return { '#0' : name,
                  'value': value, 

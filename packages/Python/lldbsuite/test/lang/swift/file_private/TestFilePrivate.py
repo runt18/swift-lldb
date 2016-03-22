@@ -39,7 +39,7 @@ class TestFilePrivate(TestBase):
             answer = value.GetSummary()
         else:
             answer = value.GetValue()
-        report_str = "%s expected: %s got: %s"%(expression, expected_result, answer)
+        report_str = "{0!s} expected: {1!s} got: {2!s}".format(expression, expected_result, answer)
         self.assertTrue(answer == expected_result, report_str)
 
     @swiftTest

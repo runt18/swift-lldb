@@ -45,7 +45,7 @@ class CommandInterpreterAPICase(TestBase):
         self.assertTrue(ci.AliasExists("bt"))
 
         res = lldb.SBCommandReturnObject()
-        ci.HandleCommand("breakpoint set -f main.c -l %d" % self.line, res)
+        ci.HandleCommand("breakpoint set -f main.c -l {0:d}".format(self.line), res)
         self.assertTrue(res.Succeeded())
         ci.HandleCommand("process launch", res)
         self.assertTrue(res.Succeeded())

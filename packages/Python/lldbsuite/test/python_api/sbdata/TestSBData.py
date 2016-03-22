@@ -342,7 +342,7 @@ class SBDataAPICase(TestBase):
             stream = lldb.SBStream()
             error.GetDescription(stream)
             self.assertTrue(error.Success(),
-                            "%s(error, %s) did not succeed: %s" % (func.__name__,
+                            "{0!s}(error, {1!s}) did not succeed: {2!s}".format(func.__name__,
                                                                    arg,
                                                                    stream.GetData()))
-        self.assertTrue(expected == result, "%s(error, %s) == %s != %s" % (func.__name__, arg, result, expected))
+        self.assertTrue(expected == result, "{0!s}(error, {1!s}) == {2!s} != {3!s}".format(func.__name__, arg, result, expected))

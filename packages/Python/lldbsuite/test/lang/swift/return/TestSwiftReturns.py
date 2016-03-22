@@ -50,15 +50,15 @@ class TestSwiftReturns(TestBase):
         Returns an error string describing what parts of "a" and "b" didn't match
         or returns None for a successful compare'''
         if compare_name and a.name != b.name:
-            return 'error: name mismatch "%s" != "%s"' % (a.name, b.name)
+            return 'error: name mismatch "{0!s}" != "{1!s}"'.format(a.name, b.name)
         if a.type.name != b.type.name:
-            return 'error: typename mismatch "%s" != "%s"' % (a.type.name, b.type.name)
+            return 'error: typename mismatch "{0!s}" != "{1!s}"'.format(a.type.name, b.type.name)
         if a.value != b.value:
-            return 'error: value string mismatch "%s" != "%s"' % (a.value, b.value)
+            return 'error: value string mismatch "{0!s}" != "{1!s}"'.format(a.value, b.value)
         if a.summary != b.summary:
-            return 'error: summary mismatch "%s" != "%s"' % (a.summary, b.summary)
+            return 'error: summary mismatch "{0!s}" != "{1!s}"'.format(a.summary, b.summary)
         if a.num_children != b.num_children:
-            return 'error: num_children mismatch %i != %i' % (a.num_children, b.num_children)
+            return 'error: num_children mismatch {0:d} != {1:d}'.format(a.num_children, b.num_children)
         for i in range(a.num_children):
             a_child = a.GetChildAtIndex (i, lldb.eNoDynamicValues, False)
             b_child = b.GetChildAtIndex (i, lldb.eNoDynamicValues, False)
@@ -77,8 +77,8 @@ class TestSwiftReturns(TestBase):
         err = self.compare_value(return_value, variable, False)
         if err:
             if self.TraceOn():
-                print 'return value: %s' % (return_value)
-                print '    variable: %s' % (variable)
+                print 'return value: {0!s}'.format((return_value))
+                print '    variable: {0!s}'.format((variable))
             self.assertTrue(False, err)
 
     def do_test(self):

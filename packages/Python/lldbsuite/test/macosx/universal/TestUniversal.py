@@ -99,7 +99,7 @@ class UniversalTestCase(TestBase):
 
         pointerSize = self.invoke(process, 'GetAddressByteSize')
         self.assertTrue(pointerSize == 4,
-                        "AddressByteSize of 32-bit process should be 4, got %d instead." % pointerSize)
+                        "AddressByteSize of 32-bit process should be 4, got {0:d} instead.".format(pointerSize))
 
         frame = process.GetThreadAtIndex(0).GetFrameAtIndex(0)
         registers = print_registers(frame, string_buffer=True)

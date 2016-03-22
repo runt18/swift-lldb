@@ -29,7 +29,7 @@ class MiTestCaseBase(Base):
 
     def tearDown(self):
         if self.TraceOn():
-            print("\n\nContents of %s:" % self.mylog)
+            print("\n\nContents of {0!s}:".format(self.mylog))
             try:
                 print(open(self.mylog, "r").read())
             except IOError:
@@ -38,7 +38,7 @@ class MiTestCaseBase(Base):
 
     def spawnLldbMi(self, args=None):
         import pexpect
-        self.child = pexpect.spawn("%s --interpreter %s" % (
+        self.child = pexpect.spawn("{0!s} --interpreter {1!s}".format(
             self.lldbMiExec, args if args else ""))
         self.child.setecho(True)
         self.child.logfile_read = open(self.mylog, "w")

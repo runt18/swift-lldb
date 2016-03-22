@@ -94,17 +94,17 @@ class targetCommandTestCase(TestBase):
 
         self.runCmd("target list")
 
-        self.runCmd("target select %d" % base)
+        self.runCmd("target select {0:d}".format(base))
         self.runCmd("thread backtrace")
 
-        self.runCmd("target select %d" % (base + 2))
+        self.runCmd("target select {0:d}".format((base + 2)))
         self.expect("thread backtrace", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = ['c.c:%d' % self.line_c,
+            substrs = ['c.c:{0:d}'.format(self.line_c),
                        'stop reason = breakpoint'])
 
-        self.runCmd("target select %d" % (base + 1))
+        self.runCmd("target select {0:d}".format((base + 1)))
         self.expect("thread backtrace", STOPPED_DUE_TO_BREAKPOINT,
-            substrs = ['b.c:%d' % self.line_b,
+            substrs = ['b.c:{0:d}'.format(self.line_b),
                        'stop reason = breakpoint'])
 
         self.runCmd("target list")

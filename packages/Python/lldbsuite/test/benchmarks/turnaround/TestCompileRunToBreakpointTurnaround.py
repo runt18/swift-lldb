@@ -32,7 +32,7 @@ class CompileRunToBreakpointBench(BenchBase):
         print("lldb turnaround benchmark:", self.stopwatch)
         self.run_gdb_turnaround(self.exe, self.function, self.count)
         print("gdb turnaround benchmark:", self.stopwatch)
-        print("lldb_avg/gdb_avg: %f" % (self.lldb_avg/self.gdb_avg))
+        print("lldb_avg/gdb_avg: {0:f}".format((self.lldb_avg/self.gdb_avg)))
 
     def run_lldb_turnaround(self, exe, function, count):
         import pexpect
@@ -40,7 +40,7 @@ class CompileRunToBreakpointBench(BenchBase):
             prompt = self.child_prompt
 
             # So that the child gets torn down after the test.
-            self.child = pexpect.spawn('%s %s %s' % (lldbtest_config.lldbExec, self.lldbOption, exe))
+            self.child = pexpect.spawn('{0!s} {1!s} {2!s}'.format(lldbtest_config.lldbExec, self.lldbOption, exe))
             child = self.child
 
             # Turn on logging for what the child sends back.
@@ -48,7 +48,7 @@ class CompileRunToBreakpointBench(BenchBase):
                 child.logfile_read = sys.stdout
 
             child.expect_exact(prompt)
-            child.sendline('breakpoint set -F %s' % function)
+            child.sendline('breakpoint set -F {0!s}'.format(function))
             child.expect_exact(prompt)
             child.sendline('run')
             child.expect_exact(prompt)
@@ -81,7 +81,7 @@ class CompileRunToBreakpointBench(BenchBase):
             prompt = self.child_prompt
 
             # So that the child gets torn down after the test.
-            self.child = pexpect.spawn('gdb --nx %s' % exe)
+            self.child = pexpect.spawn('gdb --nx {0!s}'.format(exe))
             child = self.child
 
             # Turn on logging for what the child sends back.
@@ -89,7 +89,7 @@ class CompileRunToBreakpointBench(BenchBase):
                 child.logfile_read = sys.stdout
 
             child.expect_exact(prompt)
-            child.sendline('break %s' % function)
+            child.sendline('break {0!s}'.format(function))
             child.expect_exact(prompt)
             child.sendline('run')
             child.expect_exact(prompt)

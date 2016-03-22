@@ -18,7 +18,7 @@ class NoSuchArchTestCase(TestBase):
         exe = os.path.join (os.getcwd(), "a.out")
 
         # Check that passing an invalid arch via the command-line fails but doesn't crash
-        self.expect("target crete --arch nothingtoseehere %s" % (exe), error=True)
+        self.expect("target crete --arch nothingtoseehere {0!s}".format((exe)), error=True)
 
         # Check that passing an invalid arch via the SB API fails but doesn't crash
         target = self.dbg.CreateTargetWithFileAndArch(exe,"nothingtoseehere")

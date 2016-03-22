@@ -19,7 +19,7 @@ class TestRerun(TestBase):
         self.build()
         exe = os.path.join (os.getcwd(), "a.out")
         
-        self.runCmd("target create %s" % exe)
+        self.runCmd("target create {0!s}".format(exe))
         
         # Create the target
         target = self.dbg.CreateTarget(exe)

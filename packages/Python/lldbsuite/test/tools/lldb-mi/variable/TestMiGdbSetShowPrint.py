@@ -16,14 +16,14 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
 
     # evaluates array when char-array-as-string is off
     def eval_and_check_array(self, var, typ, length):
-        self.runCmd("-var-create - * %s" % var)
-        self.expect('\^done,name="var\d+",numchild="%d",value="\[%d\]",type="%s \[%d\]",thread-id="1",has_more="0"' % (length, length, typ, length))
+        self.runCmd("-var-create - * {0!s}".format(var))
+        self.expect('\^done,name="var\d+",numchild="{0:d}",value="\[{1:d}\]",type="{2!s} \[{3:d}\]",thread-id="1",has_more="0"'.format(length, length, typ, length))
 
     # evaluates any type which can be represented as string of characters
     def eval_and_match_string(self, var, value, typ):
         value=value.replace("\\", "\\\\").replace("\"", "\\\"")
         self.runCmd("-var-create - * " + var)
-        self.expect('\^done,name="var\d+",numchild="[0-9]+",value="%s",type="%s",thread-id="1",has_more="0"' % (value, typ))
+        self.expect('\^done,name="var\d+",numchild="[0-9]+",value="{0!s}",type="{1!s}",thread-id="1",has_more="0"'.format(value, typ))
 
     @skipIfWindows #llvm.org/pr24452: Get lldb-mi working on Windows
     @skipIfFreeBSD # llvm.org/pr22411: Failure presumably due to known thread races
@@ -34,12 +34,12 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to BP_gdb_set_show_print_char_array_as_string_test
         line = line_number('main.cpp', '// BP_gdb_set_show_print_char_array_as_string_test')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")
@@ -116,12 +116,12 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to BP_gdb_set_show_print_expand_aggregates
         line = line_number('main.cpp', '// BP_gdb_set_show_print_expand_aggregates')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")
@@ -175,12 +175,12 @@ class MiGdbSetShowTestCase(lldbmi_testcase.MiTestCaseBase):
         self.spawnLldbMi(args = None)
 
         # Load executable
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
 
         # Run to BP_gdb_set_show_print_aggregate_field_names
         line = line_number('main.cpp', '// BP_gdb_set_show_print_aggregate_field_names')
-        self.runCmd("-break-insert main.cpp:%d" % line)
+        self.runCmd("-break-insert main.cpp:{0:d}".format(line))
         self.expect("\^done,bkpt={number=\"1\"")
         self.runCmd("-exec-run")
         self.expect("\^running")

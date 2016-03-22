@@ -139,7 +139,7 @@ STOPPED_DUE_TO_ASSERT = "Process should be stopped due to an assertion"
 
 STOPPED_DUE_TO_BREAKPOINT = "Process should be stopped due to breakpoint"
 
-STOPPED_DUE_TO_BREAKPOINT_WITH_STOP_REASON_AS = "%s, %s" % (
+STOPPED_DUE_TO_BREAKPOINT_WITH_STOP_REASON_AS = "{0!s}, {1!s}".format(
     STOPPED_DUE_TO_BREAKPOINT, "instead, the actual stop reason is: '%s'")
 
 STOPPED_DUE_TO_BREAKPOINT_CONDITION = "Stopped due to breakpoint condition"
@@ -182,20 +182,20 @@ WATCHPOINT_CREATED = "Watchpoint created successfully"
 
 def CMD_MSG(str):
     '''A generic "Command '%s' returns successfully" message generator.'''
-    return "Command '%s' returns successfully" % str
+    return "Command '{0!s}' returns successfully".format(str)
 
 def COMPLETION_MSG(str_before, str_after):
     '''A generic message generator for the completion mechanism.'''
-    return "'%s' successfully completes to '%s'" % (str_before, str_after)
+    return "'{0!s}' successfully completes to '{1!s}'".format(str_before, str_after)
 
 def EXP_MSG(str, exe):
     '''A generic "'%s' returns expected result" message generator if exe.
     Otherwise, it generates "'%s' matches expected result" message.'''
-    return "'%s' %s expected result" % (str, 'returns' if exe else 'matches')
+    return "'{0!s}' {1!s} expected result".format(str, 'returns' if exe else 'matches')
 
 def SETTING_MSG(setting):
     '''A generic "Value of setting '%s' is correct" message generator.'''
-    return "Value of setting '%s' is correct" % setting
+    return "Value of setting '{0!s}' is correct".format(setting)
 
 def EnvArray():
     """Returns an env variable array from the os.environ map object."""
@@ -208,7 +208,7 @@ def line_number(filename, string_to_match):
             if line.find(string_to_match) != -1:
                 # Found our match.
                 return i+1
-    raise Exception("Unable to find '%s' within file %s" % (string_to_match, filename))
+    raise Exception("Unable to find '{0!s}' within file {1!s}".format(string_to_match, filename))
 
 def pointer_size():
     """Return the pointer size of the host system."""
@@ -337,7 +337,7 @@ class _RemoteProcess(_BaseProcess):
             dst_file_spec = lldb.SBFileSpec(dst_path, False)
             err = lldb.remote_platform.Install(lldb.SBFileSpec(src_path, True), dst_file_spec)
             if err.Fail():
-                raise Exception("remote_platform.Install('%s', '%s') failed: %s" % (src_path, dst_path, err))
+                raise Exception("remote_platform.Install('{0!s}', '{1!s}') failed: {2!s}".format(src_path, dst_path, err))
         else:
             dst_path = executable
             dst_file_spec = lldb.SBFileSpec(executable, False)
@@ -352,7 +352,7 @@ class _RemoteProcess(_BaseProcess):
 
         err = lldb.remote_platform.Launch(launch_info)
         if err.Fail():
-            raise Exception("remote_platform.Launch('%s', '%s') failed: %s" % (dst_path, args, err))
+            raise Exception("remote_platform.Launch('{0!s}', '{1!s}') failed: {2!s}".format(dst_path, args, err))
         self._pid = launch_info.GetProcessID()
 
     def terminate(self):
@@ -862,7 +862,7 @@ def skipUnlessListedRemote(remote_list=None):
                     if r in triple:
                         func(*args, **kwargs)
                         return
-                self.skipTest("skip on remote platform %s" % str(triple))
+                self.skipTest("skip on remote platform {0!s}".format(str(triple)))
             else:
                 func(*args, **kwargs)
         return wrapper
@@ -1024,9 +1024,9 @@ def skipIfHostIncompatibleWithRemote(func):
         target_arch = self.getArchitecture()
         target_platform = 'darwin' if self.platformIsDarwin() else self.getPlatform()
         if not (target_arch == 'x86_64' and host_arch == 'i386') and host_arch != target_arch:
-            self.skipTest("skipping because target %s is not compatible with host architecture %s" % (target_arch, host_arch))
+            self.skipTest("skipping because target {0!s} is not compatible with host architecture {1!s}".format(target_arch, host_arch))
         elif target_platform != host_platform:
-            self.skipTest("skipping because target is %s but host is %s" % (target_platform, host_platform))
+            self.skipTest("skipping because target is {0!s} but host is {1!s}".format(target_platform, host_platform))
         else:
             func(*args, **kwargs)
     return wrapper
@@ -1034,12 +1034,12 @@ def skipIfHostIncompatibleWithRemote(func):
 def skipIfHostPlatform(oslist):
     """Decorate the item to skip tests if running on one of the listed host platforms."""
     return unittest2.skipIf(getHostPlatform() in oslist,
-                            "skip on %s" % (", ".join(oslist)))
+                            "skip on {0!s}".format((", ".join(oslist))))
 
 def skipUnlessHostPlatform(oslist):
     """Decorate the item to skip tests unless running on one of the listed host platforms."""
     return unittest2.skipUnless(getHostPlatform() in oslist,
-                                "requires on of %s" % (", ".join(oslist)))
+                                "requires on of {0!s}".format((", ".join(oslist))))
 
 def skipUnlessArch(archlist):
     """Decorate the item to skip tests unless running on one of the listed architectures."""
@@ -1051,8 +1051,7 @@ def skipUnlessArch(archlist):
         def wrapper(*args, **kwargs):
             self = args[0]
             if self.getArchitecture() not in archlist:
-                self.skipTest("skipping for architecture %s (requires one of %s)" % 
-                    (self.getArchitecture(), ", ".join(archlist)))
+                self.skipTest("skipping for architecture {0!s} (requires one of {1!s})".format(self.getArchitecture(), ", ".join(archlist)))
             else:
                 func(*args, **kwargs)
         return wrapper
@@ -1062,12 +1061,12 @@ def skipUnlessArch(archlist):
 def skipIfPlatform(oslist):
     """Decorate the item to skip tests if running on one of the listed platforms."""
     return unittest2.skipIf(getPlatform() in oslist,
-                            "skip on %s" % (", ".join(oslist)))
+                            "skip on {0!s}".format((", ".join(oslist))))
 
 def skipUnlessPlatform(oslist):
     """Decorate the item to skip tests unless running on one of the listed platforms."""
     return unittest2.skipUnless(getPlatform() in oslist,
-                                "requires on of %s" % (", ".join(oslist)))
+                                "requires on of {0!s}".format((", ".join(oslist))))
 
 def skipIfLinuxClang(func):
     """Decorate the item to skip tests that should be skipped if building on 
@@ -1117,7 +1116,7 @@ def skipIf(bugnumber=None, oslist=None, compiler=None, compiler_version=None, ar
     args = [x for x in inspect.getargspec(skipIf).args]
     arg_vals = [eval(x, globals(), local_vars) for x in args]
     args = [x for x in zip(args, arg_vals) if x[1] is not None]
-    reasons = ['%s=%s' % (x, str(y)) for (x,y) in args]
+    reasons = ['{0!s}={1!s}'.format(x, str(y)) for (x,y) in args]
     return skipTestIfFn(fn, bugnumber, skipReason='skipping because ' + ' && '.join(reasons))
 
 def skipIfDebugInfo(bugnumber=None, debug_info=None):
@@ -1210,8 +1209,7 @@ def skipIfTargetAndroid(api_levels=None, archs=None):
             from unittest2 import case
             self = args[0]
             if matchAndroid(api_levels, archs)(self):
-                self.skipTest("skiped on Android target with API %d and architecture %s" %
-                        (android_device_api(), self.getArchitecture()))
+                self.skipTest("skiped on Android target with API {0:d} and architecture {1!s}".format(android_device_api(), self.getArchitecture()))
             func(*args, **kwargs)
         return wrapper
     return myImpl
@@ -1760,7 +1758,7 @@ class Base(unittest2.TestCase):
                 print("unexpected success (problem id:" + str(bugnumber) + ")", file=sbuf)
 
     def getRerunArgs(self):
-        return " -f %s.%s" % (self.__class__.__name__, self._testMethodName)
+        return " -f {0!s}.{1!s}".format(self.__class__.__name__, self._testMethodName)
 
     def getLogBasenameForCurrentTest(self, prefix=None):
         """
@@ -1847,7 +1845,7 @@ class Base(unittest2.TestCase):
         import datetime
         print("Session info generated @", datetime.datetime.now().ctime(), file=self.session)
         print("To rerun this test, issue the following command from the 'test' directory:\n", file=self.session)
-        print("./dotest.py %s -v %s %s" % (self.getRunOptions(),
+        print("./dotest.py {0!s} -v {1!s} {2!s}".format(self.getRunOptions(),
                                                  ('+b' if benchmarks else '-t'),
                                                  self.getRerunArgs()), file=self.session)
         self.session.close()
@@ -2029,7 +2027,7 @@ class Base(unittest2.TestCase):
         if comp:
             option_str += " -C " + comp
         if lldb.remote_platform:
-            option_str += ' --platform-name=%s' % (lldb.remote_platform_name)
+            option_str += ' --platform-name={0!s}'.format((lldb.remote_platform_name))
         return option_str
 
     # ==================================================
@@ -2065,22 +2063,22 @@ class Base(unittest2.TestCase):
             dsym = os.path.join(lib_dir, 'LLDB.framework', 'LLDB')
             d = {'CXX_SOURCES' : sources,
                  'EXE' : exe_name,
-                 'CFLAGS_EXTRAS' : "%s %s" % (stdflag, stdlibflag),
-                 'FRAMEWORK_INCLUDES' : "-F%s" % lib_dir,
-                 'LD_EXTRAS' : "%s -Wl,-rpath,%s" % (dsym, lib_dir),
+                 'CFLAGS_EXTRAS' : "{0!s} {1!s}".format(stdflag, stdlibflag),
+                 'FRAMEWORK_INCLUDES' : "-F{0!s}".format(lib_dir),
+                 'LD_EXTRAS' : "{0!s} -Wl,-rpath,{1!s}".format(dsym, lib_dir),
                 }
         elif sys.platform.rstrip('0123456789') in ('freebsd', 'linux', 'netbsd') or os.environ.get('LLDB_BUILD_TYPE') == 'Makefile':
             d = {'CXX_SOURCES' : sources,
                  'EXE' : exe_name,
-                 'CFLAGS_EXTRAS' : "%s %s -I%s" % (stdflag, stdlibflag, os.path.join(os.environ["LLDB_SRC"], "include")),
-                 'LD_EXTRAS' : "-L%s -llldb" % lib_dir}
+                 'CFLAGS_EXTRAS' : "{0!s} {1!s} -I{2!s}".format(stdflag, stdlibflag, os.path.join(os.environ["LLDB_SRC"], "include")),
+                 'LD_EXTRAS' : "-L{0!s} -llldb".format(lib_dir)}
         elif sys.platform.startswith('win'):
             d = {'CXX_SOURCES' : sources,
                  'EXE' : exe_name,
-                 'CFLAGS_EXTRAS' : "%s %s -I%s" % (stdflag, stdlibflag, os.path.join(os.environ["LLDB_SRC"], "include")),
-                 'LD_EXTRAS' : "-L%s -lliblldb" % os.environ["LLDB_IMPLIB_DIR"]}
+                 'CFLAGS_EXTRAS' : "{0!s} {1!s} -I{2!s}".format(stdflag, stdlibflag, os.path.join(os.environ["LLDB_SRC"], "include")),
+                 'LD_EXTRAS' : "-L{0!s} -lliblldb".format(os.environ["LLDB_IMPLIB_DIR"])}
         if self.TraceOn():
-            print("Building LLDB Driver (%s) from sources %s" % (exe_name, sources))
+            print("Building LLDB Driver ({0!s}) from sources {1!s}".format(exe_name, sources))
 
         self.buildDefault(dictionary=d)
 
@@ -2094,22 +2092,22 @@ class Base(unittest2.TestCase):
             dsym = os.path.join(lib_dir, 'LLDB.framework', 'LLDB')
             d = {'DYLIB_CXX_SOURCES' : sources,
                  'DYLIB_NAME' : lib_name,
-                 'CFLAGS_EXTRAS' : "%s -stdlib=libc++" % stdflag,
-                 'FRAMEWORK_INCLUDES' : "-F%s" % lib_dir,
-                 'LD_EXTRAS' : "%s -Wl,-rpath,%s -dynamiclib" % (dsym, lib_dir),
+                 'CFLAGS_EXTRAS' : "{0!s} -stdlib=libc++".format(stdflag),
+                 'FRAMEWORK_INCLUDES' : "-F{0!s}".format(lib_dir),
+                 'LD_EXTRAS' : "{0!s} -Wl,-rpath,{1!s} -dynamiclib".format(dsym, lib_dir),
                 }
         elif self.getPlatform() in ('freebsd', 'linux', 'netbsd') or os.environ.get('LLDB_BUILD_TYPE') == 'Makefile':
             d = {'DYLIB_CXX_SOURCES' : sources,
                  'DYLIB_NAME' : lib_name,
-                 'CFLAGS_EXTRAS' : "%s -I%s -fPIC" % (stdflag, os.path.join(os.environ["LLDB_SRC"], "include")),
-                 'LD_EXTRAS' : "-shared -L%s -llldb" % lib_dir}
+                 'CFLAGS_EXTRAS' : "{0!s} -I{1!s} -fPIC".format(stdflag, os.path.join(os.environ["LLDB_SRC"], "include")),
+                 'LD_EXTRAS' : "-shared -L{0!s} -llldb".format(lib_dir)}
         elif self.getPlatform() == 'windows':
             d = {'DYLIB_CXX_SOURCES' : sources,
                  'DYLIB_NAME' : lib_name,
-                 'CFLAGS_EXTRAS' : "%s -I%s -fPIC" % (stdflag, os.path.join(os.environ["LLDB_SRC"], "include")),
-                 'LD_EXTRAS' : "-shared -l%s\liblldb.lib" % self.os.environ["LLDB_IMPLIB_DIR"]}
+                 'CFLAGS_EXTRAS' : "{0!s} -I{1!s} -fPIC".format(stdflag, os.path.join(os.environ["LLDB_SRC"], "include")),
+                 'LD_EXTRAS' : "-shared -l{0!s}\liblldb.lib".format(self.os.environ["LLDB_IMPLIB_DIR"])}
         if self.TraceOn():
-            print("Building LLDB Library (%s) from sources %s" % (lib_name, sources))
+            print("Building LLDB Library ({0!s}) from sources {1!s}".format(lib_name, sources))
 
         self.buildDefault(dictionary=d)
     
@@ -2156,7 +2154,7 @@ class Base(unittest2.TestCase):
 
     def signBinary(self, binary_path):
         if sys.platform.startswith("darwin"):
-            codesign_cmd = "codesign --force --sign lldb_codesign %s" % (binary_path)
+            codesign_cmd = "codesign --force --sign lldb_codesign {0!s}".format((binary_path))
             call(codesign_cmd, shell=True)
 
     def findBuiltClang(self):
@@ -2201,7 +2199,7 @@ class Base(unittest2.TestCase):
                 libcxxInclude = os.path.join(self.libcxxPath, "include")
                 libcxxLib = os.path.join(self.libcxxPath, "lib")
                 if os.path.isdir(libcxxInclude) and os.path.isdir(libcxxLib):
-                    cflags += "-nostdinc++ -I%s -L%s -Wl,-rpath,%s " % (libcxxInclude, libcxxLib, libcxxLib)
+                    cflags += "-nostdinc++ -I{0!s} -L{1!s} -Wl,-rpath,{2!s} ".format(libcxxInclude, libcxxLib, libcxxLib)
 
         if use_cpp11:
             cflags += "-std="
@@ -2235,7 +2233,7 @@ class Base(unittest2.TestCase):
         existing_library_path = os.environ[self.dylibPath] if self.dylibPath in os.environ else None
         lib_dir = os.environ["LLDB_LIB_DIR"]
         if existing_library_path:
-            return "%s:%s" % (existing_library_path, lib_dir)
+            return "{0!s}:{1!s}".format(existing_library_path, lib_dir)
         elif sys.platform.startswith("darwin"):
             return os.path.join(lib_dir, 'LLDB.framework')
         else:
@@ -2428,11 +2426,11 @@ class TestBase(Base):
                     # TODO: Make it working on Windows when we need it for remote debugging support
                     # TODO: Replace the heuristic to remove the files with a logic what collects the
                     # list of files we have to remove during test runs.
-                    shell_cmd = lldb.SBPlatformShellCommand("rm %s/*" % remote_test_dir)
+                    shell_cmd = lldb.SBPlatformShellCommand("rm {0!s}/*".format(remote_test_dir))
                     lldb.remote_platform.Run(shell_cmd)
                 self.addTearDownHook(clean_working_directory)
             else:
-                print("error: making remote directory '%s': %s" % (remote_test_dir, error))
+                print("error: making remote directory '{0!s}': {1!s}".format(remote_test_dir, error))
     
     def registerSharedLibrariesWithTarget(self, target, shlibs):
         '''If we are remotely running the test suite, register the shared libraries with the target so they get uploaded, otherwise do nothing
@@ -2450,7 +2448,7 @@ class TestBase(Base):
         shlib_extension = '.' + self.platformContext.shlib_extension
 
         working_dir = self.get_process_working_directory()
-        environment = ['%s=%s' % (shlib_environment_var, working_dir)]
+        environment = ['{0!s}={1!s}'.format(shlib_environment_var, working_dir)]
         # Add any shared libraries to our target if remote so they get
         # uploaded into the working directory on the remote side
         for name in shlibs:
@@ -2550,12 +2548,12 @@ class TestBase(Base):
         from .lldbutil import stop_reason_to_str
         self.runCmd('thread list')
         output = self.res.GetOutput()
-        thread_line_pattern = re.compile("^[ *] thread #([0-9]+):.*stop reason = %s" %
-                                         stop_reason_to_str(stop_reason))
+        thread_line_pattern = re.compile("^[ *] thread #([0-9]+):.*stop reason = {0!s}".format(
+                                         stop_reason_to_str(stop_reason)))
         for line in output.splitlines():
             matched = thread_line_pattern.match(line)
             if matched:
-                self.runCmd('thread select %s' % matched.group(1))
+                self.runCmd('thread select {0!s}'.format(matched.group(1)))
 
     def runCmd(self, cmd, msg=None, check=True, trace=False, inHistory=False):
         """
@@ -2631,7 +2629,7 @@ class TestBase(Base):
             match_object = re.search(pattern, output)
             matched = bool(match_object)
             with recording(self, trace) as sbuf:
-                print("%s pattern: %s" % (heading, pattern), file=sbuf)
+                print("{0!s} pattern: {1!s}".format(heading, pattern), file=sbuf)
                 print("Matched" if matched else "Not matched", file=sbuf)
             if matched:
                 break
@@ -2697,7 +2695,7 @@ class TestBase(Base):
 
         if startstr:
             with recording(self, trace) as sbuf:
-                print("%s start string: %s" % (heading, startstr), file=sbuf)
+                print("{0!s} start string: {1!s}".format(heading, startstr), file=sbuf)
                 print("Matched" if matched else "Not matched", file=sbuf)
 
         # Look for endstr, if specified.
@@ -2705,7 +2703,7 @@ class TestBase(Base):
         if endstr:
             matched = output.endswith(endstr)
             with recording(self, trace) as sbuf:
-                print("%s end string: %s" % (heading, endstr), file=sbuf)
+                print("{0!s} end string: {1!s}".format(heading, endstr), file=sbuf)
                 print("Matched" if matched else "Not matched", file=sbuf)
 
         # Look for sub strings, if specified.
@@ -2714,7 +2712,7 @@ class TestBase(Base):
             for str in substrs:
                 matched = output.find(str) != -1
                 with recording(self, trace) as sbuf:
-                    print("%s sub string: %s" % (heading, str), file=sbuf)
+                    print("{0!s} sub string: {1!s}".format(heading, str), file=sbuf)
                     print("Matched" if matched else "Not matched", file=sbuf)
                 keepgoing = matched if matching else not matched
                 if not keepgoing:
@@ -2727,7 +2725,7 @@ class TestBase(Base):
                 # Match Objects always have a boolean value of True.
                 matched = bool(re.search(pattern, output))
                 with recording(self, trace) as sbuf:
-                    print("%s pattern: %s" % (heading, pattern), file=sbuf)
+                    print("{0!s} pattern: {1!s}".format(heading, pattern), file=sbuf)
                     print("Matched" if matched else "Not matched", file=sbuf)
                 keepgoing = matched if matching else not matched
                 if not keepgoing:
@@ -2763,7 +2761,7 @@ class TestBase(Base):
         elif self.debug_info == "dwo":
             return self.buildDwo(architecture, compiler, dictionary, clean)
         else:
-            self.fail("Can't build for debug info: %s" % self.debug_info)
+            self.fail("Can't build for debug info: {0!s}".format(self.debug_info))
 
     # =================================================
     # Misc. helper methods for debugging test execution

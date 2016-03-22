@@ -107,7 +107,7 @@ def do_lldb_disassembly(lldb_commands, exe, disassemble_options, num_symbols,
         run_command(ci, cmd, res, not quiet_disassembly)
 
     # Now issue the file command.
-    run_command(ci, 'file %s' % exe, res, not quiet_disassembly)
+    run_command(ci, 'file {0!s}'.format(exe), res, not quiet_disassembly)
 
     # Create a target.
     #target = dbg.CreateTarget(exe)
@@ -163,7 +163,7 @@ def do_lldb_disassembly(lldb_commands, exe, disassemble_options, num_symbols,
 
     # Disassembly time.
     for symbol in symbol_iter(num_symbols, symbols_to_disassemble, re_symbol_pattern, target, not quiet_disassembly):
-        cmd = "disassemble %s '%s'" % (disassemble_options, symbol)
+        cmd = "disassemble {0!s} '{1!s}'".format(disassemble_options, symbol)
         run_command(ci, cmd, res, not quiet_disassembly)
 
 

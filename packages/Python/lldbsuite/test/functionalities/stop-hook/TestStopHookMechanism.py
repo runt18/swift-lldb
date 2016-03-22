@@ -38,7 +38,7 @@ class StopHookMechanismTestCase(TestBase):
         add_prompt1 = "> "
 
         # So that the child gets torn down after the test.
-        self.child = pexpect.spawn('%s %s' % (lldbtest_config.lldbExec, self.lldbOption))
+        self.child = pexpect.spawn('{0!s} {1!s}'.format(lldbtest_config.lldbExec, self.lldbOption))
         child = self.child
         # Turn on logging for what the child sends back.
         if self.TraceOn():
@@ -46,22 +46,22 @@ class StopHookMechanismTestCase(TestBase):
 
         if lldb.remote_platform:
             child.expect_exact(prompt)
-            child.sendline('platform select %s' % lldb.remote_platform.GetName())
+            child.sendline('platform select {0!s}'.format(lldb.remote_platform.GetName()))
             child.expect_exact(prompt)
-            child.sendline('platform connect %s' % configuration.lldb_platform_url)
+            child.sendline('platform connect {0!s}'.format(configuration.lldb_platform_url))
             child.expect_exact(prompt)
-            child.sendline('platform settings -w %s' % configuration.lldb_platform_working_dir)
+            child.sendline('platform settings -w {0!s}'.format(configuration.lldb_platform_working_dir))
 
         child.expect_exact(prompt)
-        child.sendline('target create %s' % exe)
+        child.sendline('target create {0!s}'.format(exe))
 
         # Set the breakpoint, followed by the target stop-hook commands.
         child.expect_exact(prompt)
-        child.sendline('breakpoint set -f main.cpp -l %d' % self.begl)
+        child.sendline('breakpoint set -f main.cpp -l {0:d}'.format(self.begl))
         child.expect_exact(prompt)
-        child.sendline('breakpoint set -f main.cpp -l %d' % self.line)
+        child.sendline('breakpoint set -f main.cpp -l {0:d}'.format(self.line))
         child.expect_exact(prompt)
-        child.sendline('target stop-hook add -f main.cpp -l %d -e %d' % (self.begl, self.endl))
+        child.sendline('target stop-hook add -f main.cpp -l {0:d} -e {1:d}'.format(self.begl, self.endl))
         child.expect_exact(add_prompt)
         child.expect_exact(add_prompt1)
         child.sendline('expr ptr')
@@ -85,8 +85,8 @@ class StopHookMechanismTestCase(TestBase):
         # I fixed that in lldb and I'm sticking in a test here because I don't want to have to
         # make up a whole nother test case for it.
         child.sendline('frame info')
-        at_line = 'at main.cpp:%d' % (self.correct_step_line)
-        print('expecting "%s"' % at_line)
+        at_line = 'at main.cpp:{0:d}'.format((self.correct_step_line))
+        print('expecting "{0!s}"'.format(at_line))
         child.expect_exact(at_line)
 
         # Now continue the inferior, we'll stop at another breakpoint which is outside the stop-hook range.

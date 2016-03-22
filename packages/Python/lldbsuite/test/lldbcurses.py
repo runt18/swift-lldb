@@ -20,7 +20,7 @@ class Point(object):
         return str(self)
 
     def __str__(self):
-        return "(x=%u, y=%u)" % (self.x, self.y)
+        return "(x={0:d}, y={1:d})".format(self.x, self.y)
 
     def __eq__(self, rhs):
         return self.x == rhs.x and self.y == rhs.y
@@ -40,7 +40,7 @@ class Size(object):
         return str(self)
 
     def __str__(self):
-        return "(w=%u, h=%u)" % (self.w, self.h)
+        return "(w={0:d}, h={1:d})".format(self.w, self.h)
 
     def __eq__(self, rhs):
         return self.w == rhs.w and self.h == rhs.h
@@ -57,7 +57,7 @@ class Rect(object):
         return str(self)
 
     def __str__(self):
-        return "{ %s, %s }" % (str(self.origin), str(self.size))
+        return "{{ {0!s}, {1!s} }}".format(str(self.origin), str(self.size))
 
     def get_min_x(self):
         return self.origin.x
@@ -1117,7 +1117,7 @@ class StatusPanel(Panel):
     def update(self):
         self.erase();
         for status_item_dict in self.status_items:
-            self.addnstr_at_point(Point(x=status_item_dict['x'], y=0), '%s: %s' % (status_item_dict['title'], status_item_dict['value']), status_item_dict['width'])
+            self.addnstr_at_point(Point(x=status_item_dict['x'], y=0), '{0!s}: {1!s}'.format(status_item_dict['title'], status_item_dict['value']), status_item_dict['width'])
 
 stdscr = None
 

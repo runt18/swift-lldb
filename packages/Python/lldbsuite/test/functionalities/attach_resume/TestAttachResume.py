@@ -55,7 +55,7 @@ class AttachResumeTestCase(TestBase):
         self.expect("process interrupt", patterns=["Process is not running"], error=True)
 
         # check that this breakpoint is auto-cleared on detach (r204752)
-        self.runCmd("br set -f main.cpp -l %u" % (line_number('main.cpp', '// Set breakpoint here')))
+        self.runCmd("br set -f main.cpp -l {0:d}".format((line_number('main.cpp', '// Set breakpoint here'))))
 
         self.runCmd("c")
         lldbutil.expect_state_changes(self, listener, [lldb.eStateRunning, lldb.eStateStopped])

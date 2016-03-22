@@ -31,14 +31,14 @@ class TestQueues(TestBase):
         self.main_source = "main.c"
 
     def check_queue_for_valid_queue_id(self, queue):
-        self.assertTrue(queue.GetQueueID() != 0, "Check queue %s for valid QueueID (got 0x%x)" % (queue.GetName(), queue.GetQueueID()))
+        self.assertTrue(queue.GetQueueID() != 0, "Check queue {0!s} for valid QueueID (got 0x{1:x})".format(queue.GetName(), queue.GetQueueID()))
 
     def check_running_and_pending_items_on_queue(self, queue, expected_running, expected_pending):
-        self.assertTrue(queue.GetNumPendingItems() == expected_pending, "queue %s should have %d pending items, instead has %d pending items" % (queue.GetName(), expected_pending, (queue.GetNumPendingItems())))
-        self.assertTrue(queue.GetNumRunningItems() == expected_running, "queue %s should have %d running items, instead has %d running items" % (queue.GetName(), expected_running, (queue.GetNumRunningItems())))
+        self.assertTrue(queue.GetNumPendingItems() == expected_pending, "queue {0!s} should have {1:d} pending items, instead has {2:d} pending items".format(queue.GetName(), expected_pending, (queue.GetNumPendingItems())))
+        self.assertTrue(queue.GetNumRunningItems() == expected_running, "queue {0!s} should have {1:d} running items, instead has {2:d} running items".format(queue.GetName(), expected_running, (queue.GetNumRunningItems())))
 
     def check_number_of_threads_owned_by_queue(self, queue, number_threads):
-        self.assertTrue(queue.GetNumThreads() == number_threads, "queue %s should have %d thread executing, but has %d" % (queue.GetName(), number_threads, queue.GetNumThreads()))
+        self.assertTrue(queue.GetNumThreads() == number_threads, "queue {0!s} should have {1:d} thread executing, but has {2:d}".format(queue.GetName(), number_threads, queue.GetNumThreads()))
 
     def check_queue_kind (self, queue, kind):
         expected_kind_string = "Unknown"
@@ -51,15 +51,15 @@ class TestQueues(TestBase):
             actual_kind_string = "Serial queue"
         if queue.GetKind() == lldb.eQueueKindConcurrent:
             actual_kind_string = "Concurrent queue"
-        self.assertTrue(queue.GetKind() == kind, "queue %s is expected to be a %s but it is actually a %s" % (queue.GetName(), expected_kind_string, actual_kind_string))
+        self.assertTrue(queue.GetKind() == kind, "queue {0!s} is expected to be a {1!s} but it is actually a {2!s}".format(queue.GetName(), expected_kind_string, actual_kind_string))
 
     def check_queues_threads_match_queue(self, queue):
         for idx in range(0, queue.GetNumThreads()):
             t = queue.GetThreadAtIndex(idx)
-            self.assertTrue(t.IsValid(), "Queue %s's thread #%d must be valid" % (queue.GetName(), idx))
-            self.assertTrue(t.GetQueueID() == queue.GetQueueID(), "Queue %s has a QueueID of %d but its thread #%d has a QueueID of %d" % (queue.GetName(), queue.GetQueueID(), idx, t.GetQueueID()))
-            self.assertTrue(t.GetQueueName() == queue.GetName(), "Queue %s has a QueueName of %s but its thread #%d has a QueueName of %s" % (queue.GetName(), queue.GetName(), idx, t.GetQueueName()))
-            self.assertTrue(t.GetQueue().GetQueueID() == queue.GetQueueID(), "Thread #%d's Queue's QueueID of %d is not the same as the QueueID of its owning queue %d" % (idx, t.GetQueue().GetQueueID(), queue.GetQueueID()))
+            self.assertTrue(t.IsValid(), "Queue {0!s}'s thread #{1:d} must be valid".format(queue.GetName(), idx))
+            self.assertTrue(t.GetQueueID() == queue.GetQueueID(), "Queue {0!s} has a QueueID of {1:d} but its thread #{2:d} has a QueueID of {3:d}".format(queue.GetName(), queue.GetQueueID(), idx, t.GetQueueID()))
+            self.assertTrue(t.GetQueueName() == queue.GetName(), "Queue {0!s} has a QueueName of {1!s} but its thread #{2:d} has a QueueName of {3!s}".format(queue.GetName(), queue.GetName(), idx, t.GetQueueName()))
+            self.assertTrue(t.GetQueue().GetQueueID() == queue.GetQueueID(), "Thread #{0:d}'s Queue's QueueID of {1:d} is not the same as the QueueID of its owning queue {2:d}".format(idx, t.GetQueue().GetQueueID(), queue.GetQueueID()))
 
     def queues(self):
         """Test queues inspection SB APIs without libBacktraceRecording."""
@@ -91,7 +91,7 @@ class TestQueues(TestBase):
           if q.GetName() == "com.apple.work_performer_3":
             queue_performer_3 = q
 
-        self.assertTrue(queue_submittor_1.IsValid() and queue_performer_1.IsValid() and queue_performer_2.IsValid() and queue_performer_3.IsValid(), "Got all four expected queues: %s %s %s %s" % (queue_submittor_1.IsValid(), queue_performer_1.IsValid(), queue_performer_2.IsValid(), queue_performer_3.IsValid()))
+        self.assertTrue(queue_submittor_1.IsValid() and queue_performer_1.IsValid() and queue_performer_2.IsValid() and queue_performer_3.IsValid(), "Got all four expected queues: {0!s} {1!s} {2!s} {3!s}".format(queue_submittor_1.IsValid(), queue_performer_1.IsValid(), queue_performer_2.IsValid(), queue_performer_3.IsValid()))
 
         self.check_queue_for_valid_queue_id (queue_submittor_1)
         self.check_queue_for_valid_queue_id (queue_performer_1)
@@ -208,7 +208,7 @@ class TestQueues(TestBase):
           if q.GetName() == "com.apple.work_performer_3":
             queue_performer_3 = q
 
-        self.assertTrue(queue_submittor_1.IsValid() and queue_performer_1.IsValid() and queue_performer_2.IsValid() and queue_performer_3.IsValid(), "Got all four expected queues: %s %s %s %s" % (queue_submittor_1.IsValid(), queue_performer_1.IsValid(), queue_performer_2.IsValid(), queue_performer_3.IsValid()))
+        self.assertTrue(queue_submittor_1.IsValid() and queue_performer_1.IsValid() and queue_performer_2.IsValid() and queue_performer_3.IsValid(), "Got all four expected queues: {0!s} {1!s} {2!s} {3!s}".format(queue_submittor_1.IsValid(), queue_performer_1.IsValid(), queue_performer_2.IsValid(), queue_performer_3.IsValid()))
 
         self.check_queue_for_valid_queue_id (queue_submittor_1)
         self.check_queue_for_valid_queue_id (queue_performer_1)

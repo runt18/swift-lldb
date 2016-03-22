@@ -26,7 +26,7 @@ class MiPromptTestCase(lldbmi_testcase.MiTestCaseBase):
         self.expect(self.child_prompt, exactly = True)
 
         # Test that lldb-mi is ready after -file-exec-and-symbols
-        self.runCmd("-file-exec-and-symbols %s" % self.myexe)
+        self.runCmd("-file-exec-and-symbols {0!s}".format(self.myexe))
         self.expect("\^done")
         self.expect(self.child_prompt, exactly = True)
 

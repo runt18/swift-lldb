@@ -317,12 +317,12 @@ def run_break_set_by_file_and_line (test, file_name, line_number, extra_options 
     If loc_exact is true, we check that there is one location, and that location must be at the input file and line number."""
 
     if file_name == None:
-        command = 'breakpoint set -l %d'%(line_number)
+        command = 'breakpoint set -l {0:d}'.format((line_number))
     else:
-        command = 'breakpoint set -f "%s" -l %d'%(file_name, line_number)
+        command = 'breakpoint set -f "{0!s}" -l {1:d}'.format(file_name, line_number)
 
     if module_name:
-        command += " --shlib '%s'" % (module_name)
+        command += " --shlib '{0!s}'".format((module_name))
 
     if extra_options:
         command += " " + extra_options
@@ -340,10 +340,10 @@ def run_break_set_by_symbol (test, symbol, extra_options = None, num_expected_lo
     """Set a breakpoint by symbol name.  Common options are the same as run_break_set_by_file_and_line.
 
     If sym_exact is true, then the output symbol must match the input exactly, otherwise we do a substring match."""
-    command = 'breakpoint set -n "%s"'%(symbol)
+    command = 'breakpoint set -n "{0!s}"'.format((symbol))
 
     if module_name:
-        command += " --shlib '%s'" % (module_name)
+        command += " --shlib '{0!s}'".format((module_name))
 
     if extra_options:
         command += " " + extra_options
@@ -360,10 +360,10 @@ def run_break_set_by_symbol (test, symbol, extra_options = None, num_expected_lo
 def run_break_set_by_selector (test, selector, extra_options = None, num_expected_locations = -1, module_name=None):
     """Set a breakpoint by selector.  Common options are the same as run_break_set_by_file_and_line."""
 
-    command = 'breakpoint set -S "%s"' % (selector)
+    command = 'breakpoint set -S "{0!s}"'.format((selector))
 
     if module_name:
-        command += ' --shlib "%s"' % (module_name)
+        command += ' --shlib "{0!s}"'.format((module_name))
 
     if extra_options:
         command += " " + extra_options
@@ -380,7 +380,7 @@ def run_break_set_by_selector (test, selector, extra_options = None, num_expecte
 def run_break_set_by_regexp (test, regexp, extra_options=None, num_expected_locations=-1):
     """Set a breakpoint by regular expression match on symbol name.  Common options are the same as run_break_set_by_file_and_line."""
 
-    command = 'breakpoint set -r "%s"'%(regexp)
+    command = 'breakpoint set -r "{0!s}"'.format((regexp))
     if extra_options:
         command += " " + extra_options
     
@@ -392,7 +392,7 @@ def run_break_set_by_regexp (test, regexp, extra_options=None, num_expected_loca
 
 def run_break_set_by_source_regexp (test, regexp, extra_options=None, num_expected_locations=-1):
     """Set a breakpoint by source regular expression.  Common options are the same as run_break_set_by_file_and_line."""
-    command = 'breakpoint set -p "%s"'%(regexp)
+    command = 'breakpoint set -p "{0!s}"'.format((regexp))
     if extra_options:
         command += " " + extra_options
     
@@ -464,20 +464,20 @@ def check_breakpoint_result (test, break_results, file_name=None, line_number=-1
     if num_locations == -1:
         test.assertTrue (out_num_locations > 0, "Expecting one or more locations, got none.")
     else:
-        test.assertTrue (num_locations == out_num_locations, "Expecting %d locations, got %d."%(num_locations, out_num_locations))
+        test.assertTrue (num_locations == out_num_locations, "Expecting {0:d} locations, got {1:d}.".format(num_locations, out_num_locations))
 
     if file_name:
         out_file_name = ""
         if 'file' in break_results:
             out_file_name = break_results['file']
-        test.assertTrue (file_name == out_file_name, "Breakpoint file name '%s' doesn't match resultant name '%s'."%(file_name, out_file_name))
+        test.assertTrue (file_name == out_file_name, "Breakpoint file name '{0!s}' doesn't match resultant name '{1!s}'.".format(file_name, out_file_name))
 
     if line_number != -1:
         out_file_line = -1
         if 'line_no' in break_results:
             out_line_number = break_results['line_no']
 
-        test.assertTrue (line_number == out_line_number, "Breakpoint line number %s doesn't match resultant line %s."%(line_number, out_line_number))
+        test.assertTrue (line_number == out_line_number, "Breakpoint line number {0!s} doesn't match resultant line {1!s}.".format(line_number, out_line_number))
 
     if symbol_name:
         out_symbol_name = ""
@@ -488,16 +488,16 @@ def check_breakpoint_result (test, break_results, file_name=None, line_number=-1
             out_symbol_name = break_results['symbol']
 
         if symbol_match_exact:
-            test.assertTrue(symbol_name == out_symbol_name, "Symbol name '%s' doesn't match resultant symbol '%s'."%(symbol_name, out_symbol_name))
+            test.assertTrue(symbol_name == out_symbol_name, "Symbol name '{0!s}' doesn't match resultant symbol '{1!s}'.".format(symbol_name, out_symbol_name))
         else:
-            test.assertTrue(out_symbol_name.find(symbol_name) != -1, "Symbol name '%s' isn't in resultant symbol '%s'."%(symbol_name, out_symbol_name))
+            test.assertTrue(out_symbol_name.find(symbol_name) != -1, "Symbol name '{0!s}' isn't in resultant symbol '{1!s}'.".format(symbol_name, out_symbol_name))
 
     if module_name:
         out_nodule_name = None
         if 'module' in break_results:
             out_module_name = break_results['module']
         
-        test.assertTrue (module_name.find(out_module_name) != -1, "Symbol module name '%s' isn't in expected module name '%s'."%(out_module_name, module_name))
+        test.assertTrue (module_name.find(out_module_name) != -1, "Symbol module name '{0!s}' isn't in expected module name '{1!s}'.".format(out_module_name, module_name))
 
 # ==================================================
 # Utility functions related to Threads and Processes
@@ -688,7 +688,7 @@ def print_stacktrace(thread, string_buffer = False):
         else:
             print >> output, "  frame #{num}: {addr:#016x} {mod}`{func} at {file}:{line} {args}".format(
                 num=i, addr=load_addr, mod=mods[i],
-                func='%s [inlined]' % funcs[i] if frame.IsInlined() else funcs[i],
+                func='{0!s} [inlined]'.format(funcs[i]) if frame.IsInlined() else funcs[i],
                 file=files[i], line=lines[i],
                 args=get_args_as_string(frame, showFuncName=False) if not frame.IsInlined() else '()')
 
@@ -739,7 +739,7 @@ def get_args_as_string(frame, showFuncName=True):
     vars = frame.GetVariables(True, False, False, True) # type of SBValueList
     args = [] # list of strings
     for var in vars:
-        args.append("(%s)%s=%s" % (var.GetTypeName(),
+        args.append("({0!s}){1!s}={2!s}".format(var.GetTypeName(),
                                    var.GetName(),
                                    var.GetValue()))
     if frame.GetFunction():
@@ -749,9 +749,9 @@ def get_args_as_string(frame, showFuncName=True):
     else:
         name = ""
     if showFuncName:
-        return "%s(%s)" % (name, ", ".join(args))
+        return "{0!s}({1!s})".format(name, ", ".join(args))
     else:
-        return "(%s)" % (", ".join(args))
+        return "({0!s})".format((", ".join(args)))
         
 def print_registers(frame, string_buffer = False):
     """Prints all the register sets of the frame."""
@@ -761,12 +761,12 @@ def print_registers(frame, string_buffer = False):
     print >> output, "Register sets for " + str(frame)
 
     registerSet = frame.GetRegisters() # Return type of SBValueList.
-    print >> output, "Frame registers (size of register set = %d):" % registerSet.GetSize()
+    print >> output, "Frame registers (size of register set = {0:d}):".format(registerSet.GetSize())
     for value in registerSet:
         #print >> output, value 
-        print >> output, "%s (number of children = %d):" % (value.GetName(), value.GetNumChildren())
+        print >> output, "{0!s} (number of children = {1:d}):".format(value.GetName(), value.GetNumChildren())
         for child in value:
-            print >> output, "Name: %s, Value: %s" % (child.GetName(), child.GetValue())
+            print >> output, "Name: {0!s}, Value: {1!s}".format(child.GetName(), child.GetValue())
 
     if string_buffer:
         return output.getvalue()
@@ -839,7 +839,7 @@ class BasicFormatter(object):
         if val == None:
             val = value.GetValue()
         if val == None and value.GetNumChildren() > 0:
-            val = "%s (location)" % value.GetLocation()
+            val = "{0!s} (location)".format(value.GetLocation())
         print >> output, "{indentation}({type}) {name} = {value}".format(
             indentation = ' ' * indent,
             type = value.GetTypeName(),

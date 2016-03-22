@@ -59,6 +59,6 @@ def find_executable(executable):
 
     if not result or len(result) < 1:
         raise os.OSError(
-            "failed to find exe='%s' in paths='%s'" % (executable, paths_to_check))
+            "failed to find exe='{0!s}' in paths='{1!s}'".format(executable, paths_to_check))
     return result
 

@@ -65,16 +65,16 @@ class DebuggerDriver(Thread):
                                            | lldb.SBCommandInterpreter.eBroadcastBitAsynchronousErrorData
                                            )
     def createTarget(self, target_image, args=None):
-        self.handleCommand("target create %s" % target_image)
+        self.handleCommand("target create {0!s}".format(target_image))
         if args is not None:
-          self.handleCommand("settings set target.run-args %s" % args)
+          self.handleCommand("settings set target.run-args {0!s}".format(args))
 
     def attachProcess(self, pid):
-        self.handleCommand("process attach -p %d" % pid)
+        self.handleCommand("process attach -p {0:d}".format(pid))
         pass
 
     def loadCore(self, corefile):
-        self.handleCommand("target create -c %s" % corefile)
+        self.handleCommand("target create -c {0!s}".format(corefile))
         pass
 
     def setDone(self):

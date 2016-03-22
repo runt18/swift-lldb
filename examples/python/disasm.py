@@ -41,7 +41,7 @@ debugger = lldb.SBDebugger.Create()
 debugger.SetAsync (False)
 
 # Create a target from a file and arch
-print "Creating a target for '%s'" % exe
+print "Creating a target for '{0!s}'".format(exe)
 
 target = debugger.CreateTargetWithFileAndArch (exe, lldb.LLDB_ARCH_DEFAULT)
 
@@ -90,10 +90,10 @@ if target:
                             disassemble_instructions (insts)
 
                     registerList = frame.GetRegisters()
-                    print "Frame registers (size of register set = %d):" % registerList.GetSize()
+                    print "Frame registers (size of register set = {0:d}):".format(registerList.GetSize())
                     for value in registerList:
                         #print value
-                        print "%s (number of children = %d):" % (value.GetName(), value.GetNumChildren())
+                        print "{0!s} (number of children = {1:d}):".format(value.GetName(), value.GetNumChildren())
                         for child in value:
                             print "Name: ", child.GetName(), " Value: ", child.GetValue()
 
@@ -111,7 +111,7 @@ if target:
         elif state == lldb.eStateExited:
             print "Didn't hit the breakpoint at main, program has exited..."
         else:
-            print "Unexpected process state: %s, killing process..." % debugger.StateAsCString (state)
+            print "Unexpected process state: {0!s}, killing process...".format(debugger.StateAsCString (state))
             process.Kill()
 
         

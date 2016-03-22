@@ -36,7 +36,7 @@ class AsanTestCase(TestBase):
         exe = os.path.join (os.getcwd(), "a.out")
         self.expect("file " + exe, patterns = [ "Current executable set to .*a.out" ])
 
-        self.runCmd("breakpoint set -f main.c -l %d" % self.line_breakpoint)
+        self.runCmd("breakpoint set -f main.c -l {0:d}".format(self.line_breakpoint))
 
         # "memory history" command should not work without a process
         self.expect("memory history 0",
@@ -62,8 +62,8 @@ class AsanTestCase(TestBase):
         # test the 'memory history' command
         self.expect("memory history 'pointer'",
             substrs = [
-                'Memory allocated at', 'a.out`f1', 'main.c:%d' % self.line_malloc,
-                'Memory deallocated at', 'a.out`f2', 'main.c:%d' % self.line_free])
+                'Memory allocated at', 'a.out`f1', 'main.c:{0:d}'.format(self.line_malloc),
+                'Memory deallocated at', 'a.out`f2', 'main.c:{0:d}'.format(self.line_free)])
 
         # do the same using SB API
         process = self.dbg.GetSelectedTarget().process
@@ -100,4 +100,4 @@ class AsanTestCase(TestBase):
         # make sure the 'memory history' command still works even when we're generating a report now
         self.expect("memory history 'another_pointer'",
             substrs = [
-                'Memory allocated at', 'a.out`f1', 'main.c:%d' % self.line_malloc2])
+                'Memory allocated at', 'a.out`f1', 'main.c:{0:d}'.format(self.line_malloc2)])

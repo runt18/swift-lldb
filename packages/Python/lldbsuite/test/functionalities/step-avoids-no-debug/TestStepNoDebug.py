@@ -54,11 +54,11 @@ class ReturnValueTestCase(TestBase):
         target_line = line_number (self.main_source, pattern)
         self.assertTrue (target_line != 0, "Could not find source pattern " + pattern)
         cur_line = self.thread.frames[0].GetLineEntry().GetLine()
-        self.assertTrue (cur_line == target_line, "Stepped to line %d instead of expected %d with pattern '%s'."%(cur_line, target_line, pattern))
+        self.assertTrue (cur_line == target_line, "Stepped to line {0:d} instead of expected {1:d} with pattern '{2!s}'.".format(cur_line, target_line, pattern))
 
     def hit_correct_function (self, pattern):
         name = self.thread.frames[0].GetFunctionName()
-        self.assertTrue (pattern in name, "Got to '%s' not the expected function '%s'."%(name, pattern))
+        self.assertTrue (pattern in name, "Got to '{0!s}' not the expected function '{1!s}'.".format(name, pattern))
 
     def get_to_starting_point (self):
         exe = os.path.join(os.getcwd(), "a.out")

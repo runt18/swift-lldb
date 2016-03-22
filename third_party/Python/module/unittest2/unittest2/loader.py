@@ -26,11 +26,11 @@ VALID_MODULE_NAME = re.compile(r'[_a-z]\w*\.py$', re.IGNORECASE)
 
 
 def _make_failed_import_test(name, suiteClass):
-    message = 'Failed to import test module: %s' % name
+    message = 'Failed to import test module: {0!s}'.format(name)
     if hasattr(traceback, 'format_exc'):
         # Python 2.3 compatibility
         # format_exc returns two frames of discover.py as well
-        message += '\n%s' % traceback.format_exc()
+        message += '\n{0!s}'.format(traceback.format_exc())
     return _make_failed_test('ModuleImportFailure', name, ImportError(message),
                              suiteClass)
 
@@ -128,10 +128,9 @@ class TestLoader(unittest.TestLoader):
             elif isinstance(test, unittest.TestCase):
                 return self.suiteClass([test])
             else:
-                raise TypeError("calling %s returned %s, not a test" %
-                                (obj, test))
+                raise TypeError("calling {0!s} returned {1!s}, not a test".format(obj, test))
         else:
-            raise TypeError("don't know how to make test from: %s" % obj)
+            raise TypeError("don't know how to make test from: {0!s}".format(obj))
 
     def loadTestsFromNames(self, names, module=None):
         """Return a suite of all tests cases found using the given sequence
@@ -211,7 +210,7 @@ class TestLoader(unittest.TestLoader):
                     sys.path.remove(top_level_dir)
 
         if is_not_importable:
-            raise ImportError('Start directory is not importable: %r' % start_dir)
+            raise ImportError('Start directory is not importable: {0!r}'.format(start_dir))
 
         tests = list(self._find_tests(start_dir, pattern))
         return self.suiteClass(tests)

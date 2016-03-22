@@ -31,7 +31,7 @@ class ExprCommandThatRestartsTestCase(TestBase):
 
     def check_after_call (self, num_sigchld):
         after_call = self.sigchld_no.GetValueAsSigned(-1)
-        self.assertTrue (after_call - self.start_sigchld_no == num_sigchld, "Really got %d SIGCHLD signals through the call."%(num_sigchld))
+        self.assertTrue (after_call - self.start_sigchld_no == num_sigchld, "Really got {0:d} SIGCHLD signals through the call.".format((num_sigchld)))
         self.start_sigchld_no = after_call
 
         # Check that we are back where we were before:
@@ -81,7 +81,7 @@ class ExprCommandThatRestartsTestCase(TestBase):
         self.orig_frame_pc = frame.GetPC()
 
         num_sigchld = 30
-        value = frame.EvaluateExpression ("call_me (%d)"%(num_sigchld), options)
+        value = frame.EvaluateExpression ("call_me ({0:d})".format((num_sigchld)), options)
         self.assertTrue (value.IsValid())
         self.assertTrue (value.GetError().Success() == True)
         self.assertTrue (value.GetValueAsSigned(-1) == num_sigchld)
@@ -95,7 +95,7 @@ class ExprCommandThatRestartsTestCase(TestBase):
         options.SetIgnoreBreakpoints(True)
         options.SetUnwindOnError(True)
 
-        value = frame.EvaluateExpression("call_me (%d)"%(num_sigchld), options)
+        value = frame.EvaluateExpression("call_me ({0:d})".format((num_sigchld)), options)
 
         self.assertTrue (value.IsValid() and value.GetError().Success() == True)
         self.assertTrue (value.GetValueAsSigned(-1) == num_sigchld)
@@ -105,7 +105,7 @@ class ExprCommandThatRestartsTestCase(TestBase):
         self.dbg.GetCommandInterpreter().HandleCommand("process handle SIGCHLD -s 0 -p 1 -n 1", return_obj)
         self.assertTrue (return_obj.Succeeded() == True, "Set SIGCHLD to pass, no-stop, notify")
 
-        value = frame.EvaluateExpression("call_me (%d)"%(num_sigchld), options)
+        value = frame.EvaluateExpression("call_me ({0:d})".format((num_sigchld)), options)
 
         self.assertTrue (value.IsValid() and value.GetError().Success() == True)
         self.assertTrue (value.GetValueAsSigned(-1) == num_sigchld)
@@ -113,7 +113,7 @@ class ExprCommandThatRestartsTestCase(TestBase):
 
         # Now set this unwind on error to false, and make sure that we still complete the call:
         options.SetUnwindOnError(False)
-        value = frame.EvaluateExpression("call_me (%d)"%(num_sigchld), options)
+        value = frame.EvaluateExpression("call_me ({0:d})".format((num_sigchld)), options)
 
         self.assertTrue (value.IsValid() and value.GetError().Success() == True)
         self.assertTrue (value.GetValueAsSigned(-1) == num_sigchld)
@@ -125,7 +125,7 @@ class ExprCommandThatRestartsTestCase(TestBase):
         self.dbg.GetCommandInterpreter().HandleCommand("process handle SIGCHLD -s 1 -p 1 -n 1", return_obj)
         self.assertTrue (return_obj.Succeeded() == True, "Set SIGCHLD to pass, stop, notify")
         
-        value = frame.EvaluateExpression("call_me (%d)"%(num_sigchld), options)
+        value = frame.EvaluateExpression("call_me ({0:d})".format((num_sigchld)), options)
         self.assertTrue (value.IsValid() and value.GetError().Success() == False)
         
         # Set signal handling back to no-stop, and continue and we should end up back in out starting frame:

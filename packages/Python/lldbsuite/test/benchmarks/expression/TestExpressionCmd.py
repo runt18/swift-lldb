@@ -42,7 +42,7 @@ class ExpressionEvaluationCase(BenchBase):
         self.stopwatch.reset()
         for i in range(count):
             # So that the child gets torn down after the test.
-            self.child = pexpect.spawn('%s %s %s' % (lldbtest_config.lldbExec, self.lldbOption, exe))
+            self.child = pexpect.spawn('{0!s} {1!s} {2!s}'.format(lldbtest_config.lldbExec, self.lldbOption, exe))
             child = self.child
 
             # Turn on logging for what the child sends back.
@@ -50,7 +50,7 @@ class ExpressionEvaluationCase(BenchBase):
                 child.logfile_read = sys.stdout
 
             child.expect_exact(prompt)
-            child.sendline('breakpoint set -f %s -l %d' % (self.source, self.line_to_break))
+            child.sendline('breakpoint set -f {0!s} -l {1:d}'.format(self.source, self.line_to_break))
             child.expect_exact(prompt)
             child.sendline('run')
             child.expect_exact(prompt)

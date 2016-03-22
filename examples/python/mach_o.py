@@ -186,9 +186,9 @@ def dump_memory(base_addr, data, hex_bytes_len, num_per_line):
     while i < hex_bytes_len:
         if ((i/2) % num_per_line) == 0:
             if i > 0:
-                print ' %s' % (ascii_str)
+                print ' {0!s}'.format((ascii_str))
                 ascii_str = ''
-            print '0x%8.8x:' % (addr+i),
+            print '0x{0:8.8x}:'.format((addr+i)),
         hex_byte = hex_bytes[i:i+2]
         print hex_byte,
         int_byte = int (hex_byte, 16)
@@ -369,8 +369,8 @@ def dump_hex_bytes(addr, s, bytes_per_line=16):
         if (i % bytes_per_line) == 0:
             if line:
                 print line
-            line = '%#8.8x: ' % (addr + i)
-        line += "%02X " % ord(ch)
+            line = '{0:#8.8x}: '.format((addr + i))
+        line += "{0:02X} ".format(ord(ch))
         i += 1
     print line
 
@@ -401,9 +401,9 @@ def dump_hex_byte_string_diff(addr, a, b, bytes_per_line=16):
         if (i % bytes_per_line) == 0:
             if line:
                 print line
-            line = '%#8.8x: ' % (addr + i)
+            line = '{0:#8.8x}: '.format((addr + i))
         if mismatch: line += tty_colors.red()
-        line += "%02X " % ord(ch)
+        line += "{0:02X} ".format(ord(ch))
         if mismatch: line += tty_colors.default()
         i += 1
     
@@ -583,12 +583,12 @@ class Mach:
             self.archs      = list()
 
         def description(self):
-            s = '%#8.8x: %s (' % (self.file_off, self.path)
+            s = '{0:#8.8x}: {1!s} ('.format(self.file_off, self.path)
             archs_string = ''
             for arch in self.archs:
                 if len(archs_string):
                     archs_string += ', '
-                archs_string += '%s' % arch.arch
+                archs_string += '{0!s}'.format(arch.arch)
             s += archs_string
             s += ')'
             return s
@@ -621,7 +621,7 @@ class Mach:
         def dump(self, options):
             if options.dump_header:
                 print
-                print "Universal Mach File: magic = %s, nfat_arch = %u" % (self.magic, self.nfat_arch)
+                print "Universal Mach File: magic = {0!s}, nfat_arch = {1:d}".format(self.magic, self.nfat_arch)
                 print
             if self.nfat_arch > 0:
                 if options.dump_header:
@@ -693,19 +693,19 @@ class Mach:
                     print "---------- ---------- ---------- ----------"
             def dump_flat(self, options):
                 if options.verbose:
-                    print "%#8.8x %#8.8x %#8.8x %#8.8x %#8.8x" % (self.arch.cpu, self.arch.sub, self.offset, self.size, self.align)
+                    print "{0:#8.8x} {1:#8.8x} {2:#8.8x} {3:#8.8x} {4:#8.8x}".format(self.arch.cpu, self.arch.sub, self.offset, self.size, self.align)
                 else:
-                    print "%-10s %#8.8x %#8.8x %#8.8x" % (self.arch, self.offset, self.size, self.align)
+                    print "{0:<10!s} {1:#8.8x} {2:#8.8x} {3:#8.8x}".format(self.arch, self.offset, self.size, self.align)
             def dump(self):
-                print "   cputype: %#8.8x" % self.arch.cpu
-                print "cpusubtype: %#8.8x" % self.arch.sub
-                print "    offset: %#8.8x" % self.offset
-                print "      size: %#8.8x" % self.size
-                print "     align: %#8.8x" % self.align
+                print "   cputype: {0:#8.8x}".format(self.arch.cpu)
+                print "cpusubtype: {0:#8.8x}".format(self.arch.sub)
+                print "    offset: {0:#8.8x}".format(self.offset)
+                print "      size: {0:#8.8x}".format(self.size)
+                print "     align: {0:#8.8x}".format(self.align)
             def __str__(self):
-                return "Mach.Universal.ArchInfo: %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x" % (self.arch.cpu, self.arch.sub, self.offset, self.size, self.align)
+                return "Mach.Universal.ArchInfo: {0:#8.8x} {1:#8.8x} {2:#8.8x} {3:#8.8x} {4:#8.8x}".format(self.arch.cpu, self.arch.sub, self.offset, self.size, self.align)
             def __repr__(self):
-                return "Mach.Universal.ArchInfo: %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x" % (self.arch.cpu, self.arch.sub, self.offset, self.size, self.align)
+                return "Mach.Universal.ArchInfo: {0:#8.8x} {1:#8.8x} {2:#8.8x} {3:#8.8x} {4:#8.8x}".format(self.arch.cpu, self.arch.sub, self.offset, self.size, self.align)
                 
     class Flags:
 
@@ -809,7 +809,7 @@ class Mach:
             self.sections.append(Mach.Section())
 
         def description(self):
-            return '%#8.8x: %s (%s)' % (self.file_off, self.path, self.arch)
+            return '{0:#8.8x}: {1!s} ({2!s})'.format(self.file_off, self.path, self.arch)
             
         def unpack(self, data, magic = None):
             self.data = data
@@ -888,14 +888,14 @@ class Mach:
         
         def compare(self, rhs):
             print "\nComparing:"
-            print "a) %s %s" % (self.arch, self.path)
-            print "b) %s %s" % (rhs.arch, rhs.path)
+            print "a) {0!s} {1!s}".format(self.arch, self.path)
+            print "b) {0!s} {1!s}".format(rhs.arch, rhs.path)
             result = True
             if self.type == rhs.type:
                 for lhs_section in self.sections[1:]:
                     rhs_section = rhs.get_section_by_section(lhs_section)
                     if rhs_section:
-                        print 'comparing %s.%s...' % (lhs_section.segname, lhs_section.sectname),
+                        print 'comparing {0!s}.{1!s}...'.format(lhs_section.segname, lhs_section.sectname),
                         sys.stdout.flush()
                         lhs_data = lhs_section.get_contents (self)
                         rhs_data = rhs_section.get_contents (rhs)
@@ -926,26 +926,26 @@ class Mach:
                                 # dump_hex_byte_string_diff(0, rhs_data, lhs_data)
                         elif lhs_data and not rhs_data:
                             print 'error: section data missing from b:'
-                            print 'a) %s' % (lhs_section)
-                            print 'b) %s' % (rhs_section)
+                            print 'a) {0!s}'.format((lhs_section))
+                            print 'b) {0!s}'.format((rhs_section))
                             result = False
                         elif not lhs_data and rhs_data:
                             print 'error: section data missing from a:'
-                            print 'a) %s' % (lhs_section)
-                            print 'b) %s' % (rhs_section)
+                            print 'a) {0!s}'.format((lhs_section))
+                            print 'b) {0!s}'.format((rhs_section))
                             result = False
                         elif lhs_section.offset or rhs_section.offset:
                             print 'error: section data missing for both a and b:'
-                            print 'a) %s' % (lhs_section)
-                            print 'b) %s' % (rhs_section)
+                            print 'a) {0!s}'.format((lhs_section))
+                            print 'b) {0!s}'.format((rhs_section))
                             result = False
                         else:
                             print 'ok'
                     else:
                         result = False
-                        print 'error: section %s is missing in %s' % (lhs_section.sectname, rhs.path)
+                        print 'error: section {0!s} is missing in {1!s}'.format(lhs_section.sectname, rhs.path)
             else:
-                print 'error: comaparing a %s mach-o file with a %s mach-o file is not supported' % (self.type, rhs.type)
+                print 'error: comaparing a {0!s} mach-o file with a {1!s} mach-o file is not supported'.format(self.type, rhs.type)
                 result = False
             if not result:
                 print 'error: mach files differ'
@@ -960,9 +960,9 @@ class Mach:
 
         def dump_flat(self, options):
             if options.verbose:
-                print "%#8.8x %#8.8x %#8.8x %#8.8x %#8u %#8.8x %#8.8x" % (self.magic, self.arch.cpu , self.arch.sub, self.filetype.value, self.ncmds, self.sizeofcmds, self.flags.bits)
+                print "{0:#8.8x} {1:#8.8x} {2:#8.8x} {3:#8.8x} {4:8d} {5:#8.8x} {6:#8.8x}".format(self.magic, self.arch.cpu , self.arch.sub, self.filetype.value, self.ncmds, self.sizeofcmds, self.flags.bits)
             else:
-                print "%-12s %-10s %-14s %#8u %#8.8x %s" % (self.magic, self.arch, self.filetype, self.ncmds, self.sizeofcmds, self.flags)
+                print "{0:<12!s} {1:<10!s} {2:<14!s} {3:8d} {4:#8.8x} {5!s}".format(self.magic, self.arch, self.filetype, self.ncmds, self.sizeofcmds, self.flags)
 
         def dump(self, options):
             if options.dump_header:
@@ -986,13 +986,13 @@ class Mach:
             if dump_description:
                 print self.description()
             print "Mach Header"
-            print "       magic: %#8.8x %s" % (self.magic.value, self.magic)
-            print "     cputype: %#8.8x %s" % (self.arch.cpu, self.arch)
-            print "  cpusubtype: %#8.8x" % self.arch.sub
-            print "    filetype: %#8.8x %s" % (self.filetype.get_enum_value(), self.filetype.get_enum_name())
-            print "       ncmds: %#8.8x %u" % (self.ncmds, self.ncmds)
-            print "  sizeofcmds: %#8.8x" % self.sizeofcmds
-            print "       flags: %#8.8x %s" % (self.flags.bits, self.flags)
+            print "       magic: {0:#8.8x} {1!s}".format(self.magic.value, self.magic)
+            print "     cputype: {0:#8.8x} {1!s}".format(self.arch.cpu, self.arch)
+            print "  cpusubtype: {0:#8.8x}".format(self.arch.sub)
+            print "    filetype: {0:#8.8x} {1!s}".format(self.filetype.get_enum_value(), self.filetype.get_enum_name())
+            print "       ncmds: {0:#8.8x} {1:d}".format(self.ncmds, self.ncmds)
+            print "  sizeofcmds: {0:#8.8x}".format(self.sizeofcmds)
+            print "       flags: {0:#8.8x} {1!s}".format(self.flags.bits, self.flags)
             
         def dump_load_commands(self, dump_description = True, options = None):
             if dump_description:
@@ -1019,7 +1019,7 @@ class Mach:
             if num_sections > 1:
                 self.sections[1].dump_header()
                 for sect_idx in range(1,num_sections):
-                    print "%s" % self.sections[sect_idx]
+                    print "{0!s}".format(self.sections[sect_idx])
 
         def dump_section_contents(self, options):
             saved_section_to_disk = False
@@ -1048,19 +1048,19 @@ class Mach:
                                     data.seek (data_offset)
                                     outfile.write(data.read_size (data_size))
                             else:
-                                print "Saving section %s to '%s'" % (sectname, options.outfile)
+                                print "Saving section {0!s} to '{1!s}'".format(sectname, options.outfile)
                                 outfile.write(sect_bytes)
                             outfile.close()
                             saved_section_to_disk = True
                         else:
-                            print "error: you can only save a single section to disk at a time, skipping section '%s'" % (sectname)
+                            print "error: you can only save a single section to disk at a time, skipping section '{0!s}'".format((sectname))
                     else:
-                        print 'section %s:\n' % (sectname)
+                        print 'section {0!s}:\n'.format((sectname))
                         section.dump_header()
-                        print '%s\n' % (section)
+                        print '{0!s}\n'.format((section))
                         dump_memory (0, sect_bytes, options.max_count, 16)
                 else:
-                    print 'error: no section named "%s" was found' % (sectname)
+                    print 'error: no section named "{0!s}" was found'.format((sectname))
 
         def get_segment(self, segname):
             if len(self.segments) == 1 and self.segments[0].segname == '':
@@ -1105,7 +1105,7 @@ class Mach:
             if dump_description:
                 print self.description()
             for i, symbol in enumerate(self.symbols):
-                print '[%5u] %s' % (i, symbol)
+                print '[{0:5d}] {1!s}'.format(i, symbol)
         
         def dump_symbol_names_matching_regex(self, regex, file=None):
             self.get_symtab()
@@ -1113,7 +1113,7 @@ class Mach:
                 if symbol.name and regex.search (symbol.name):
                     print symbol.name
                     if file:
-                        file.write('%s\n' % (symbol.name))
+                        file.write('{0!s}\n'.format((symbol.name)))
         
         def is_64_bit(self):
             return self.magic.is_64_bit()
@@ -1184,7 +1184,7 @@ class Mach:
 
         def __str__(self):
             lc_name = self.command.get_enum_name()
-            return '%#8.8x: <%#4.4x> %-24s' % (self.file_off, self.length, lc_name)
+            return '{0:#8.8x}: <{1:#4.4x}> {2:<24!s}'.format(self.file_off, self.length, lc_name)
 
     class Section:
 
@@ -1225,9 +1225,9 @@ class Mach:
 
         def __str__(self):
             if self.is_64:
-                return "[%3u] %#16.16x %#16.16x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %s.%s" % (self.index, self.addr, self.size, self.offset, self.align, self.reloff, self.nreloc, self.flags, self.reserved1, self.reserved2, self.reserved3, self.segname, self.sectname)
+                return "[{0:3d}] {1:#16.16x} {2:#16.16x} {3:#8.8x} {4:#8.8x} {5:#8.8x} {6:#8.8x} {7:#8.8x} {8:#8.8x} {9:#8.8x} {10:#8.8x} {11!s}.{12!s}".format(self.index, self.addr, self.size, self.offset, self.align, self.reloff, self.nreloc, self.flags, self.reserved1, self.reserved2, self.reserved3, self.segname, self.sectname)
             else:
-                return "[%3u] %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %#8.8x %s.%s" % (self.index, self.addr, self.size, self.offset, self.align, self.reloff, self.nreloc, self.flags, self.reserved1, self.reserved2, self.segname, self.sectname)
+                return "[{0:3d}] {1:#8.8x} {2:#8.8x} {3:#8.8x} {4:#8.8x} {5:#8.8x} {6:#8.8x} {7:#8.8x} {8:#8.8x} {9:#8.8x} {10!s}.{11!s}".format(self.index, self.addr, self.size, self.offset, self.align, self.reloff, self.nreloc, self.flags, self.reserved1, self.reserved2, self.segname, self.sectname)
 
         def get_contents(self, mach_file):
             '''Get the section contents as a python string'''
@@ -1258,7 +1258,7 @@ class Mach:
 
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
-            s += "%#8.8x %#8.8x %#8.8x " % (self.timestamp, self.current_version, self.compatibility_version)
+            s += "{0:#8.8x} {1:#8.8x} {2:#8.8x} ".format(self.timestamp, self.current_version, self.compatibility_version)
             s += self.name
             return s
     
@@ -1273,7 +1273,7 @@ class Mach:
 
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
-            s += "%s" % self.name
+            s += "{0!s}".format(self.name)
             return s
 
     class UnixThreadLoadCommand(LoadCommand):
@@ -1288,12 +1288,12 @@ class Mach:
                 self.register_values = data.get_n_uint32(self.count)
             
             def __str__(self):
-                s = "flavor = %u, count = %u, regs =" % (self.flavor, self.count)
+                s = "flavor = {0:d}, count = {1:d}, regs =".format(self.flavor, self.count)
                 i = 0
                 for register_value in self.register_values:
                     if i % 8 == 0:
                         s += "\n                                            "
-                    s += " %#8.8x" % register_value
+                    s += " {0:#8.8x}".format(register_value)
                     i += 1
                 return s
             
@@ -1309,7 +1309,7 @@ class Mach:
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
             for reg_set in self.reg_sets:
-                s += "%s" % reg_set
+                s += "{0!s}".format(reg_set)
             return s
 
     class DYLDInfoOnlyLoadCommand(LoadCommand):
@@ -1332,11 +1332,11 @@ class Mach:
 
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
-            s += "rebase_off = %#8.8x, rebase_size = %u, " % (self.rebase_off, self.rebase_size)
-            s += "bind_off = %#8.8x, bind_size = %u, " % (self.bind_off, self.bind_size)
-            s += "weak_bind_off = %#8.8x, weak_bind_size = %u, " % (self.weak_bind_off, self.weak_bind_size)
-            s += "lazy_bind_off = %#8.8x, lazy_bind_size = %u, " % (self.lazy_bind_off, self.lazy_bind_size)
-            s += "export_off = %#8.8x, export_size = %u, " % (self.export_off, self.export_size)
+            s += "rebase_off = {0:#8.8x}, rebase_size = {1:d}, ".format(self.rebase_off, self.rebase_size)
+            s += "bind_off = {0:#8.8x}, bind_size = {1:d}, ".format(self.bind_off, self.bind_size)
+            s += "weak_bind_off = {0:#8.8x}, weak_bind_size = {1:d}, ".format(self.weak_bind_off, self.weak_bind_size)
+            s += "lazy_bind_off = {0:#8.8x}, lazy_bind_size = {1:d}, ".format(self.lazy_bind_off, self.lazy_bind_size)
+            s += "export_off = {0:#8.8x}, export_size = {1:d}, ".format(self.export_off, self.export_size)
             return s
 
     class DYLDSymtabLoadCommand(LoadCommand):
@@ -1376,15 +1376,15 @@ class Mach:
             # s += "indirectsymoff = %#8.8x, nindirectsyms = %u, " % (self.indirectsymoff, self.nindirectsyms)
             # s += "extreloff = %#8.8x, nextrel = %u, " % (self.extreloff, self.nextrel)
             # s += "locreloff = %#8.8x, nlocrel = %u" % (self.locreloff, self.nlocrel)
-            s += "ilocalsym      = %-10u, nlocalsym     = %u\n" % (self.ilocalsym, self.nlocalsym)
-            s += "                                             iextdefsym     = %-10u, nextdefsym    = %u\n" % (self.iextdefsym, self.nextdefsym)
-            s += "                                             iundefsym      = %-10u, nundefsym     = %u\n" % (self.iundefsym, self.nundefsym)
-            s += "                                             tocoff         = %#8.8x, ntoc          = %u\n" % (self.tocoff, self.ntoc)
-            s += "                                             modtaboff      = %#8.8x, nmodtab       = %u\n" % (self.modtaboff, self.nmodtab)
-            s += "                                             extrefsymoff   = %#8.8x, nextrefsyms   = %u\n" % (self.extrefsymoff, self.nextrefsyms)
-            s += "                                             indirectsymoff = %#8.8x, nindirectsyms = %u\n" % (self.indirectsymoff, self.nindirectsyms)
-            s += "                                             extreloff      = %#8.8x, nextrel       = %u\n" % (self.extreloff, self.nextrel)
-            s += "                                             locreloff      = %#8.8x, nlocrel       = %u" % (self.locreloff, self.nlocrel)
+            s += "ilocalsym      = {0:<10d}, nlocalsym     = {1:d}\n".format(self.ilocalsym, self.nlocalsym)
+            s += "                                             iextdefsym     = {0:<10d}, nextdefsym    = {1:d}\n".format(self.iextdefsym, self.nextdefsym)
+            s += "                                             iundefsym      = {0:<10d}, nundefsym     = {1:d}\n".format(self.iundefsym, self.nundefsym)
+            s += "                                             tocoff         = {0:#8.8x}, ntoc          = {1:d}\n".format(self.tocoff, self.ntoc)
+            s += "                                             modtaboff      = {0:#8.8x}, nmodtab       = {1:d}\n".format(self.modtaboff, self.nmodtab)
+            s += "                                             extrefsymoff   = {0:#8.8x}, nextrefsyms   = {1:d}\n".format(self.extrefsymoff, self.nextrefsyms)
+            s += "                                             indirectsymoff = {0:#8.8x}, nindirectsyms = {1:d}\n".format(self.indirectsymoff, self.nindirectsyms)
+            s += "                                             extreloff      = {0:#8.8x}, nextrel       = {1:d}\n".format(self.extreloff, self.nextrel)
+            s += "                                             locreloff      = {0:#8.8x}, nlocrel       = {1:d}".format(self.locreloff, self.nlocrel)
             return s
 
     class SymtabLoadCommand(LoadCommand):                
@@ -1401,7 +1401,7 @@ class Mach:
                 
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
-            s += "symoff = %#8.8x, nsyms = %u, stroff = %#8.8x, strsize = %u" % (self.symoff, self.nsyms, self.stroff, self.strsize)
+            s += "symoff = {0:#8.8x}, nsyms = {1:d}, stroff = {2:#8.8x}, strsize = {3:d}".format(self.symoff, self.nsyms, self.stroff, self.strsize)
             return s
 
 
@@ -1414,7 +1414,7 @@ class Mach:
             uuid_data = data.get_n_uint8(16)
             uuid_str = ''
             for byte in uuid_data:
-                uuid_str += '%2.2x' % byte
+                uuid_str += '{0:2.2x}'.format(byte)
             self.uuid = uuid.UUID(uuid_str)
             mach_file.uuid = self.uuid
 
@@ -1435,7 +1435,7 @@ class Mach:
 
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
-            s += "dataoff = %#8.8x, datasize = %u" % (self.dataoff, self.datasize)
+            s += "dataoff = {0:#8.8x}, datasize = {1:d}".format(self.dataoff, self.datasize)
             return s
 
     class EncryptionInfoLoadCommand(LoadCommand):
@@ -1451,7 +1451,7 @@ class Mach:
 
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
-            s += "file-range = [%#8.8x - %#8.8x), cryptsize = %u, cryptid = %u" % (self.cryptoff, self.cryptoff + self.cryptsize, self.cryptsize, self.cryptid)
+            s += "file-range = [{0:#8.8x} - {1:#8.8x}), cryptsize = {2:d}, cryptid = {3:d}".format(self.cryptoff, self.cryptoff + self.cryptsize, self.cryptsize, self.cryptid)
             return s
 
     class SegmentLoadCommand(LoadCommand):
@@ -1487,10 +1487,10 @@ class Mach:
         def __str__(self):
             s = Mach.LoadCommand.__str__(self);
             if self.command.get_enum_value() == LC_SEGMENT:
-                s += "%#8.8x %#8.8x %#8.8x %#8.8x " % (self.vmaddr, self.vmsize, self.fileoff, self.filesize)
+                s += "{0:#8.8x} {1:#8.8x} {2:#8.8x} {3:#8.8x} ".format(self.vmaddr, self.vmsize, self.fileoff, self.filesize)
             else:
-                s += "%#16.16x %#16.16x %#16.16x %#16.16x " % (self.vmaddr, self.vmsize, self.fileoff, self.filesize)
-            s += "%s %s %3u %#8.8x" % (vm_prot_names[self.maxprot], vm_prot_names[self.initprot], self.nsects, self.flags)
+                s += "{0:#16.16x} {1:#16.16x} {2:#16.16x} {3:#16.16x} ".format(self.vmaddr, self.vmsize, self.fileoff, self.filesize)
+            s += "{0!s} {1!s} {2:3d} {3:#8.8x}".format(vm_prot_names[self.maxprot], vm_prot_names[self.initprot], self.nsects, self.flags)
             s += ' ' + self.segname
             return s
 
@@ -1539,7 +1539,7 @@ class Mach:
                 n_type = self.value
                 if n_type & N_STAB:
                     stab = Mach.NList.Type.Stab(self.value)
-                    return '%s' % stab
+                    return '{0!s}'.format(stab)
                 else:
                     type = self.value & N_TYPE
                     type_str = ''
@@ -1554,7 +1554,7 @@ class Mach:
                     elif type == N_INDR:
                         type_str = 'N_INDR'
                     else:
-                        type_str = "??? (%#2.2x)" % type
+                        type_str = "??? ({0:#2.2x})".format(type)
                     if n_type & N_PEXT:
                         type_str += ' | PEXT'
                     if n_type & N_EXT:
@@ -1588,8 +1588,8 @@ class Mach:
         def __str__(self):
             name_display = ''
             if len(self.name):
-                name_display = ' "%s"' % self.name
-            return '%#8.8x %#2.2x (%-20s) %#2.2x %#4.4x %16.16x%s' % (self.name_offset, self.type.value, self.type, self.sect_idx, self.desc, self.value, name_display)
+                name_display = ' "{0!s}"'.format(self.name)
+            return '{0:#8.8x} {1:#2.2x} ({2:<20!s}) {3:#2.2x} {4:#4.4x} {5:16.16x}{6!s}'.format(self.name_offset, self.type.value, self.type, self.sect_idx, self.desc, self.value, name_display)
 
 
     class Interactive(cmd.Cmd):
@@ -1598,13 +1598,13 @@ class Mach:
         def __init__(self, mach, options):
             cmd.Cmd.__init__(self)
             self.intro = 'Interactive mach-o command interpreter'
-            self.prompt = 'mach-o: %s %% ' % mach.path
+            self.prompt = 'mach-o: {0!s} % '.format(mach.path)
             self.mach = mach
             self.options = options
 
         def default(self, line):
             '''Catch all for unknown command, which will exit the interpreter.'''
-            print "uknown command: %s" % line
+            print "uknown command: {0!s}".format(line)
             return True
 
         def do_q(self, line):

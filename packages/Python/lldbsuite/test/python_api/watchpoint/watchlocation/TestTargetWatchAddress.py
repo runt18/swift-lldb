@@ -127,4 +127,4 @@ class TargetWatchAddressAPITestCase(TestBase):
         watchpoint = target.WatchAddress(value.GetValueAsUnsigned(), 365, False, True, error)
         self.assertFalse(watchpoint)
         self.expect(error.GetCString(), exe=False,
-            substrs = ['watch size of %d is not supported' % 365])
+            substrs = ['watch size of {0:d} is not supported'.format(365)])

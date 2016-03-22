@@ -29,7 +29,7 @@ import sys
 def copy_one_file(dest_dir, source_dir, filename):
     source_path = os.path.join(source_dir, filename)
     dest_path = os.path.join(dest_dir, filename)
-    print 'Copying file %s ==> %s...' % (source_path, dest_path)
+    print 'Copying file {0!s} ==> {1!s}...'.format(source_path, dest_path)
     shutil.copyfile(source_path, dest_path)
 
 def copy_named_files(dest_dir, source_dir, files, extensions, copy_debug_suffix_also):
@@ -41,13 +41,13 @@ def copy_named_files(dest_dir, source_dir, files, extensions, copy_debug_suffix_
 def copy_subdirectory(dest_dir, source_dir, subdir):
     dest_dir = os.path.join(dest_dir, subdir)
     source_dir = os.path.join(source_dir, subdir)
-    print 'Copying directory %s ==> %s...' % (source_dir, dest_dir)
+    print 'Copying directory {0!s} ==> {1!s}...'.format(source_dir, dest_dir)
     shutil.copytree(source_dir, dest_dir)
 
 def copy_distro(dest_dir, dest_subdir, source_dir, source_prefix):
     dest_dir = os.path.join(dest_dir, dest_subdir)
 
-    print 'Copying distribution %s ==> %s' % (source_dir, dest_dir)
+    print 'Copying distribution {0!s} ==> {1!s}'.format(source_dir, dest_dir)
 
     os.mkdir(dest_dir)
     PCbuild_dir = os.path.join(source_dir, 'PCbuild')
@@ -117,10 +117,10 @@ if not os.path.exists(args.source):
 
 if os.path.exists(args.dest):
     if not args.overwrite:
-        print 'The destination directory \'%s\' already exists and --overwrite was not specified.  Exiting...' % args.dest
+        print 'The destination directory \'{0!s}\' already exists and --overwrite was not specified.  Exiting...'.format(args.dest)
         sys.exit(1)
     while not args.silent:
-        print 'Ok to recursively delete \'%s\' and all contents (Y/N)?  Choosing Y will permanently delete the contents.' % args.dest
+        print 'Ok to recursively delete \'{0!s}\' and all contents (Y/N)?  Choosing Y will permanently delete the contents.'.format(args.dest)
         result = str.upper(sys.stdin.read(1))
         if result == 'N':
             print 'Unable to copy files to the destination.  The destination already exists.'

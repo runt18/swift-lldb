@@ -104,11 +104,11 @@ class UI:
         buf = buffers[0]
         if buf != vim.current.buffer:
           # Vim has an open buffer to the required file: select it
-          vim.command('execute ":%db"' % buf.number)
+          vim.command('execute ":{0:d}b"'.format(buf.number))
       elif is_selected and vim.current.buffer.name not in fname and os.path.exists(fname) and goto_file:
         # FIXME: If current buffer is modified, vim will complain when we try to switch away.
         #        Find a way to detect if the current buffer is modified, and...warn instead?
-        vim.command('execute ":e %s"' % fname)
+        vim.command('execute ":e {0!s}"'.format(fname))
         buf = vim.current.buffer
       elif len(buffers) > 1 and goto_file:
         #FIXME: multiple open buffers match PC location
@@ -124,7 +124,7 @@ class UI:
         if curname is not None and is_same_file(curname, fname):
           move_cursor(line, 0)
         elif move_cursor:
-          print "FIXME: not sure where to move cursor because %s != %s " % (vim.current.buffer.name, fname)
+          print "FIXME: not sure where to move cursor because {0!s} != {1!s} ".format(vim.current.buffer.name, fname)
 
   def update_breakpoints(self, target, buffers):
     """ Decorates buffer with signs corresponding to breakpoints in target. """
@@ -145,7 +145,7 @@ class UI:
           lineNum = int(match.group(2).strip())
           ret.append((loc.IsResolved(), match.group(1), lineNum))
         except ValueError as e:
-          sys.stderr.write("unable to parse breakpoint location line number: '%s'" % match.group(2))
+          sys.stderr.write("unable to parse breakpoint location line number: '{0!s}'".format(match.group(2)))
           sys.stderr.write(str(e))
 
       return ret
@@ -218,7 +218,7 @@ class UI:
   def showWindow(self, name):
     """ Shows (un-hides) window pane specified by name """
     if not self.paneCol.havePane(name):
-      sys.stderr.write("unknown window: %s" % name)
+      sys.stderr.write("unknown window: {0!s}".format(name))
       return False
     self.paneCol.prepare([name])
     return True
@@ -226,7 +226,7 @@ class UI:
   def hideWindow(self, name):
     """ Hides window pane specified by name """
     if not self.paneCol.havePane(name):
-      sys.stderr.write("unknown window: %s" % name)
+      sys.stderr.write("unknown window: {0!s}".format(name))
       return False
     self.paneCol.hide([name])
     return True

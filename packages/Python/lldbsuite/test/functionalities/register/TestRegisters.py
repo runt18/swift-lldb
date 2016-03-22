@@ -77,9 +77,9 @@ class RegisterCommandsTestCase(TestBase):
             gpr = "r0"
             vector = "q0"
 
-        self.expect("expr/x $%s" % gpr, substrs = ['unsigned int', ' = 0x'])
-        self.expect("expr $%s" % vector, substrs = ['vector_type'])
-        self.expect("expr (unsigned int)$%s[0]" % vector, substrs = ['unsigned int'])
+        self.expect("expr/x ${0!s}".format(gpr), substrs = ['unsigned int', ' = 0x'])
+        self.expect("expr ${0!s}".format(vector), substrs = ['vector_type'])
+        self.expect("expr (unsigned int)${0!s}[0]".format(vector), substrs = ['unsigned int'])
 
         if self.getArchitecture() in ['amd64', 'x86_64']:
             self.expect("expr -- ($rax & 0xffffffff) == $eax", substrs = ['true'])
@@ -173,7 +173,7 @@ class RegisterCommandsTestCase(TestBase):
         for str1 in substrs:
             matched = output.find(str1) != -1
             with recording(self, False) as sbuf:
-                print("%s sub string: %s" % ('Expecting', str1), file=sbuf)
+                print("{0!s} sub string: {1!s}".format('Expecting', str1), file=sbuf)
                 print("Matched" if matched else "Not Matched", file=sbuf)
             if matched:
                 break
@@ -212,18 +212,18 @@ class RegisterCommandsTestCase(TestBase):
             # Verify fstat and save it to be used for verification in next execution of 'si' command
             if not (reg_value_fstat_initial & 0x3800):
                 self.expect("register read fstat",
-                    substrs = ['fstat' + ' = ', str("0x%0.4x" %((reg_value_fstat_initial & ~(0x3800))| 0x3800))])
+                    substrs = ['fstat' + ' = ', str("0x{0:0.4x}".format(((reg_value_fstat_initial & ~(0x3800))| 0x3800)))])
                 reg_value_fstat_initial = ((reg_value_fstat_initial & ~(0x3800))| 0x3800)
                 fstat_top_pointer_initial = 7
             else :
                 self.expect("register read fstat",
-                    substrs = ['fstat' + ' = ', str("0x%0.4x" % (reg_value_fstat_initial - 0x0800))])
+                    substrs = ['fstat' + ' = ', str("0x{0:0.4x}".format((reg_value_fstat_initial - 0x0800)))])
                 reg_value_fstat_initial = (reg_value_fstat_initial - 0x0800)
                 fstat_top_pointer_initial -= 1
 
             # Verify ftag and save it to be used for verification in next execution of 'si' command
             self.expect("register read ftag",
-                substrs = ['ftag' + ' = ', str("0x%0.2x" % (reg_value_ftag_initial | (1<< fstat_top_pointer_initial)))])
+                substrs = ['ftag' + ' = ', str("0x{0:0.2x}".format((reg_value_ftag_initial | (1<< fstat_top_pointer_initial))))])
             reg_value_ftag_initial = reg_value_ftag_initial | (1<< fstat_top_pointer_initial)
 
     def fp_register_write(self):
@@ -333,9 +333,9 @@ class RegisterCommandsTestCase(TestBase):
         self.addTearDownHook(self.cleanupSubprocesses)
 
         if self.TraceOn():
-            print("pid of spawned process: %d" % pid)
+            print("pid of spawned process: {0:d}".format(pid))
 
-        self.runCmd("process attach -p %d" % pid)
+        self.runCmd("process attach -p {0:d}".format(pid))
 
         # Check that "register read eax" works.
         self.runCmd("register read eax")

@@ -76,7 +76,7 @@ def main():
     #
     # Login via SSH
     #
-    child = pexpect.spawn('ssh -l %s %s'%(user, host))
+    child = pexpect.spawn('ssh -l {0!s} {1!s}'.format(user, host))
     i = child.expect([pexpect.TIMEOUT, SSH_NEWKEY, COMMAND_PROMPT, '(?i)password'])
     if i == 0: # Timeout
         print 'ERROR! could not login with SSH. Here is what SSH said:'
@@ -147,7 +147,7 @@ def main():
         child.match = re.search('([0-9]+)\s+min',duration)
         mins = str(int(child.match.group(1)))
     print
-    print 'Uptime: %s days, %s users, %s (1 min), %s (5 min), %s (15 min)' % (
+    print 'Uptime: {0!s} days, {1!s} users, {2!s} (1 min), {3!s} (5 min), {4!s} (15 min)'.format(
         duration, users, av1, av5, av15)
     child.expect (COMMAND_PROMPT)
 

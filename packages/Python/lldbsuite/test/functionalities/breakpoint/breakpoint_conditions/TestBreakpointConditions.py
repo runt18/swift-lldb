@@ -78,8 +78,8 @@ class BreakpointConditionsTestCase(TestBase):
         # in function name 'c'.  And the parent frame should point to main.c:24.
         self.expect("thread backtrace", STOPPED_DUE_TO_BREAKPOINT_CONDITION,
             #substrs = ["stop reason = breakpoint"],
-            patterns = ["frame #0.*main.c:%d" % self.line1,
-                        "frame #1.*main.c:%d" % self.line2])
+            patterns = ["frame #0.*main.c:{0:d}".format(self.line1),
+                        "frame #1.*main.c:{0:d}".format(self.line2)])
 
         # Test that "breakpoint modify -c ''" clears the condition for the last
         # created breakpoint, so that when the breakpoint hits, val == 1.

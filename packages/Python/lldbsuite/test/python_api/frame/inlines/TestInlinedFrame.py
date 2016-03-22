@@ -64,8 +64,8 @@ class InlinedFrameAPITestCase(TestBase):
         if frame0.IsInlined():
             filename = frame0.GetLineEntry().GetFileSpec().GetFilename()
             self.assertTrue(filename == self.source)
-            self.expect(stack_traces1, "First stop at %s:%d" % (self.source, self.first_stop), exe=False,
-                        substrs = ['%s:%d' % (self.source, self.first_stop)])
+            self.expect(stack_traces1, "First stop at {0!s}:{1:d}".format(self.source, self.first_stop), exe=False,
+                        substrs = ['{0!s}:{1:d}'.format(self.source, self.first_stop)])
 
             # Expect to break again for the second time.
             process.Continue()
@@ -75,5 +75,5 @@ class InlinedFrameAPITestCase(TestBase):
             if self.TraceOn():
                 print("Full stack traces when stopped on the breakpoint 'inner_inline' for the second time:")
                 print(stack_traces2)
-                self.expect(stack_traces2, "Second stop at %s:%d" % (self.source, self.second_stop), exe=False,
-                            substrs = ['%s:%d' % (self.source, self.second_stop)])
+                self.expect(stack_traces2, "Second stop at {0!s}:{1:d}".format(self.source, self.second_stop), exe=False,
+                            substrs = ['{0!s}:{1:d}'.format(self.source, self.second_stop)])

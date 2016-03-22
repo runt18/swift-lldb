@@ -63,7 +63,7 @@ class SourceManagerTestCase(TestBase):
         #    6    }
         self.expect(stream.GetData(), "Source code displayed correctly",
                     exe=False,
-            patterns = ['=> %d.*Hello world' % self.line])
+            patterns = ['=> {0:d}.*Hello world'.format(self.line)])
 
         # Boundary condition testings for SBStream().  LLDB should not crash!
         stream.Print(None)
@@ -88,7 +88,7 @@ class SourceManagerTestCase(TestBase):
         self.addTearDownHook(lambda: os.rename(main_c_hidden, main_c))
 
         # Set target.source-map settings.
-        self.runCmd("settings set target.source-map %s %s" % (os.getcwd(), os.path.join(os.getcwd(), "hidden")))
+        self.runCmd("settings set target.source-map {0!s} {1!s}".format(os.getcwd(), os.path.join(os.getcwd(), "hidden")))
         # And verify that the settings work.
         self.expect("settings show target.source-map",
             substrs = [os.getcwd(), os.path.join(os.getcwd(), "hidden")])
@@ -110,18 +110,18 @@ class SourceManagerTestCase(TestBase):
         # The stop reason of the thread should be breakpoint.
         self.expect("thread list", STOPPED_DUE_TO_BREAKPOINT,
             substrs = ['stopped',
-                       'main.c:%d' % self.line,
+                       'main.c:{0:d}'.format(self.line),
                        'stop reason = breakpoint'])
 
         # Display some source code.
-        self.expect("source list -f main.c -l %d" % self.line, SOURCE_DISPLAYED_CORRECTLY,
+        self.expect("source list -f main.c -l {0:d}".format(self.line), SOURCE_DISPLAYED_CORRECTLY,
             substrs = ['Hello world'])
 
         # The '-b' option shows the line table locations from the debug information
         # that indicates valid places to set source level breakpoints.
 
         # The file to display is implicit in this case.
-        self.runCmd("source list -l %d -c 3 -b" % self.line)
+        self.runCmd("source list -l {0:d} -c 3 -b".format(self.line))
         output = self.res.GetOutput().splitlines()[0]
 
         # If the breakpoint set command succeeded, we should expect a positive number
@@ -168,5 +168,5 @@ class SourceManagerTestCase(TestBase):
             self.addTearDownHook(restore_file)
 
         # Display the source code again.  We should see the updated line.
-        self.expect("source list -f main.c -l %d" % self.line, SOURCE_DISPLAYED_CORRECTLY,
+        self.expect("source list -f main.c -l {0:d}".format(self.line), SOURCE_DISPLAYED_CORRECTLY,
             substrs = ['Hello lldb'])

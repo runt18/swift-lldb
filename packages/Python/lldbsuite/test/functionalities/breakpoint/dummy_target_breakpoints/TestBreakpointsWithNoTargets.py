@@ -49,8 +49,8 @@ class BreakpointInDummyTarget (TestBase):
 
         # The breakpoint list should show 3 locations.
         self.expect("breakpoint list -f", "Breakpoint locations shown correctly",
-            substrs = ["1: file = 'main.c', line = %d, exact_match = 0, locations = 1" % self.line,
-                       "2: file = 'main.c', line = %d, exact_match = 0, locations = 1" % self.line2])
+            substrs = ["1: file = 'main.c', line = {0:d}, exact_match = 0, locations = 1".format(self.line),
+                       "2: file = 'main.c', line = {0:d}, exact_match = 0, locations = 1".format(self.line2)])
 
         # Run the program.
         self.runCmd("run", RUN_SUCCEEDED)

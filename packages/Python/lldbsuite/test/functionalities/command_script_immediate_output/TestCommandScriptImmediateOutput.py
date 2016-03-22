@@ -30,7 +30,7 @@ class CommandScriptImmediateOutputTestCase (PExpectTest):
         script = os.path.join(os.getcwd(), 'custom_command.py')
         prompt = "(lldb)"
         
-        self.sendline('command script import %s' % script, patterns=[prompt])
+        self.sendline('command script import {0!s}'.format(script), patterns=[prompt])
         self.sendline('command script add -f custom_command.command_function mycommand', patterns=[prompt])
         self.sendline('mycommand', patterns='this is a test string, just a test string')
         self.sendline('command script delete mycommand', patterns=[prompt])
