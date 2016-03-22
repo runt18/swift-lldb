@@ -868,7 +868,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
              # Note we require launch-only testing so we can get inferior otuput.
              { "type":"output_match", "regex":r"^data address: 0x([0-9a-fA-F]+)\r\n$", "capture":{ 1:"message_address"} },
              # Now stop the inferior.
-             "read packet: {}".format(chr(3)),
+             "read packet: {0}".format(chr(3)),
              # And wait for the stop notification.
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})thread:([0-9a-fA-F]+);", "capture":{1:"stop_signo", 2:"stop_thread_id"} }],
             True)
@@ -950,7 +950,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
              # Note we require launch-only testing so we can get inferior otuput.
              { "type":"output_match", "regex":r"^code address: 0x([0-9a-fA-F]+)\r\n$", "capture":{ 1:"code_address"} },
              # Now stop the inferior.
-             "read packet: {}".format(chr(3)),
+             "read packet: {0}".format(chr(3)),
              # And wait for the stop notification.
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})thread:([0-9a-fA-F]+);", "capture":{1:"stop_signo", 2:"stop_thread_id"} }],
             True)
@@ -1011,7 +1011,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
              # Note we require launch-only testing so we can get inferior otuput.
              { "type":"output_match", "regex":r"^stack address: 0x([0-9a-fA-F]+)\r\n$", "capture":{ 1:"stack_address"} },
              # Now stop the inferior.
-             "read packet: {}".format(chr(3)),
+             "read packet: {0}".format(chr(3)),
              # And wait for the stop notification.
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})thread:([0-9a-fA-F]+);", "capture":{1:"stop_signo", 2:"stop_thread_id"} }],
             True)
@@ -1072,7 +1072,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
              # Note we require launch-only testing so we can get inferior otuput.
              { "type":"output_match", "regex":r"^heap address: 0x([0-9a-fA-F]+)\r\n$", "capture":{ 1:"heap_address"} },
              # Now stop the inferior.
-             "read packet: {}".format(chr(3)),
+             "read packet: {0}".format(chr(3)),
              # And wait for the stop notification.
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})thread:([0-9a-fA-F]+);", "capture":{1:"stop_signo", 2:"stop_thread_id"} }],
             True)
@@ -1135,7 +1135,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
              # Note we require launch-only testing so we can get inferior otuput.
              { "type":"output_match", "regex":r"^code address: 0x([0-9a-fA-F]+)\r\n$", "capture":{ 1:"function_address"} },
              # Now stop the inferior.
-             "read packet: {}".format(chr(3)),
+             "read packet: {0}".format(chr(3)),
              # And wait for the stop notification.
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})thread:([0-9a-fA-F]+);", "capture":{1:"stop_signo", 2:"stop_thread_id"} }],
             True)
@@ -1278,7 +1278,7 @@ class LldbGdbServerTestCase(gdbremote_testcase.GdbRemoteTestCaseBase):
              # Note we require launch-only testing so we can get inferior otuput.
              { "type":"output_match", "regex":r"^data address: 0x([0-9a-fA-F]+)\r\n$", "capture":{ 1:"message_address"} },
              # Now stop the inferior.
-             "read packet: {}".format(chr(3)),
+             "read packet: {0}".format(chr(3)),
              # And wait for the stop notification.
              {"direction":"send", "regex":r"^\$T([0-9a-fA-F]{2})thread:([0-9a-fA-F]+);", "capture":{1:"stop_signo", 2:"stop_thread_id"} }],
             True)

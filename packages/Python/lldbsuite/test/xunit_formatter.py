@@ -218,7 +218,7 @@ class XunitFormatter(ResultsFormatter):
         else:
             # This is an unknown event.
             if self.options.assert_on_unknown_events:
-                raise Exception("unknown event type {} from {}\n".format(
+                raise Exception("unknown event type {0} from {1}\n".format(
                     event_type, test_event))
 
     def _handle_success(self, test_event):
@@ -240,7 +240,7 @@ class XunitFormatter(ResultsFormatter):
         result = self._common_add_testcase_entry(
             test_event,
             inner_content=(
-                '<failure type={} message={}><![CDATA[{}]]></failure>'.format(
+                '<failure type={0} message={1}><![CDATA[{2}]]></failure>'.format(
                     XunitFormatter._quote_attribute(test_event["issue_class"]),
                     XunitFormatter._quote_attribute(message),
                     backtrace)
@@ -259,7 +259,7 @@ class XunitFormatter(ResultsFormatter):
         result = self._common_add_testcase_entry(
             test_event,
             inner_content=(
-                '<error type={} message={}><![CDATA[{}]]></error>'.format(
+                '<error type={0} message={1}><![CDATA[{2}]]></error>'.format(
                     XunitFormatter._quote_attribute(test_event["issue_class"]),
                     XunitFormatter._quote_attribute(message),
                     backtrace)
@@ -276,7 +276,7 @@ class XunitFormatter(ResultsFormatter):
         else:
             name = test_event.get("test_filename", "<unknown test/filename>")
 
-        message_text = "ERROR: {} ({}): {}".format(
+        message_text = "ERROR: {0} ({1}): {2}".format(
             test_event.get("exception_code", 0),
             test_event.get("exception_description", ""),
             name)
@@ -285,7 +285,7 @@ class XunitFormatter(ResultsFormatter):
         result = self._common_add_testcase_entry(
             test_event,
             inner_content=(
-                '<error type={} message={}></error>'.format(
+                '<error type={0} message={1}></error>'.format(
                     "exceptional_exit",
                     XunitFormatter._quote_attribute(message))
             ))
@@ -301,13 +301,13 @@ class XunitFormatter(ResultsFormatter):
         else:
             name = test_event.get("test_filename", "<unknown test/filename>")
 
-        message_text = "TIMEOUT: {}".format(name)
+        message_text = "TIMEOUT: {0}".format(name)
         message = self._replace_invalid_xml(message_text)
 
         result = self._common_add_testcase_entry(
             test_event,
             inner_content=(
-                '<error type={} message={}></error>'.format(
+                '<error type={0} message={1}></error>'.format(
                     "timeout",
                     XunitFormatter._quote_attribute(message))
             ))
@@ -351,7 +351,7 @@ class XunitFormatter(ResultsFormatter):
         reason = self._replace_invalid_xml(test_event.get("skip_reason", ""))
         result = self._common_add_testcase_entry(
             test_event,
-            inner_content='<skipped message={} />'.format(
+            inner_content='<skipped message={0} />'.format(
                 XunitFormatter._quote_attribute(reason)))
         with self.lock:
             self.elements["skips"].append(result)
@@ -365,7 +365,7 @@ class XunitFormatter(ResultsFormatter):
             # testcase mode, so it might fail a validating
             # test results viewer.
             if "bugnumber" in test_event:
-                bug_id_attribute = 'bug-id={} '.format(
+                bug_id_attribute = 'bug-id={0} '.format(
                     XunitFormatter._quote_attribute(test_event["bugnumber"]))
             else:
                 bug_id_attribute = ''
@@ -373,7 +373,7 @@ class XunitFormatter(ResultsFormatter):
             result = self._common_add_testcase_entry(
                 test_event,
                 inner_content=(
-                    '<expected-failure {}type={} message={} />'.format(
+                    '<expected-failure {0}type={1} message={2} />'.format(
                         bug_id_attribute,
                         XunitFormatter._quote_attribute(
                             test_event["issue_class"]),
@@ -389,7 +389,7 @@ class XunitFormatter(ResultsFormatter):
         elif self.options.xfail == XunitFormatter.RM_FAILURE:
             result = self._common_add_testcase_entry(
                 test_event,
-                inner_content='<failure type={} message={} />'.format(
+                inner_content='<failure type={0} message={1} />'.format(
                     XunitFormatter._quote_attribute(test_event["issue_class"]),
                     XunitFormatter._quote_attribute(
                         test_event["issue_message"])))
@@ -399,7 +399,7 @@ class XunitFormatter(ResultsFormatter):
             pass
         else:
             raise Exception(
-                "unknown xfail option: {}".format(self.options.xfail))
+                "unknown xfail option: {0}".format(self.options.xfail))
 
     def _handle_expected_timeout(self, test_event):
         """Handles expected_timeout.
@@ -429,13 +429,13 @@ class XunitFormatter(ResultsFormatter):
         elif self.options.xpass == XunitFormatter.RM_FAILURE:
             # Treat the xpass as a failure.
             if "bugnumber" in test_event:
-                message = "unexpected success (bug_id:{})".format(
+                message = "unexpected success (bug_id:{0})".format(
                     test_event["bugnumber"])
             else:
                 message = "unexpected success (bug_id:none)"
             result = self._common_add_testcase_entry(
                 test_event,
-                inner_content='<failure type={} message={} />'.format(
+                inner_content='<failure type={0} message={1} />'.format(
                     XunitFormatter._quote_attribute("unexpected_success"),
                     XunitFormatter._quote_attribute(message)))
             with self.lock:
@@ -444,7 +444,7 @@ class XunitFormatter(ResultsFormatter):
             # Ignore the xpass result as far as xUnit reporting goes.
             pass
         else:
-            raise Exception("unknown xpass option: {}".format(
+            raise Exception("unknown xpass option: {0}".format(
                 self.options.xpass))
 
     def _process_test_result(self, test_event):
@@ -459,7 +459,7 @@ class XunitFormatter(ResultsFormatter):
 
         status = test_event["status"]
         if status not in self.status_handlers:
-            raise Exception("test event status '{}' unsupported".format(
+            raise Exception("test event status '{0}' unsupported".format(
                 status))
 
         # Call the status handler for the test result.

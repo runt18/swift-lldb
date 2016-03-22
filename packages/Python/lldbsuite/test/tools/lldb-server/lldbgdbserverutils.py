@@ -116,7 +116,7 @@ def _is_packet_lldb_gdbserver_input(packet_type, llgs_input_is_read):
         return not llgs_input_is_read
     else:
         # don't understand what type of packet this is
-        raise "Unknown packet type: {}".format(packet_type)
+        raise "Unknown packet type: {0}".format(packet_type)
 
 
 def handle_O_packet(context, packet_contents, logger):
@@ -133,7 +133,7 @@ def handle_O_packet(context, packet_contents, logger):
     context["O_count"] += 1
     
     if logger:
-        logger.debug("text: new \"{}\", cumulative: \"{}\"".format(new_text, context["O_content"]))
+        logger.debug("text: new \"{0}\", cumulative: \"{1}\"".format(new_text, context["O_content"]))
     
     return True
 
@@ -209,7 +209,7 @@ def expect_lldb_gdbserver_replay(
                         packet_desc = "^C"
                     else:
                         packet_desc = send_packet
-                    logger.info("sending packet to remote: {}".format(packet_desc))
+                    logger.info("sending packet to remote: {0}".format(packet_desc))
                 sock.sendall(send_packet)
             else:
                 # This is an entry expecting to receive content from the remote debug monitor.
@@ -223,15 +223,15 @@ def expect_lldb_gdbserver_replay(
                         content = pump.output_queue().get(True, timeout_seconds)
                     except queue.Empty:
                         if logger:
-                            logger.warning("timeout waiting for stub output (accumulated output:{})".format(pump.get_accumulated_output()))
-                        raise Exception("timed out while waiting for output match (accumulated output: {})".format(pump.get_accumulated_output()))
+                            logger.warning("timeout waiting for stub output (accumulated output:{0})".format(pump.get_accumulated_output()))
+                        raise Exception("timed out while waiting for output match (accumulated output: {0})".format(pump.get_accumulated_output()))
                 else:
                     try:
                         content = pump.packet_queue().get(True, timeout_seconds)
                     except queue.Empty:
                         if logger:
-                            logger.warning("timeout waiting for packet match (receive buffer: {})".format(pump.get_receive_buffer()))
-                        raise Exception("timed out while waiting for packet match (receive buffer: {})".format(pump.get_receive_buffer()))
+                            logger.warning("timeout waiting for packet match (receive buffer: {0})".format(pump.get_receive_buffer()))
+                        raise Exception("timed out while waiting for packet match (receive buffer: {0})".format(pump.get_receive_buffer()))
                 
                 # Give the sequence entry the opportunity to match the content.
                 # Output matchers might match or pass after more output accumulates.
@@ -284,7 +284,7 @@ def build_gdbremote_A_packet(args_list):
         hex_arg = gdbremote_hex_encode_string(arg)
 
         # Build the A entry.
-        payload += "{},{},{}".format(len(hex_arg), arg_index, hex_arg)
+        payload += "{0},{1},{2}".format(len(hex_arg), arg_index, hex_arg)
 
         # Next arg index, please.
         arg_index += 1
@@ -346,7 +346,7 @@ def unpack_endian_binary_string(endian, value_string):
         return value
     else:
         # pdp is valid but need to add parse code once needed.
-        raise Exception("unsupported endian:{}".format(endian))
+        raise Exception("unsupported endian:{0}".format(endian))
 
 def unpack_register_hex_unsigned(endian, value_string):
     """Unpack a gdb-remote $p-style response to an unsigned int given endianness of inferior."""
@@ -367,7 +367,7 @@ def unpack_register_hex_unsigned(endian, value_string):
         return int(value_string, 16)
     else:
         # pdp is valid but need to add parse code once needed.
-        raise Exception("unsupported endian:{}".format(endian))
+        raise Exception("unsupported endian:{0}".format(endian))
 
 def pack_register_hex(endian, value, byte_size=None):
     """Unpack a gdb-remote $p-style response to an unsigned int given endianness of inferior."""
@@ -378,7 +378,7 @@ def pack_register_hex(endian, value, byte_size=None):
         # Create the litt-endian return value.
         retval = ""
         while value != 0:
-            retval = retval + "{:02x}".format(value & 0xff)
+            retval = retval + "{0:02x}".format(value & 0xff)
             value = value >> 8
         if byte_size:
             # Add zero-fill to the right/end (MSB side) of the value.
@@ -394,7 +394,7 @@ def pack_register_hex(endian, value, byte_size=None):
 
     else:
         # pdp is valid but need to add parse code once needed.
-        raise Exception("unsupported endian:{}".format(endian))
+        raise Exception("unsupported endian:{0}".format(endian))
 
 class GdbRemoteEntryBase(object):
     def is_output_matcher(self):
@@ -478,7 +478,7 @@ class GdbRemoteEntry(GdbRemoteEntryBase):
         # Ensure the actual packet matches from the start of the actual packet.
         match = self.regex.match(actual_packet)
         if not match:
-            asserter.fail("regex '{}' failed to match against content '{}'".format(self.regex.pattern, actual_packet))
+            asserter.fail("regex '{0}' failed to match against content '{1}'".format(self.regex.pattern, actual_packet))
 
         if self.capture:
             # Handle captures.
@@ -493,7 +493,7 @@ class GdbRemoteEntry(GdbRemoteEntryBase):
             for group_index, var_name in list(self.expect_captures.items()):
                 capture_text = match.group(group_index)
                 if not capture_text:
-                    raise Exception("No content to expect for group index {}".format(group_index))
+                    raise Exception("No content to expect for group index {0}".format(group_index))
                 asserter.assertEqual(capture_text, context[var_name])
 
         return context
@@ -666,7 +666,7 @@ class MatchRemoteOutputEntry(GdbRemoteEntryBase):
             raise Exception("regex cannot be None")
 
         if not self._regex_mode in ["match", "search"]:
-            raise Exception("unsupported regex mode \"{}\": must be \"match\" or \"search\"".format(self._regex_mode))
+            raise Exception("unsupported regex mode \"{0}\": must be \"match\" or \"search\"".format(self._regex_mode))
 
     def is_output_matcher(self):
         return True
@@ -699,7 +699,7 @@ class MatchRemoteOutputEntry(GdbRemoteEntryBase):
         elif self._regex_mode == "search":
             match = self._regex.search(accumulated_output)
         else:
-            raise Exception("Unexpected regex mode: {}".format(self._regex_mode))
+            raise Exception("Unexpected regex mode: {0}".format(self._regex_mode))
 
         # If we don't match, wait to try again after next $O content, or time out.
         if not match:
@@ -716,7 +716,7 @@ class MatchRemoteOutputEntry(GdbRemoteEntryBase):
             for group_index, var_name in list(self._capture.items()):
                 capture_text = match.group(group_index)
                 if not capture_text:
-                    raise Exception("No content for group index {}".format(group_index))
+                    raise Exception("No content for group index {0}".format(group_index))
                 context[var_name] = capture_text
 
         return context
@@ -751,7 +751,7 @@ class GdbRemoteTestSequence(object):
                         #     self.logger.info("receiving packet from llgs, should match: {}".format(playback_packet))
                         self.entries.append(GdbRemoteEntry(is_send_to_remote=False,exact_payload=playback_packet))
                 else:
-                    raise Exception("failed to interpret log line: {}".format(line))
+                    raise Exception("failed to interpret log line: {0}".format(line))
             elif type(line) == dict:
                 entry_type = line.get("type", "regex_capture")
                 if entry_type == "regex_capture":
@@ -837,6 +837,6 @@ def process_is_running(pid, unknown_value=True):
 if __name__ == '__main__':
     EXE_PATH = get_lldb_server_exe()
     if EXE_PATH:
-        print("lldb-server path detected: {}".format(EXE_PATH))
+        print("lldb-server path detected: {0}".format(EXE_PATH))
     else:
         print("lldb-server could not be found")

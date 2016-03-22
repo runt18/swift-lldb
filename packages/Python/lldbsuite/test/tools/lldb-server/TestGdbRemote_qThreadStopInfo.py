@@ -33,7 +33,7 @@ class TestGdbRemote_qThreadStopInfo(gdbremote_testcase.GdbRemoteTestCaseBase):
         time.sleep(1)
         self.reset_test_sequence()
         self.test_sequence.add_log_lines([
-            "read packet: {}".format(chr(3)),
+            "read packet: {0}".format(chr(3)),
             {"direction":"send", "regex":r"^\$T([0-9a-fA-F]+)([^#]+)#[0-9a-fA-F]{2}$", "capture":{1:"stop_result", 2:"key_vals_text"} },
             ], True)
         context = self.expect_gdbremote_sequence()
@@ -51,7 +51,7 @@ class TestGdbRemote_qThreadStopInfo(gdbremote_testcase.GdbRemoteTestCaseBase):
             # Run the qThreadStopInfo command.
             self.reset_test_sequence()
             self.test_sequence.add_log_lines([
-                "read packet: $qThreadStopInfo{:x}#00".format(thread),
+                "read packet: $qThreadStopInfo{0:x}#00".format(thread),
                 {"direction":"send", "regex":r"^\$T([0-9a-fA-F]+)([^#]+)#[0-9a-fA-F]{2}$", "capture":{1:"stop_result", 2:"key_vals_text"} },
                 ], True)
             context = self.expect_gdbremote_sequence()

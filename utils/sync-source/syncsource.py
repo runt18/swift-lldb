@@ -101,7 +101,7 @@ def find_appropriate_rcfile(options):
     if options.rc_file and len(options.rc_file) > 0:
         if not os.path.isfile(options.rc_file):
             # If it doesn't exist, error out here.
-            raise "rcfile '{}' specified but doesn't exist".format(
+            raise "rcfile '{0}' specified but doesn't exist".format(
                 options.rc_file)
         return options.rc_file
 
@@ -140,7 +140,7 @@ def get_configuration(options, rcdata, config_name):
             else:
                 next_config_name = None
         else:
-            raise "failed to find specified parent config '{}'".format(
+            raise "failed to find specified parent config '{0}'".format(
                 next_config_name)
     return Configuration(rcdata_configs)
 
@@ -148,7 +148,7 @@ def get_configuration(options, rcdata, config_name):
 def create_transfer_agent(options, configuration):
     transfer_class_spec = configuration.get_value("transfer_class")
     if options.verbose:
-        print "specified transfer class: '{}'".format(transfer_class_spec)
+        print "specified transfer class: '{0}'".format(transfer_class_spec)
 
     # Load the module (possibly package-qualified).
     components = transfer_class_spec.split(".")
@@ -179,7 +179,7 @@ def sync_configured_sources(options, configuration, default_excludes):
     transfer_specs = []
 
     for dir_id in dir_ids:
-        dir_key = "{}_dir".format(dir_id)
+        dir_key = "{0}_dir".format(dir_id)
 
         # Build the source dir (absolute) that we're copying from.
         # Defaults the base-relative source dir to the source id (e.g. lldb)
@@ -250,7 +250,7 @@ def main():
     rc_filename = find_appropriate_rcfile(options)
     if rc_filename:
         if options.verbose:
-            print "reading rc data from file '{}'".format(rc_filename)
+            print "reading rc data from file '{0}'".format(rc_filename)
         rcdata = read_rcfile(rc_filename)
     else:
         sys.stderr.write("no rcfile specified, cannot guess configuration")
@@ -259,7 +259,7 @@ def main():
     # Find configuration.
     configuration = get_configuration(options, rcdata, options.config_name)
     if not configuration:
-        sys.stderr.write("failed to find configuration for {}".format(
+        sys.stderr.write("failed to find configuration for {0}".format(
             options.config_data))
         exit(2)
 

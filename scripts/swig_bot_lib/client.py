@@ -121,43 +121,43 @@ def finalize_subparser_options(options):
 def establish_remote_connection(ip_port):
     logging.debug("Creating socket...")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    logging.info("Connecting to server {} on port {}"
+    logging.info("Connecting to server {0} on port {1}"
                  .format(ip_port[0], ip_port[1]))
     s.connect(ip_port)
     logging.info("Connection established...")
     return s
 
 def transmit_request(connection, packed_input):
-    logging.info("Sending {} bytes of compressed data."
+    logging.info("Sending {0} bytes of compressed data."
                  .format(len(packed_input)))
     connection.sendall(struct.pack("!I", len(packed_input)))
     connection.sendall(packed_input)
     logging.info("Awaiting response.")
     response_len = struct.unpack("!I", sockutil.recvall(connection, 4))[0]
-    logging.debug("Expecting {} byte response".format(response_len))
+    logging.debug("Expecting {0} byte response".format(response_len))
     response = sockutil.recvall(connection, response_len)
     return response
 
 def handle_response(options, connection, response):
-    logging.debug("Received {} byte response.".format(len(response)))
-    logging.debug("Creating output directory {}"
+    logging.debug("Received {0} byte response.".format(len(response)))
+    logging.debug("Creating output directory {0}"
                     .format(options.target_dir))
     os.makedirs(options.target_dir, exist_ok=True)
 
-    logging.info("Unpacking response archive into {}"
+    logging.info("Unpacking response archive into {0}"
                     .format(options.target_dir))
     local.unpack_archive(options.target_dir, response)
     response_file_path = os.path.normpath(
         os.path.join(options.target_dir, "swig_output.json"))
     if not os.path.isfile(response_file_path):
-        logging.error("Response file '{}' does not exist."
+        logging.error("Response file '{0}' does not exist."
                         .format(response_file_path))
         return
     try:
         response = remote.deserialize_response_status(
             io.open(response_file_path))
         if response[0] != 0:
-            logging.error("An error occurred during generation.  Status={}"
+            logging.error("An error occurred during generation.  Status={0}"
                             .format(response[0]))
             logging.error(response[1])
         else:
@@ -169,10 +169,10 @@ def handle_response(options, connection, response):
 
 def run(options):
     if options.remote is None:
-        logging.info("swig bot client using local swig installation at '{}'"
+        logging.info("swig bot client using local swig installation at '{0}'"
                      .format(options.swig_executable))
         if not os.path.isfile(options.swig_executable):
-            logging.error("Swig executable '{}' does not exist."
+            logging.error("Swig executable '{0}' does not exist."
                           .format(options.swig_executable))
         config = local.LocalConfig()
         config.languages = options.languages
@@ -181,12 +181,12 @@ def run(options):
         config.swig_executable = options.swig_executable
         local.generate(config)
     else:
-        logging.info("swig bot client using remote generation with server '{}'"
+        logging.info("swig bot client using remote generation with server '{0}'"
                      .format(options.remote))
         connection = None
         try:
             config = remote.generate_config(options.languages)
-            logging.debug("Generated config json {}".format(config))
+            logging.debug("Generated config json {0}".format(config))
             inputs = [("include/lldb", ".h"),
                       ("include/lldb/API", ".h"),
                       ("scripts", ".swig"),

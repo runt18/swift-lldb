@@ -31,7 +31,7 @@ class StdListSynthProvider:
 	def value(self,node):
 		logger = lldb.formatters.Logger.Logger()
 		value = node.GetValueAsUnsigned()
-		logger >> "synthetic value for {}: {}".format(str(self.valobj.GetName()), value)
+		logger >> "synthetic value for {0}: {1}".format(str(self.valobj.GetName()), value)
 		return value
 
 	# Floyd's cycle-finding algorithm

@@ -118,7 +118,7 @@ class ProcessControlTimeoutTests(ProcessControlTests):
         timeout_seconds = 5
         driver.run_command_with_timeout(
             self.inferior_command(),
-            "{}s".format(timeout_seconds),
+            "{0}s".format(timeout_seconds),
             False)
         self.assertTrue(
             driver.completed_event.wait(2*timeout_seconds),
@@ -138,8 +138,8 @@ class ProcessControlTimeoutTests(ProcessControlTests):
             # Sleep twice as long as the timeout interval.  This
             # should force a timeout.
             self.inferior_command(
-                options="--sleep {}".format(timeout_seconds*2)),
-            "{}s".format(timeout_seconds),
+                options="--sleep {0}".format(timeout_seconds*2)),
+            "{0}s".format(timeout_seconds),
             with_core)
 
         # We should complete, albeit with a timeout.
@@ -179,7 +179,7 @@ class ProcessControlTimeoutTests(ProcessControlTests):
             self.inferior_command(
                 ignore_soft_terminate=True,
                 options="--never-return"),
-            "{}s".format(timeout_seconds),
+            "{0}s".format(timeout_seconds),
             True)
 
         # We should complete, albeit with a timeout.

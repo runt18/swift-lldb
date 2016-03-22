@@ -70,7 +70,7 @@ def handle_ignore_signals(options, signals):
 
     for signum in signals:
         if options.verbose:
-            print("disabling signum {}".format(signum))
+            print("disabling signum {0}".format(signum))
         signal.signal(signum, signal.SIG_IGN)
 
 
@@ -91,7 +91,7 @@ def handle_sleep(options, sleep_seconds):
 
     end_time = datetime.datetime.now() + datetime.timedelta(0, sleep_seconds)
     if options.verbose:
-        print("sleep end time: {}".format(end_time))
+        print("sleep end time: {0}".format(end_time))
 
     # Do sleep in a loop: signals can interrupt.
     while datetime.datetime.now() < end_time:

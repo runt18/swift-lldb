@@ -22,11 +22,11 @@ class RsyncOverSsh(transfer.protocol.Protocol):
             "rsync",
             flags,
             "-e",
-            "ssh -p {}".format(self.ssh_config["port"]),
+            "ssh -p {0}".format(self.ssh_config["port"]),
             "--rsync-path",
             # The following command needs to know the right way to do
             # this on the dest platform - ensures the target dir exists.
-            "mkdir -p {} && rsync".format(dest_path)
+            "mkdir -p {0} && rsync".format(dest_path)
         ]
 
         # Add source dir exclusions
@@ -38,7 +38,7 @@ class RsyncOverSsh(transfer.protocol.Protocol):
         cmd.extend([
             "--delete",
             transfer_spec.source_path + "/",
-            "{}@{}:{}".format(
+            "{0}@{1}:{2}".format(
                 self.ssh_config["user"],
                 self.ssh_config["dest_host"],
                 dest_path)])
@@ -53,7 +53,7 @@ class RsyncOverSsh(transfer.protocol.Protocol):
         for spec in transfer_specs:
             cmd = self.build_rsync_command(spec, dry_run)
             if self.options.verbose:
-                print "executing the following command:\n{}".format(cmd)
+                print "executing the following command:\n{0}".format(cmd)
             result = subprocess.call(
                 cmd, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
             if result != 0:

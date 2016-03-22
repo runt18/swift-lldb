@@ -270,7 +270,7 @@ class EventBuilder(object):
         type_var = error_tuple[0]
         module = inspect.getmodule(type_var)
         if module:
-            return "{}.{}".format(module.__name__, type_var.__name__)
+            return "{0}.{1}".format(module.__name__, type_var.__name__)
         else:
             return type_var.__name__
 
@@ -645,7 +645,7 @@ class ResultsFormatter(object):
     def arg_parser(cls):
         """@return arg parser used to parse formatter-specific options."""
         parser = argparse.ArgumentParser(
-            description='{} options'.format(cls.__name__),
+            description='{0} options'.format(cls.__name__),
             usage=('dotest.py --results-formatter-options='
                    '"--option1 value1 [--option2 value2 [...]]"'))
         parser.add_argument(
@@ -957,7 +957,7 @@ class ResultsFormatter(object):
         if test_class is None or test_name is None:
             return
 
-        test_key = "{}.{}".format(test_class, test_name)
+        test_key = "{0}.{1}".format(test_class, test_name)
         self.start_time_by_test[test_key] = start_time
 
     def elapsed_time_for_test(self, test_class, test_name, end_time):
@@ -970,7 +970,7 @@ class ResultsFormatter(object):
         if test_class is None or test_name is None:
             return -2.0
 
-        test_key = "{}.{}".format(test_class, test_name)
+        test_key = "{0}.{1}".format(test_class, test_name)
         if test_key not in self.start_time_by_test:
             return -1.0
         else:
@@ -1062,7 +1062,7 @@ class ResultsFormatter(object):
         """
         banner_separator = "".ljust(len(banner_text), "=")
 
-        out_file.write("\n{}\n{}\n{}\n".format(
+        out_file.write("\n{0}\n{1}\n{2}\n".format(
             banner_separator,
             banner_text,
             banner_separator))
@@ -1101,14 +1101,14 @@ class ResultsFormatter(object):
             for row in extra_rows:
                 extra_label = "{}:".format(row[0]).ljust(
                     max_category_name_length + 1)
-                out_file.write("{} {:4}\n".format(extra_label, row[1]))
+                out_file.write("{0} {1:4}\n".format(extra_label, row[1]))
 
         for category in categories:
             result_status_id = category[0]
             result_label = "{}:".format(category[1]).ljust(
                 max_category_name_length + 1)
             count = len(result_events_by_status[result_status_id])
-            out_file.write("{} {:4}\n".format(
+            out_file.write("{0} {1:4}\n".format(
                 result_label,
                 count))
 
@@ -1169,7 +1169,7 @@ class ResultsFormatter(object):
 
                 # Create extra info component (used for exceptional exit info)
                 if result_status_id == EventBuilder.STATUS_EXCEPTIONAL_EXIT:
-                    extra_info = "[EXCEPTIONAL EXIT {} ({})] ".format(
+                    extra_info = "[EXCEPTIONAL EXIT {0} ({1})] ".format(
                         event["exception_code"],
                         event["exception_description"])
                 else:
@@ -1177,7 +1177,7 @@ class ResultsFormatter(object):
 
                 # Figure out the identity we will use for this test.
                 if configuration.verbose and ("test_class" in event):
-                    test_id = "{}.{}".format(
+                    test_id = "{0}.{1}".format(
                         event["test_class"], event["test_name"])
                 elif "test_name" in event:
                     test_id = event["test_name"]
@@ -1185,7 +1185,7 @@ class ResultsFormatter(object):
                     test_id = "<no_running_test_method>"
 
                 # Display the info.
-                out_file.write("{}: {}{} ({})\n".format(
+                out_file.write("{0}: {1}{2} ({3})\n".format(
                     detail_label,
                     extra_info,
                     test_id,
@@ -1249,10 +1249,10 @@ class ResultsFormatter(object):
             # Debug dump of the key/result info for all categories.
             self._print_banner("Results Dump")
             for status, events_by_key in result_events_by_status.items():
-                out_file.write("\nSTATUS: {}\n".format(status))
+                out_file.write("\nSTATUS: {0}\n".format(status))
                 for key, event in events_by_key:
-                    out_file.write("key:   {}\n".format(key))
-                    out_file.write("event: {}\n".format(event))
+                    out_file.write("key:   {0}\n".format(key))
+                    out_file.write("event: {0}\n".format(event))
 
 
 class RawPickledFormatter(ResultsFormatter):
