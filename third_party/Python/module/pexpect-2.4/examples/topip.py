@@ -199,8 +199,8 @@ def main():
         pass
 
     # remove a few common, uninteresting addresses from the dictionary.
-    ip_list = dict([ (key,value) for key,value in ip_list.items() if '192.168.' not in key])
-    ip_list = dict([ (key,value) for key,value in ip_list.items() if '127.0.0.1' not in key])
+    ip_list = {key: value for key,value in ip_list.items() if '192.168.' not in key}
+    ip_list = {key: value for key,value in ip_list.items() if '127.0.0.1' not in key}
 
     # sort dict by value (count)
     #ip_list = sorted(ip_list.iteritems(),lambda x,y:cmp(x[1], y[1]),reverse=True)

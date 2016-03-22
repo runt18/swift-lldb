@@ -376,7 +376,7 @@ def apply_smart (func, args):
     if hasattr(func,'im_func'): # Handle case when func is a class method.
         func = func.im_func
     argcount = func.func_code.co_argcount
-    required_args = dict([(k,args.get(k)) for k in func.func_code.co_varnames[:argcount]])
+    required_args = {k: args.get(k) for k in func.func_code.co_varnames[:argcount]}
     return func(**required_args)
 
 def count_unique (items):
