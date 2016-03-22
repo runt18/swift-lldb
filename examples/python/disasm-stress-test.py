@@ -21,20 +21,20 @@ def AddLLDBToSysPathOnMacOSX():
     def GetLLDBFrameworkPath():
         lldb_path = subprocess.check_output(["xcrun", "-find", "lldb"])
         re_result = re.match("(.*)/Developer/usr/bin/lldb", lldb_path)
-        if re_result == None:
+        if re_result is None:
             return None
         xcode_contents_path = re_result.group(1)
         return xcode_contents_path + "/SharedFrameworks/LLDB.framework"
     
     lldb_framework_path = GetLLDBFrameworkPath()
     
-    if lldb_framework_path == None:
+    if lldb_framework_path is None:
         print "Couldn't find LLDB.framework"
         sys.exit(-1)
     
     sys.path.append(lldb_framework_path + "/Resources/Python")
 
-if arg_ns.lldb == None:
+if arg_ns.lldb is None:
     AddLLDBToSysPathOnMacOSX()
 else:
     sys.path.append(arg_ns.lldb + "/Resources/Python")
@@ -89,7 +89,7 @@ class SequentialInstructionProvider:
         return self
     def next(self):
         ret = self.GetNextInstruction()
-        if ret == None:
+        if ret is None:
             raise StopIteration
         return ret
 
@@ -111,7 +111,7 @@ class RandomInstructionProvider:
         return self
     def next(self):
         ret = self.GetNextInstruction()
-        if ret == None:
+        if ret is None:
             raise StopIteration
         return ret
 
@@ -119,7 +119,7 @@ log_file = None
 
 def GetProviderWithArguments(args):
     global log_file
-    if args.log != None:
+    if args.log is not None:
         log_file = open(args.log, 'w')
     else:
         log_file = sys.stdout
@@ -129,9 +129,9 @@ def GetProviderWithArguments(args):
     else:
         start = 0
         skip = 1
-        if args.start != None:
+        if args.start is not None:
             start = args.start
-        if args.skip != None:
+        if args.skip is not None:
             skip = args.skip
         instruction_provider = SequentialInstructionProvider(args.bytes, log_file, start, skip)
     return instruction_provider

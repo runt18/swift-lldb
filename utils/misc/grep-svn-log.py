@@ -25,7 +25,7 @@ class Log(StringIO.StringIO):
     def add_line(self, a_line):
         """Add a line to the content, if there is a previous line, commit it."""
         global separator
-        if self.prev_line != None:
+        if self.prev_line is not None:
             print >> self, self.prev_line
         self.prev_line = a_line
         self.separator_added = (a_line == separator)
@@ -38,7 +38,7 @@ class Log(StringIO.StringIO):
         self.prev_line = None
     def finish(self):
         """Call this when you're finished with populating content."""
-        if self.prev_line != None:
+        if self.prev_line is not None:
             print >> self, self.prev_line
         self.prev_line = None
 

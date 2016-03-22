@@ -83,7 +83,7 @@ class CFBitVectorKnown_SummaryProvider:
 		data_list = []
 		cur_byte_pos = None
 		for i in range(0,count):
-			if cur_byte_pos == None:
+			if cur_byte_pos is None:
 				cur_byte_pos = byte_index(i)
 				cur_byte = grab_array_item_data(array_vo,cur_byte_pos)
 				cur_byte_val = cur_byte.uint8[0]
@@ -158,7 +158,7 @@ def GetSummary_Impl(valobj):
 def CFBitVector_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -166,7 +166,7 @@ def CFBitVector_SummaryProvider (valobj,dict):
 		except:
 			summary = None
 		logger >> "summary got from provider: " + str(summary)
-		if summary == None or summary == '':
+		if summary is None or summary == '':
 			summary = '<variable is not CFBitVector>'
 		return summary
 	return 'Summary Unavailable'

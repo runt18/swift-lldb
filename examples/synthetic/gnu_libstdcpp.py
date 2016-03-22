@@ -149,7 +149,7 @@ class StdVectorSynthProvider:
 			self.count = None
 
 		def num_children(self):
-			if self.count == None:
+			if self.count is None:
 				self.count = self.num_children_impl()
 			return self.count
 
@@ -353,7 +353,7 @@ class StdMapSynthProvider:
 
 	def num_children(self):
 		logger = lldb.formatters.Logger.Logger()
-		if self.count == None:
+		if self.count is None:
 			self.count = self.num_children_impl()
 		return self.count
 

@@ -53,7 +53,7 @@ class Enum(LookupDictionary):
 
     def __str__(self):
         s = self.get_first_key_for_value (self.value, None)
-        if s == None:
+        if s is None:
             s = "%#8.8x" % self.value
         return s
     

@@ -21,7 +21,7 @@ def parse_linespec (linespec, frame, result):
 
     if (not matched):
         mo = re.match("^([0-9]+)$", linespec)
-        if (mo != None):
+        if (mo is not None):
             matched = True
             #print "Matched <linenum>"
             line_number = int(mo.group(1))
@@ -33,7 +33,7 @@ def parse_linespec (linespec, frame, result):
 
     if (not matched):
         mo = re.match("^\+([0-9]+)$", linespec)
-        if (mo != None):
+        if (mo is not None):
             matched = True
             #print "Matched +<count>"
             line_number = int(mo.group(1))
@@ -45,7 +45,7 @@ def parse_linespec (linespec, frame, result):
      
     if (not matched):
         mo = re.match("^\-([0-9]+)$", linespec)
-        if (mo != None):
+        if (mo is not None):
             matched = True
             #print "Matched -<count>"
             line_number = int(mo.group(1))
@@ -57,7 +57,7 @@ def parse_linespec (linespec, frame, result):
 
     if (not matched):
         mo = re.match("^(.*):([0-9]+)$", linespec)
-        if (mo != None):
+        if (mo is not None):
             matched = True
             #print "Matched <filename>:<linenum>"
             file_name = mo.group(1)
@@ -66,7 +66,7 @@ def parse_linespec (linespec, frame, result):
 
     if (not matched):
         mo = re.match("\*((0x)?([0-9a-f]+))$", linespec)
-        if (mo != None):
+        if (mo is not None):
             matched = True
             #print "Matched <address-expression>"
             address = long(mo.group(1), base=0)

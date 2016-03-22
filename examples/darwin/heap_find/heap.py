@@ -628,7 +628,7 @@ def display_match_results (process, result, options, arg_str_description, expr, 
                     result.AppendMessage(result_output)
                 if options.memory:
                     cmd_result = lldb.SBCommandReturnObject()
-                    if options.format == None:
+                    if options.format is None:
                         memory_command = "memory read --force 0x%x 0x%x" % (malloc_addr, malloc_addr + malloc_size)
                     else:
                         memory_command = "memory read --force -f %s 0x%x 0x%x" % (options.format, malloc_addr, malloc_addr + malloc_size)
@@ -704,7 +704,7 @@ def ptr_refs(debugger, command, result, dict):
         return
 
     options.type = 'pointer'
-    if options.format == None: 
+    if options.format is None: 
         options.format = "A" # 'A' is "address" format
 
     if args:
@@ -798,7 +798,7 @@ def cstr_refs(debugger, command, result, dict):
 
 
     options.type = 'cstr'
-    if options.format == None: 
+    if options.format is None: 
         options.format = "Y" # 'Y' is "bytes with ASCII" format
 
     if args:
@@ -1086,7 +1086,7 @@ def objc_refs(debugger, command, result, dict):
         return
 
     options.type = 'isa'
-    if options.format == None: 
+    if options.format is None: 
         options.format = "A" # 'A' is "address" format
 
     expr_options = lldb.SBExpressionOptions()

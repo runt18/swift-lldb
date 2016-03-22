@@ -102,7 +102,7 @@ class ExitDuringStepTestCase(TestBase):
             if stop_desc and (expected_bp_desc in stop_desc):
                 stepping_thread = thread
                 break
-        self.assertTrue(stepping_thread != None, "unable to find thread stopped at %s" % expected_bp_desc)
+        self.assertTrue(stepping_thread is not None, "unable to find thread stopped at %s" % expected_bp_desc)
 
         current_line = self.breakpoint
         stepping_frame = stepping_thread.GetFrameAtIndex(0)

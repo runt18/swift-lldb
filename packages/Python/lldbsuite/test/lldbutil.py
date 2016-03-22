@@ -322,7 +322,7 @@ def run_break_set_by_file_and_line (test, file_name, line_number, extra_options 
 
     If loc_exact is true, we check that there is one location, and that location must be at the input file and line number."""
 
-    if file_name == None:
+    if file_name is None:
         command = 'breakpoint set -l %d'%(line_number)
     else:
         command = 'breakpoint set -f "%s" -l %d'%(file_name, line_number)
@@ -884,9 +884,9 @@ class BasicFormatter(object):
         # If there is a summary, it suffices.
         val = value.GetSummary()
         # Otherwise, get the value.
-        if val == None:
+        if val is None:
             val = value.GetValue()
-        if val == None and value.GetNumChildren() > 0:
+        if val is None and value.GetNumChildren() > 0:
             val = "%s (location)" % value.GetLocation()
         print("{indentation}({type}) {name} = {value}".format(
             indentation = ' ' * indent,
@@ -935,7 +935,7 @@ class RecursiveDecentFormatter(BasicFormatter):
         BasicFormatter.format(self, value, buffer=output, indent=self.lindent)
         new_indent = self.lindent + self.cindent
         for child in value:
-            if child.GetSummary() != None:
+            if child.GetSummary() is not None:
                 BasicFormatter.format(self, child, buffer=output, indent=new_indent)
             else:
                 if child.GetNumChildren() > 0:

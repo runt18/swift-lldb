@@ -29,7 +29,7 @@ class TestPaths(TestBase):
         for path_type in dir_path_types:
             f = lldb.SBHostOS.GetLLDBPath(path_type);
             # No directory path types should have the filename set
-            self.assertTrue (f.GetFilename() == None);
+            self.assertTrue (f.GetFilename() is None);
 
     @no_debug_info_test
     def test_directory_doesnt_end_with_slash(self):

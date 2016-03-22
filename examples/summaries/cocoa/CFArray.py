@@ -133,17 +133,17 @@ class NSArray_SynthProvider:
 		self.adjust_for_architecture()
 		self.error = False
 		self.wrapper = self.make_wrapper()
-		self.invalid = (self.wrapper == None)
+		self.invalid = (self.wrapper is None)
 
 	def num_children(self):
 		logger = lldb.formatters.Logger.Logger()
-		if self.wrapper == None:
+		if self.wrapper is None:
 			return 0;
 		return self.wrapper.num_children()
 
 	def update(self):
 		logger = lldb.formatters.Logger.Logger()
-		if self.wrapper == None:
+		if self.wrapper is None:
 			return
 		self.wrapper.update()
 
@@ -190,7 +190,7 @@ def CFArray_SummaryProvider (valobj,dict):
 		except:
 			summary = None
 		logger >> "provider gave me " + str(summary)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not NSArray>'
 		elif isinstance(summary,basestring):
 			pass

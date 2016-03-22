@@ -9,7 +9,7 @@ print "Running lldb build test as user: ", pwd.getpwuid(os.getuid()).pw_name
 
 # We get everything from the workspace environment variable, so if it is not set we're toast:
 workspace = os.getenv("WORKSPACE")
-if workspace == None:
+if workspace is None:
     print "WORKSPACE environment variable is not set.  Exiting."
     exit(-1)
 
@@ -63,7 +63,7 @@ if not os.path.isdir (llvm_in_lldb_dir):
     os.symlink (llvm_dir, llvm_in_lldb_dir)
 
 lldb_configuration = os.getenv("LLDB_CONFIGURATION")
-if lldb_configuration == None:
+if lldb_configuration is None:
     lldb_configuration = "BuildAndIntegration"
 
 lldb_arch = "x86_64"

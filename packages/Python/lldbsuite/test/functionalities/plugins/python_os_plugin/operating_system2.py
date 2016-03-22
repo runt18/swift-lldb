@@ -55,7 +55,7 @@ class OperatingSystemPlugIn(object):
         return self.threads
     
     def get_register_info(self):
-        if self.registers == None:
+        if self.registers is None:
             self.registers = dict()            
             self.registers['sets'] = ['GPR']
             self.registers['registers'] = [

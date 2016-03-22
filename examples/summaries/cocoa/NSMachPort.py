@@ -104,7 +104,7 @@ def GetSummary_Impl(valobj):
 def NSMachPort_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -112,7 +112,7 @@ def NSMachPort_SummaryProvider (valobj,dict):
 		except:
 			summary = None
 		logger >> "got summary " + str(summary)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not NSMachPort>'
 		if isinstance(summary, basestring):
 			return summay

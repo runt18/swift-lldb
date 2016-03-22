@@ -173,7 +173,7 @@ class CrashLog(symbolication.Symbolicator):
                 self.idents.append(ident)
             
         def did_crash(self):
-            return self.reason != None
+            return self.reason is not None
         
         def __str__(self):
             if self.app_specific_backtrace:

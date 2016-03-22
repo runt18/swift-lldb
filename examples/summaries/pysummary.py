@@ -1,7 +1,7 @@
 import lldb
 
 def pyobj_summary (value,unused):
-	if value == None or value.IsValid() == False or value.GetValueAsUnsigned(0) == 0:
+	if value is None or value.IsValid() == False or value.GetValueAsUnsigned(0) == 0:
 		return "<invalid>"
 	refcnt = value.GetChildMemberWithName("ob_refcnt")
 	expr = "(char*)PyString_AsString( (PyObject*)PyObject_Str( (PyObject*)0x%x) )" % (value.GetValueAsUnsigned(0))

@@ -10,13 +10,13 @@ class TracebackFancy:
 		return FrameFancy(self.t.tb_frame)
 
 	def getLineNumber(self):
-		return self.t.tb_lineno if self.t != None else None
+		return self.t.tb_lineno if self.t is not None else None
 
 	def getNext(self):
 		return TracebackFancy(self.t.tb_next)
 
 	def __str__(self):
-		if self.t == None:
+		if self.t is None:
 			return ""
 		str_self = "%s @ %s" % (self.getFrame().getName(), self.getLineNumber())
 		return str_self + "\n" + self.getNext().__str__()
@@ -36,7 +36,7 @@ class ExceptionFancy:
 		return TracebackFancy(self.etraceback)
 
 	def __nonzero__(self):
-		return self.etraceback != None or self.etype != None or self.evalue != None
+		return self.etraceback is not None or self.etype is not None or self.evalue is not None
 
 	def getType(self):
 		return str(self.etype)
@@ -49,19 +49,19 @@ class CodeFancy:
 		self.c = code
 
 	def getArgCount(self):
-		return self.c.co_argcount if self.c != None else 0
+		return self.c.co_argcount if self.c is not None else 0
 
 	def getFilename(self):
-		return self.c.co_filename if self.c != None else ""
+		return self.c.co_filename if self.c is not None else ""
 
 	def getVariables(self):
-		return self.c.co_varnames if self.c != None else []
+		return self.c.co_varnames if self.c is not None else []
 
 	def getName(self):
-		return self.c.co_name if self.c != None else ""
+		return self.c.co_name if self.c is not None else ""
 
 	def getFileName(self):
-		return self.c.co_filename if self.c != None else ""
+		return self.c.co_filename if self.c is not None else ""
 
 class ArgsFancy:
 	def __init__(self,frame,arginfo):
@@ -124,25 +124,25 @@ class FrameFancy:
 		return FrameFancy(self.f.f_back)
 
 	def getLineNumber(self):
-		return self.f.f_lineno if self.f != None else 0
+		return self.f.f_lineno if self.f is not None else 0
 
 	def getCodeInformation(self):
-		return CodeFancy(self.f.f_code) if self.f != None else None
+		return CodeFancy(self.f.f_code) if self.f is not None else None
 
 	def getExceptionInfo(self):
-		return ExceptionFancy(self.f) if self.f != None else None
+		return ExceptionFancy(self.f) if self.f is not None else None
 
 	def getName(self):
-		return self.getCodeInformation().getName() if self.f != None else ""
+		return self.getCodeInformation().getName() if self.f is not None else ""
 
 	def getFileName(self):
-		return self.getCodeInformation().getFileName() if self.f != None else ""
+		return self.getCodeInformation().getFileName() if self.f is not None else ""
 
 	def getLocals(self):
-		return self.f.f_locals if self.f != None else {}
+		return self.f.f_locals if self.f is not None else {}
 		
 	def getArgumentInfo(self):
-		return ArgsFancy(self.f,inspect.getargvalues(self.f)) if self.f != None else None
+		return ArgsFancy(self.f,inspect.getargvalues(self.f)) if self.f is not None else None
 
 class TracerClass:
 	def callEvent(self,frame):
@@ -170,7 +170,7 @@ tracer_impl = TracerClass()
 
 
 def the_tracer_entrypoint(frame,event,args):
-	if tracer_impl == None:
+	if tracer_impl is None:
 		return None
 	if event == "call":
 		call_retval = tracer_impl.callEvent(FrameFancy(frame))

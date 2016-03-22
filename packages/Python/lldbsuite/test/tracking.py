@@ -53,7 +53,7 @@ global_radar_client = None
 
 def get_radar_details(id):
     global global_radar_client
-    if global_radar_client == None:
+    if global_radar_client is None:
         authentication_strategy = AuthenticationStrategySPNego()
         system_identifier = ClientSystemIdentifier('lldb-test-tracker', '1.0')
         global_radar_client = RadarClient(authentication_strategy, system_identifier)
@@ -82,8 +82,8 @@ def process_xfail(path):
     m1 = re.search('rdar://([0-9]+)', xfail_line)
     m2 = re.search('rdar://problem/([0-9]+)', xfail_line)
     m3 = re.search('llvm.org/pr([0-9]+)', xfail_line)
-    if m1 == None and m2 == None:
-        if m3 == None:
+    if m1 is None and m2 is None:
+        if m3 is None:
             process_no_bug(name,xfail_line)
         else:
             process_llvm_bug(name,m3)

@@ -94,7 +94,7 @@ class CreateDuringStepTestCase(TestBase):
             if expected_bp_desc in thread.GetStopDescription(100):
                 stepping_thread = thread
                 break
-        self.assertTrue(stepping_thread != None, "unable to find thread stopped at %s" % expected_bp_desc)
+        self.assertTrue(stepping_thread is not None, "unable to find thread stopped at %s" % expected_bp_desc)
         current_line = self.breakpoint
         # Keep stepping until we've reached our designated continue point
         while current_line != self.continuepoint:

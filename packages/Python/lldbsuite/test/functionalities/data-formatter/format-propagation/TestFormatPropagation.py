@@ -47,11 +47,11 @@ class FormatPropagationTestCase(TestBase):
         # extract the parent and the children
         frame = self.frame()
         parent = self.frame().FindVariable("f")
-        self.assertTrue(parent != None and parent.IsValid(),"could not find f")
+        self.assertTrue(parent is not None and parent.IsValid(),"could not find f")
         X = parent.GetChildMemberWithName("X")
-        self.assertTrue(X != None and X.IsValid(),"could not find X")
+        self.assertTrue(X is not None and X.IsValid(),"could not find X")
         Y = parent.GetChildMemberWithName("Y")
-        self.assertTrue(Y != None and Y.IsValid(),"could not find Y")
+        self.assertTrue(Y is not None and Y.IsValid(),"could not find Y")
         # check their values now
         self.assertTrue(X.GetValue() == "1", "X has an invalid value")
         self.assertTrue(Y.GetValue() == "2", "Y has an invalid value")

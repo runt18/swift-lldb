@@ -115,7 +115,7 @@ def GetSummary_Impl(valobj):
 def CFBag_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -128,7 +128,7 @@ def CFBag_SummaryProvider (valobj,dict):
 		# the bit mask was derived through experimentation
 		# (if counts start looking weird, then most probably
 		#  the mask needs to be changed)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not CFBag>'
 		elif isinstance(summary,basestring):
 			pass

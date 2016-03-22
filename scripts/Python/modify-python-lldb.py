@@ -291,7 +291,7 @@ class NewContent(StringIO.StringIO):
         self.prev_line = None
     def add_line(self, a_line):
         """Add a line to the content, if there is a previous line, commit it."""
-        if self.prev_line != None:
+        if self.prev_line is not None:
             self.write(self.prev_line + "\n")
         self.prev_line = a_line
     def del_line(self):
@@ -299,11 +299,11 @@ class NewContent(StringIO.StringIO):
         self.prev_line = None
     def del_blank_line(self):
         """Forget about the previous line if it is a blank line."""
-        if self.prev_line != None and not self.prev_line.strip():
+        if self.prev_line is not None and not self.prev_line.strip():
             self.prev_line = None
     def finish(self):
         """Call this when you're finished with populating content."""
-        if self.prev_line != None:
+        if self.prev_line is not None:
             self.write(self.prev_line + "\n")
         self.prev_line = None
 

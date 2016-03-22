@@ -224,14 +224,14 @@ def GetSummary_Impl(valobj):
 def NSDate_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
 			summary = provider.value();
 		except:
 			summary = None
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not NSDate>'
 		return str(summary)
 	return 'Summary Unavailable'
@@ -239,7 +239,7 @@ def NSDate_SummaryProvider (valobj,dict):
 def NSTimeZone_SummaryProvider (valobj,dict):
 	logger = lldb.formatters.Logger.Logger()
 	provider = GetSummary_Impl(valobj);
-	if provider != None:
+	if provider is not None:
 		if isinstance(provider,lldb.runtime.objc.objc_runtime.SpecialSituation_Description):
 			return provider.message()
 		try:
@@ -247,7 +247,7 @@ def NSTimeZone_SummaryProvider (valobj,dict):
 		except:
 			summary = None
 		logger >> "got summary " + str(summary)
-		if summary == None:
+		if summary is None:
 			summary = '<variable is not NSTimeZone>'
 		return str(summary)
 	return 'Summary Unavailable'
