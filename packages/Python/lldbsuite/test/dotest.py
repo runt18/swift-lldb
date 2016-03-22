@@ -291,7 +291,7 @@ def parseOptionsAndInitTestdirs():
         os.kill(os.getpid(), signal.SIGSTOP)
 
     if args.f:
-        if any([x.startswith('-') for x in args.f]):
+        if any( x.startswith('-') for x in args.f):
             usage(parser)
         configuration.filters.extend(args.f)
         # Shut off multiprocessing mode when additional filters are specified.
